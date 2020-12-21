@@ -12,7 +12,10 @@ public class FileStreamDemo {
 
     public static void main(String[] args) throws IOException  {
 
-        FileUtils.printHex(new File("demo/fileDemo.txt"));
+        FileUtils.printHexByRead(new File("demo/fileDemo.txt"));
+        System.out.println();
+        System.out.println("=================");
+        FileUtils.printHexByReadByteArray(new File("demo/fileDemo.txt"));
     }
 
 }

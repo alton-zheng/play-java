@@ -153,7 +153,7 @@ public class FileDemo {
 }
 ```
 
-
+&nbsp;
 
 ### RandomAccessFile
 
@@ -246,4 +246,45 @@ public class RandomAccessFileDemo {
     }
 }
 ```
+
+
+
+## 字节流
+
+### InputStream 和 OutputStream
+
+`InputStream`
+
+- 抽象类
+- 应用程序读取数据的方式
+- 方法
+  - read
+    - `read()`
+      - 从 stream 中读取一个 byte
+    - `read(byte[] buf)`
+      - 从 stream 中读取数据写入到 buf 中
+    - `read(byte[] buf, int start, int size)`
+      - 从 stream 中读取数据到 buf 的 [start, start + size) 
+
+&nbsp;
+
+`OutputStream`
+
+- 抽象类
+- 应用程序写数据的方式
+- read
+  - `write()`
+    - 写入一个 byte 到流， byte 的低8位
+  - `write(byte[] buf)`
+    - 将 buf 数组写入到流
+  - `write(byte[] buf, int start, int size)`
+    - 将 buf 数据 [start, start + size) 写入到流
+
+&nbsp;
+
+### FileInputStream 和 FileOutputStream
+
+`InputStream` 和 `OutputStream` 的 File 实现类
+
+
 
