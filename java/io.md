@@ -73,7 +73,7 @@ public class Encode {
 
 ## File
 
-- `java.io.File` 表示 `directory` 或 `file`, 访问他们的元信息（名称，大小等），不能访问它们
+- `java.io.File` 表示 `directory` 或 `file`, 访问他们的元信息（名称，大小，类型等），不能读文件
 
 &nbsp;
 
@@ -217,8 +217,6 @@ public class RandomAccessFileDemo {
         raf.write((i >>> 16) & 0xff);
         raf.write((i >>> 8) & 0xff);
         raf.write((i >>> 0) & 0xff);*/
-
-        System.out.println(raf.getFilePointer());
         // 或者直接写 int
         raf.writeInt(i);
         System.out.println(raf.getFilePointer());
@@ -247,7 +245,7 @@ public class RandomAccessFileDemo {
 }
 ```
 
-
+&nbsp;
 
 ## 字节流
 
@@ -275,10 +273,10 @@ public class RandomAccessFileDemo {
 - 抽象类
 - 应用程序写数据的方式
 - read
-  - `write()`
-    - 写入一个 byte 到流， byte 的低8位
+  - `write(b)`
+    - 写入一个 `byte` 到流， `byte` 的低8位
   - `write(byte[] buf)`
-    - 将 buf 数组写入到流
+    - 将 `buf` 数组写入到流
   - `write(byte[] buf, int start, int size)`
     - 将 buf 数据 [start, start + size) 写入到流
 
@@ -570,8 +568,8 @@ public class BufferedStreamDemo {
 - 文件
   - byte 数据序列
   - 文本
-    - char
-    - 某种编码方案（utf-8, utf-16be, gbk） 序列化为 byte 的存在
+    - `char`
+    - 某种编码方案（utf-8, utf-16be, gbk） 序列化为 byte 的存储
 - 操作对象
   - 字符
     - byte 序列组成的
@@ -744,8 +742,8 @@ public static void copyFileByBrAndBw(File src, File dest) throws IOException {
   - 父子类序列化问题
     - 父类实现了 `Serializable` 接口，子类可以直接进行序列化
     - 子类被反序列化时
-      - 没有实现 `Serializable` 接口的父类，造方法会被显示调用
-      - 实现了 `Serializable` 接口的父类，父类不会被显示调用，可以直接在子类序列化的字节中可以直接读到
+      - 没有实现 `Serializable` 接口的父类，构造方法会被显示调用
+      - 实现了 `Serializable` 接口的父类，父类不会被显示调用，可以直接在子类序列化的字节中直接读到
 
 
 
@@ -778,7 +776,7 @@ public class SerializableDemo {
         /*
          * 添加 writeObject, readObject 的方法前
          * Student{name='alton', sex='男', age=0}
-         * 添加 writeObject, readObject 的方法后， 定义了 transient 关键字的 age 也能够进行反序列化
+         * 添加 writeObject, readObject 的方法后， 定义了 transient 关键字的 age 也能够正常进行反序列化
          * Student{name='alton', sex='男', age=30}
          */
         ois.close();
