@@ -5,7 +5,12 @@
 &nbsp;
 
 ## Java
+
+- [JVM](java/jvm.md)
+
 - [IO](java/io.md)
+- [数据结构](java/data-structure.md)
+- [算法](java/algorithm.md)
 
 &nbsp;
 

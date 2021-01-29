@@ -448,9 +448,6 @@ public class FileStreamDemo {
 
 }
 ```
-
-
-
  &nbsp;
 
 ### DataInputStream 和 DataOutputStream
