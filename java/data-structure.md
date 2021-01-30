@@ -149,52 +149,48 @@ array 是存储在连续内存空间的 item 集合。想法是将相同类型�
 
 &nbsp;
 
-**使用数组的优点：** 
+#### **使用 Array 的优点：** 
 
-- 数组允许随机访问元素。这样可以更快地按位置访问元素。
-- 阵列具有更好的 [缓存局部性](https://en.wikipedia.org/wiki/Locality_of_reference) ，可以在性能上产生很大的不同。
-- 数组使用单个名称表示相同类型的多个数据项。
+- Array 允许随机访问元素。这样可以更快地按位置访问元素。
+- Array 具有更好的 [cache localily](https://en.wikipedia.org/wiki/Locality_of_reference) ，可以在性能上产生很大的不同。
+- Array 使用单个名称表示相同类型的多个数据 item 。
 
-**使用数组的缺点：** 
-您无法更改大小，即一旦声明了数组，由于分配给它的静态内存，就无法更改其大小。由于元素存储在连续的存储位置中，因此插入和删除都很困难，并且移位操作也很昂贵。
-现在，以使用数组实现数据结构Stack的示例为例，存在一些明显的缺陷。 
+&nbsp;
 
-让我们来看一下堆栈的POP操作。该算法将是这样的。 
+#### **使用 Array 的缺点：** 
 
-1. 检查堆栈下溢
-2. 将顶部减1
+- 长度固定
+  - 连续内存空间
+  - 比如 `Stack`
 
-因此，我们正在做的事情是指向最上方元素的指针是递减的，这意味着我们实际上只是在限制我们的视图，即如果您有任何原始数据类型，则该元素会停留在谈论内存空间的位置，那么可能就可以了，但是数组会占用大量内存。
+- 占用空间大
+  - 即便不填充元素，也会占用那么的内存空间
 
-**例子 -** 
+&nbsp;
 
+**e.g**:
+
+```java
+// A character array in C/C++/Java
+char arr1[] = {'g', 'e', 'e', 'k', 's'};
+
+// An Integer array in C/C++/Java
+int arr2[] = {10, 20, 30, 40, 50};
+
+// Item at i'th index in array is typically accessed
+// as "arr[i]".  For example arr1[0] gives us 'g'
+// and arr2[3] gives us 40.
 ```
-// C / C ++ / Java中的字符数组
-char arr1 [] = {'g'，'e'，'e'，'k'，'s'};
 
-// C / C ++ / Java中的Integer数组
-int arr2 [] = {10，20，30，40，50};
+通常，字符数组称为 `string`，而整数或浮点数的数组简称为 `array`。
 
-//通常访问数组第i个索引处的项目
-//作为“ arr [i]”。例如arr1 [0]给我们'g'
-//和arr2 [3]给我们40。
-```
+&nbsp;
 
-通常，字符数组称为“字符串”，而整数或浮点数的数组简称为数组。
+#### **Array 上的应用**
 
-**阵列上的应用**
-
-1. 数组存储相同数据类型的数据元素。
-2. 数组可用于CPU调度。
-3. 用于实现其他数据结构，例如堆栈，队列，堆，哈希表等。
-
-如果您喜欢GeeksforGeeks并希望做出贡献，则还可以使用contribution.geeksforgeeks.org撰写文章，或将您的文章邮寄到contribution@geeksforgeeks.org。查看您的文章出现在GeeksforGeeks主页上，并帮助其他Geeks。 
-
-如果发现任何不正确的地方，或者想分享有关上述主题的更多信息，请写评论。 
-
-注意读者！现在不要停止学习。[**DSA自我**](https://practice.geeksforgeeks.org/courses/dsa-self-paced?utm_source=geeksforgeeks&utm_medium=article&utm_campaign=gfg_article_dsa_content_bottom)定价[**课程**](https://practice.geeksforgeeks.org/courses/dsa-self-paced?utm_source=geeksforgeeks&utm_medium=article&utm_campaign=gfg_article_dsa_content_bottom)以学生友善的价格掌握所有重要的DSA概念，并为行业做好准备。
-
-
+- array 存储相同数据类型的数据元素。
+-  array 可用于CPU调度。
+- 用于实现其他数据结构，例如 Stack，Queue，Heap，Hash Table 等。
 
 &nbsp;
 
