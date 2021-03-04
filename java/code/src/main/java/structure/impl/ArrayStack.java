@@ -1,4 +1,7 @@
-package structure;
+package structure.impl;
+
+import structure.Array;
+import structure.interfaces.Stack;
 
 /**
  * @Author: alton
@@ -65,4 +68,5 @@ public class ArrayStack<T> implements Stack<T> {
         return res.toString();
 
     }
+
 }

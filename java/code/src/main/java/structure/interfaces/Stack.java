@@ -1,4 +1,4 @@
-package structure;
+package structure.interfaces;
 
 import java.util.EmptyStackException;
 

@@ -1,6 +1,7 @@
-package structure;
+package structure.impl;
 
 import org.junit.jupiter.api.*;
+import structure.impl.ArrayStack;
 
 /**
  * @Author: alton
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.*;
  * @Description:
  */
 @DisplayName("Stack 测试用例")
-public class StackTestCase {
+public class StackTest {
 
     @BeforeAll
     public static void init() {
@@ -58,46 +59,5 @@ public class StackTestCase {
             System.out.println(stack);
         }
     }
-
-
-    @Nested
-    @DisplayName("Array Stack 测试用例2")
-    class ArrayStackTest2 {
-
-        ArrayStack<Integer> stack;
-
-        @BeforeEach
-        public void startCase() {
-
-            System.out.println("开始执行 Array Stack 用例");
-
-            stack = new ArrayStack<>();
-
-            for (int i = 0; i < 5; i++) {
-                stack.push(i);
-            }
-        }
-
-        @AfterEach
-        public void finshCase() {
-
-            System.out.println("Array Stack 用例执行完毕");
-            System.out.println("==========");
-        }
-
-        @DisplayName("test1: 打印全栈")
-        @Test
-        void testFirstTest() {
-            System.out.println(stack);
-        }
-
-        @DisplayName("case2: 推出栈顶元素，然后打印全栈")
-        @Test
-        void testSecondTest() {
-            stack.pop();
-            System.out.println(stack);
-        }
-    }
-
 
 }
