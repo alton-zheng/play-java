@@ -86,15 +86,19 @@ public class LoopQueue<E> implements Queue<E> {
 
     }
 
+    public int getCapacity() {
+        return elements.length;
+    }
+
     /**
      * Doubles the capacity of this queue.  Call only when full, i.e.,
      * when head and tail have wrapped around to become equal.
      */
-    private void doubleCapacity() {
+/*    private void doubleCapacity() {
 
         assert head == tail;
         int p = head;
-        int n = elements.length;
+        int n = getCapacity();
         int r = n - p; // number of elements to the right of p
         int newCapacity = n << 1;
         if (newCapacity < 0)
@@ -105,6 +109,51 @@ public class LoopQueue<E> implements Queue<E> {
         elements = a;
         head = 0;
         tail = n;
+
+    }*/
+    public void doubleCapacity() {
+
+        assert head == tail;
+
+        int size = size();
+        int p = head;
+        int n = getCapacity();
+
+        int newCapacity = n << 1;
+
+        if (newCapacity < 0) {
+            throw new IllegalStateException("Sorry, queue to big");
+        }
+
+        Object[] nElements = new Object[newCapacity];
+
+        for (int i = 0; i < n; i++) {
+            nElements[i] = elements[(i + p) & (n - 1)];
+        }
+        elements = nElements;
+
+        head = 0;
+        tail = n;
+
+    }
+
+    private void halfCapacity() {
+
+        int size = size();
+        assert size == getCapacity() / 4;
+
+        int p = head;
+        int n = getCapacity();
+        int newCapacity = n >> 1;
+        Object[] nElements = new Object[newCapacity];
+
+        for (int i = 0; i < size; i++) {
+            nElements[i] = elements[(i + p) & (n - 1)];
+        }
+
+        elements = nElements;
+        head = 0;
+        tail = size;
 
     }
 
@@ -219,6 +268,11 @@ public class LoopQueue<E> implements Queue<E> {
 
         elements[h] = null; // Must null out slot
         head = (h + 1) & (elements.length - 1);
+
+        if (size() == getCapacity() / 4 && getCapacity() >> 1 != 0) {
+            halfCapacity();
+        }
+
         return result;
 
     }
@@ -236,6 +290,11 @@ public class LoopQueue<E> implements Queue<E> {
             return null;
         elements[t] = null;
         tail = t;
+
+        if (size() == getCapacity() / 4 && getCapacity() >> 1 != 0) {
+            halfCapacity();
+        }
+
         return result;
     }
 
@@ -845,15 +904,17 @@ public class LoopQueue<E> implements Queue<E> {
 
         res.append("LoopQueue: head [");
 
-        int mask = elements.length - 1;
-        int i = head;
+        int mask = getCapacity() - 1;
 
         Object x;
-        while ((x = elements[i]) != null) {
-            res.append((E) x);
-            res.append(", ");
+        for (int i = head; i != tail; i = (i + 1) & mask) {
 
-            i = (i + 1) & mask;
+            x = (E) elements[i];
+            res.append(x);
+
+            if (((i + 1) & mask) != tail) {
+                res.append(", ");
+            }
 
         }
 
