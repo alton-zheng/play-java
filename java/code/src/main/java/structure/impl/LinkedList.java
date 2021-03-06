@@ -44,7 +44,8 @@ public class LinkedList<E> implements List<E> {
 
 
     transient Node<E> dummyFirst;
-    transient Node<E> dummyLast;
+    transient Node<E> last;
+
     transient int size = 0;
 
     /**
@@ -52,7 +53,6 @@ public class LinkedList<E> implements List<E> {
      */
     public LinkedList() {
         dummyFirst = new Node<>(null, null, null);
-        dummyLast = new Node<>(null, null, null);
     }
 
     /**
@@ -195,7 +195,7 @@ public class LinkedList<E> implements List<E> {
             return x;
         } else {
 
-            Node<E> x = dummyLast.prev;
+            Node<E> x = last;
             for (int i = size - 1; i > index; i--) {
                 x = x.prev;
             }
@@ -230,24 +230,36 @@ public class LinkedList<E> implements List<E> {
      * Links e as first element.
      */
     private void linkFirst(E e) {
-        final Node<E>  df = dummyFirst;
-        df.next = new Node<>(dummyFirst, e,  dummyFirst.next);
+
+        final Node<E> df = dummyFirst;
+        final Node<E> newNode = new Node<>(df, e, null);
+        if (df.next == null) {
+            last = newNode;
+        } else {
+            newNode.next = df.next;
+            dummyFirst.next = newNode;
+        }
+
         size++;
         modCount++;
+
     }
 
     /**
      * Links e as last element.
      */
     void linkLast(E e) {
-        
-        final Node<E> dl = dummyLast;
-        final Node<E> newNode = new Node<>(dl.prev, e, dl);
-        dummyLast.prev = newNode;
 
-        if (dl.prev == null) {
+        final Node<E> l = last;
+        final Node<E> newNode = new Node<>(last, e, null);
+        last = newNode;
 
+        if (l == null) {
+            dummyFirst.next = newNode;
+        } else {
+            l.next = newNode;
         }
+
         size++;
         modCount++;
 
@@ -273,7 +285,7 @@ public class LinkedList<E> implements List<E> {
      * Unlinks non-null first node f.
      */
     private E unlinkFirst(Node<E> f) {
-        // assert f == first && f != null;
+
         final E element = f.item;
         final Node<E> next = f.next;
         f.item = null;
@@ -284,20 +296,21 @@ public class LinkedList<E> implements List<E> {
         size--;
         modCount++;
         return element;
+
     }
 
     /**
      * Unlinks non-null last node l.
      */
     private E unlinkLast(Node<E> l) {
-        // assert l == last && l != null;
+
         final E element = l.item;
         final Node<E> prev = l.prev;
         l.item = null;
         l.prev = null;
         l.next = null; // help GC
-        dummyLast.prev = prev;
-        prev.next = dummyLast;
+        last = prev;
+        prev.next = null;
         size--;
         modCount++;
         return element;
@@ -344,7 +357,7 @@ public class LinkedList<E> implements List<E> {
      * @throws NoSuchElementException if this list is empty
      */
     public E getLast() {
-        final Node<E> l = dummyLast.prev;
+        final Node<E> l = last;
         if (l == null)
             throw new NoSuchElementException();
         return l.item;
@@ -370,7 +383,7 @@ public class LinkedList<E> implements List<E> {
      * @throws NoSuchElementException if this list is empty
      */
     public E removeLast() {
-        final Node<E> l = dummyLast.prev;
+        final Node<E> l = last;
         if (l == null)
             throw new NoSuchElementException();
         return unlinkLast(l);
@@ -459,7 +472,7 @@ public class LinkedList<E> implements List<E> {
         }
 
         dummyFirst = new Node<>(null, null, null);
-        dummyLast = new Node<>(null, null, null);
+        last = null;
 
         size = 0;
         modCount++;
@@ -500,11 +513,13 @@ public class LinkedList<E> implements List<E> {
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public E set(int index, E element) {
+
         checkElementIndex(index);
         Node<E> x = node(index);
         E oldVal = x.item;
         x.item = element;
         return oldVal;
+
     }
 
     /**
@@ -599,13 +614,13 @@ public class LinkedList<E> implements List<E> {
     public int lastIndexOf(Object o) {
         int index = size;
         if (o == null) {
-            for (Node<E> x = dummyLast.prev; x != null; x = x.prev) {
+            for (Node<E> x = last; x != dummyFirst; x = x.prev) {
                 index--;
                 if (x.item == null)
                     return index;
             }
         } else {
-            for (Node<E> x = dummyLast.prev; x != null; x = x.prev) {
+            for (Node<E> x = last; x != dummyFirst; x = x.prev) {
                 index--;
                 if (o.equals(x.item))
                     return index;
@@ -716,7 +731,7 @@ public class LinkedList<E> implements List<E> {
      * @since 1.6
      */
     public E peekLast() {
-        final Node<E> l = dummyLast.prev;
+        final Node<E> l = last;
         return (l == null) ? null : l.item;
     }
 
@@ -742,7 +757,7 @@ public class LinkedList<E> implements List<E> {
      * @since 1.6
      */
     public E pollLast() {
-        final Node<E> l = dummyLast.prev;
+        final Node<E> l = last;
         return (l == null) ? null : unlinkLast(l);
     }
 
@@ -785,21 +800,13 @@ public class LinkedList<E> implements List<E> {
         
         StringBuilder res = new StringBuilder();
         
-        res.append("LinkedList first[ ");
+        res.append("[ ");
 
-        Node<E> a = dummyFirst.next;
-        System.out.println(a.item);
-
-        for (Node<E> x = dummyFirst.next; x != dummyLast; x = x.next) {
-            System.out.println(x.item);
-            res.append(x.item);
-
-            if (x.next == dummyLast) {
-                res.append(", ");
-            }
+        for (Node<E> x = dummyFirst.next; x != null; x = x.next) {
+            res.append(x.item).append("->");
         }
 
-        res.append("] last");
+        res.append("NULL ]");
 
         return res.toString();
 

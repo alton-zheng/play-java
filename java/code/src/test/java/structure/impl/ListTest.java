@@ -32,6 +32,14 @@ public class ListTest {
             System.out.println("开始执行 List 用例");
 
             list = new LinkedList<>();
+            System.out.println("LinkedList 新增数据前，大小： " + list.size());
+
+            for (int i = 0; i < 10; i++) {
+                list.add(i);
+            }
+
+            System.out.println("LinkedList 新增数据后， 大小： : " + list.size());
+
         }
 
         @AfterEach
@@ -41,24 +49,42 @@ public class ListTest {
             System.out.println("==========");
         }
 
-        @DisplayName("case1: 测试 LinkedList ")
+        @DisplayName("case1: 打印 list ")
         @Test
         void testFirstTest() {
-
-            System.out.println(list.size());
-
-            for (int i = 0; i < 10; i++) {
-                list.add(i);
-            }
-
-            System.out.println("LinkedList 新增数据后: " + list.size());
             System.out.println(list);
         }
 
-        @DisplayName("case2: ")
+        @DisplayName("case2: 添加元素，并打印")
         @Test
         void testSecondTest() {
 
+            list.add(2, 666);
+            System.out.println(list);
+
+        }
+
+        @DisplayName("case 3: 删除元素，并打印")
+        @Test
+        void testThreeTest() {
+
+            list.remove(3);
+            System.out.println(list);
+
+        }
+
+        @DisplayName("case 4: 清空元素，并打印")
+        @Test
+        void testFourTest() {
+            list.clear();
+            System.out.println(list);
+        }
+
+        @DisplayName("case 5: 替换元素，并打印")
+        @Test
+        void testFiveTest() {
+            list.set(2, 666);
+            System.out.println(list);
         }
     }
 
