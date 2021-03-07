@@ -60,7 +60,7 @@ public class LinkedList<E> implements List<E> {
      * collection, in the order they are returned by the collection's
      * iterator.
      *
-     * @param  c the collection whose elements are to be placed into this list
+     * @param c the collection whose elements are to be placed into this list
      * @throws NullPointerException if the specified collection is null
      */
     public LinkedList(Collection<? extends E> c) {
@@ -111,10 +111,10 @@ public class LinkedList<E> implements List<E> {
      *
      * @param index index at which to insert the first element
      *              from the specified collection
-     * @param c collection containing elements to be added to this list
+     * @param c     collection containing elements to be added to this list
      * @return {@code true} if this list changed as a result of the call
      * @throws IndexOutOfBoundsException {@inheritDoc}
-     * @throws NullPointerException if the specified collection is null
+     * @throws NullPointerException      if the specified collection is null
      */
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
@@ -162,7 +162,7 @@ public class LinkedList<E> implements List<E> {
      * Shifts the element currently at that position (if any) and any
      * subsequent elements to the right (adds one to their indices).
      *
-     * @param index index at which the specified element is to be inserted
+     * @param index   index at which the specified element is to be inserted
      * @param element element to be inserted
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
@@ -181,8 +181,9 @@ public class LinkedList<E> implements List<E> {
 
     /**
      * Returns the (non-null) Node at the specified element index.
+     *
      * @param index the specified element index.
-     * @return (non-null) Node
+     * @return (non - null) Node
      */
     Node<E> node(int index) {
 
@@ -232,13 +233,13 @@ public class LinkedList<E> implements List<E> {
     private void linkFirst(E e) {
 
         final Node<E> df = dummyFirst;
-        final Node<E> newNode = new Node<>(df, e, null);
+        final Node<E> newNode = new Node<>(df, e, df.next);
+
         if (df.next == null) {
             last = newNode;
-        } else {
-            newNode.next = df.next;
-            dummyFirst.next = newNode;
         }
+
+        dummyFirst.next = newNode;
 
         size++;
         modCount++;
@@ -251,7 +252,7 @@ public class LinkedList<E> implements List<E> {
     void linkLast(E e) {
 
         final Node<E> l = last;
-        final Node<E> newNode = new Node<>(last, e, null);
+        final Node<E> newNode = new Node<>(l, e, null);
         last = newNode;
 
         if (l == null) {
@@ -288,11 +289,17 @@ public class LinkedList<E> implements List<E> {
 
         final E element = f.item;
         final Node<E> next = f.next;
+
+        dummyFirst.next = next;
+
+        if (next != null) {
+            next.prev = dummyFirst;
+        }
+
         f.item = null;
         f.prev = null;
         f.next = null; // help GC
-        dummyFirst.next = next;
-        next.prev = dummyFirst;
+
         size--;
         modCount++;
         return element;
@@ -309,11 +316,19 @@ public class LinkedList<E> implements List<E> {
         l.item = null;
         l.prev = null;
         l.next = null; // help GC
-        last = prev;
-        prev.next = null;
+
+        if (prev == dummyFirst) {
+            dummyFirst.next = null;
+            last = null;
+        } else {
+            prev.next = null;
+            last = prev;
+        }
+
         size--;
         modCount++;
         return element;
+
     }
 
     /**
@@ -507,7 +522,7 @@ public class LinkedList<E> implements List<E> {
      * Replaces the element at the specified position in this list with the
      * specified element.
      *
-     * @param index index of the element to replace
+     * @param index   index of the element to replace
      * @param element element to be stored at the specified position
      * @return the element previously at the specified position
      * @throws IndexOutOfBoundsException {@inheritDoc}
@@ -543,7 +558,7 @@ public class LinkedList<E> implements List<E> {
      * this "outlining" performs best with both server and client VMs.
      */
     private String outOfBoundsMsg(int index) {
-        return "Index: "+index+", Size: "+size;
+        return "Index: " + index + ", Size: " + size;
     }
 
     private void checkElementIndex(int index) {
@@ -580,7 +595,7 @@ public class LinkedList<E> implements List<E> {
      *
      * @param o element to search for
      * @return the index of the first occurrence of the specified element in
-     *         this list, or -1 if this list does not contain the element
+     * this list, or -1 if this list does not contain the element
      */
     public int indexOf(Object o) {
         int index = 0;
@@ -609,7 +624,7 @@ public class LinkedList<E> implements List<E> {
      *
      * @param o element to search for
      * @return the index of the last occurrence of the specified element in
-     *         this list, or -1 if this list does not contain the element
+     * this list, or -1 if this list does not contain the element
      */
     public int lastIndexOf(Object o) {
         int index = size;
@@ -685,6 +700,7 @@ public class LinkedList<E> implements List<E> {
     }
 
     // Deque operations
+
     /**
      * Inserts the specified element at the front of this list.
      *
@@ -714,7 +730,7 @@ public class LinkedList<E> implements List<E> {
      * or returns {@code null} if this list is empty.
      *
      * @return the first element of this list, or {@code null}
-     *         if this list is empty
+     * if this list is empty
      * @since 1.6
      */
     public E peekFirst() {
@@ -727,7 +743,7 @@ public class LinkedList<E> implements List<E> {
      * or returns {@code null} if this list is empty.
      *
      * @return the last element of this list, or {@code null}
-     *         if this list is empty
+     * if this list is empty
      * @since 1.6
      */
     public E peekLast() {
@@ -740,7 +756,7 @@ public class LinkedList<E> implements List<E> {
      * or returns {@code null} if this list is empty.
      *
      * @return the first element of this list, or {@code null} if
-     *     this list is empty
+     * this list is empty
      * @since 1.6
      */
     public E pollFirst() {
@@ -753,7 +769,7 @@ public class LinkedList<E> implements List<E> {
      * or returns {@code null} if this list is empty.
      *
      * @return the last element of this list, or {@code null} if
-     *     this list is empty
+     * this list is empty
      * @since 1.6
      */
     public E pollLast() {
@@ -781,7 +797,7 @@ public class LinkedList<E> implements List<E> {
      * <p>This method is equivalent to {@link #removeFirst()}.
      *
      * @return the element at the front of this list (which is the top
-     *         of the stack represented by this list)
+     * of the stack represented by this list)
      * @throws NoSuchElementException if this list is empty
      * @since 1.6
      */
@@ -789,7 +805,7 @@ public class LinkedList<E> implements List<E> {
         return removeFirst();
     }
 
-    
+
     @Override
     public java.util.List<E> subList(int fromIndex, int toIndex) {
         return null;
@@ -797,9 +813,9 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public String toString() {
-        
+
         StringBuilder res = new StringBuilder();
-        
+
         res.append("[ ");
 
         for (Node<E> x = dummyFirst.next; x != null; x = x.next) {

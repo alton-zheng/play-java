@@ -69,7 +69,7 @@ public class StackTest {
     class LinkedListStackTest {
 
         Stack<Integer> stack;
-        private static final int NUMS = 100;
+        private static final int NUMS = 10;
 
         @BeforeEach
         public void startCase() {
@@ -119,14 +119,11 @@ public class StackTest {
             for (int i = 0; i < NUMS; i++) {
                 stack.push(random.nextInt(Integer.MAX_VALUE));
             }
-
-            System.out.println(stack.size());
-
             System.out.println(stack);
 
-            /*for (int i = 0; i < NUMS; i++) {
-                stack.pop();
-            }*/
+            for (int i = 0; i < NUMS; i++) {
+                System.out.println(stack.pop());
+            }
 
             System.out.println("Array Queue cost: " + (System.currentTimeMillis() - start) + " ms");
         }

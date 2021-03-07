@@ -26,12 +26,12 @@ public class LinkedListStack<E> implements Stack<E> {
 
     @Override
     public void push(E item) {
-        linkedList.addFirst(item);
+        linkedList.addLast(item);
     }
 
     @Override
     public E pop() {
-        return linkedList.removeFirst();
+        return linkedList.removeLast();
     }
 
     @Override
