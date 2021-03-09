@@ -1,7 +1,9 @@
 package structure.impl;
 
 import org.junit.jupiter.api.*;
-import structure.impl.ArrayQueue;
+import structure.impl.queue.ArrayQueue;
+import structure.impl.queue.LinkedListQueue;
+import structure.impl.queue.LoopQueue;
 import structure.interfaces.Queue;
 
 import java.util.Random;
@@ -118,11 +120,11 @@ public class QueueTest {
     }
 
     @Nested
-    @DisplayName("ArrayQueue 与 LoopQueue 性能比对")
+    @DisplayName("基于不同实现的 Queue 性能比对")
     class CompareArrayQueueAndLoopQueue {
 
         Queue<Integer> queue;
-        private static final int NUMS = 1000000;
+        private static final int NUMS = 10000000;
 
         @BeforeEach
         public void startCase() {
@@ -139,6 +141,7 @@ public class QueueTest {
 
         @DisplayName("case1: Array Queue 增加和删除元素消耗时间")
         @Test
+        @Disabled
         void testFirstTest() {
 
             long start = System.currentTimeMillis();
@@ -174,7 +177,26 @@ public class QueueTest {
                 queue.remove();
             }
 
-            System.out.println("Array Queue cost: " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("Loop Queue cost: " + (System.currentTimeMillis() - start) + " ms");
+        }
+
+        @DisplayName("case3: LinkedList Queue 增加和删除元素所消耗时间")
+        @Test
+        void testThreeTest() {
+            long start = System.currentTimeMillis();
+
+            queue = new LinkedListQueue<>();
+
+            Random random = new Random();
+            for (int i = 0; i < NUMS; i++) {
+                queue.add(random.nextInt(Integer.MAX_VALUE));
+            }
+
+            for (int i = 0; i < NUMS; i++) {
+                queue.remove();
+            }
+
+            System.out.println("LinkedList Queue cost: " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 

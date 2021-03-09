@@ -1,5 +1,6 @@
-package structure.impl;
+package structure.impl.stack;
 
+import structure.impl.LinkedList;
 import structure.interfaces.Stack;
 
 /**

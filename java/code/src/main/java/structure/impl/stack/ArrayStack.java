@@ -1,4 +1,4 @@
-package structure.impl;
+package structure.impl.stack;
 
 import structure.Array;
 import structure.interfaces.Stack;

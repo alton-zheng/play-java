@@ -1,4 +1,4 @@
-package structure.impl;
+package structure.impl.queue;
 
 import structure.Array;
 import structure.interfaces.Queue;

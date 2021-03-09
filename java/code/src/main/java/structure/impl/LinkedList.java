@@ -233,10 +233,13 @@ public class LinkedList<E> implements List<E> {
     private void linkFirst(E e) {
 
         final Node<E> df = dummyFirst;
-        final Node<E> newNode = new Node<>(df, e, df.next);
+        final Node<E> next = dummyFirst.next;
+        final Node<E> newNode = new Node<>(df, e, next);
 
-        if (df.next == null) {
+        if (next == null) {
             last = newNode;
+        } else {
+            next.prev = newNode;
         }
 
         dummyFirst.next = newNode;
@@ -251,15 +254,17 @@ public class LinkedList<E> implements List<E> {
      */
     void linkLast(E e) {
 
-        final Node<E> l = last;
+        Node<E> l = last;
         final Node<E> newNode = new Node<>(l, e, null);
-        last = newNode;
 
         if (l == null) {
             dummyFirst.next = newNode;
+            newNode.prev = dummyFirst;
         } else {
             l.next = newNode;
         }
+
+        last = newNode;
 
         size++;
         modCount++;
@@ -313,17 +318,18 @@ public class LinkedList<E> implements List<E> {
 
         final E element = l.item;
         final Node<E> prev = l.prev;
-        l.item = null;
-        l.prev = null;
-        l.next = null; // help GC
 
-        if (prev == dummyFirst) {
-            dummyFirst.next = null;
+        if (prev.item == null) {
+            dummyFirst = new Node<>(null, null, null);
             last = null;
         } else {
             prev.next = null;
             last = prev;
         }
+
+        l.item = null;
+        l.prev = null;
+        l.next = null; // help GC
 
         size--;
         modCount++;

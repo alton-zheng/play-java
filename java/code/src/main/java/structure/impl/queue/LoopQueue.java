@@ -1,4 +1,4 @@
-package structure.impl;
+package structure.impl.queue;
 
 import structure.interfaces.Queue;
 import sun.misc.SharedSecrets;

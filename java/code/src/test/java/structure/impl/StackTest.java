@@ -1,7 +1,8 @@
 package structure.impl;
 
 import org.junit.jupiter.api.*;
-import structure.impl.ArrayStack;
+import structure.impl.stack.ArrayStack;
+import structure.impl.stack.LinkedListStack;
 import structure.interfaces.Stack;
 
 import java.util.Random;
@@ -69,7 +70,7 @@ public class StackTest {
     class LinkedListStackTest {
 
         Stack<Integer> stack;
-        private static final int NUMS = 10;
+        private static final int NUMS = 10000000;
 
         @BeforeEach
         public void startCase() {
@@ -98,13 +99,11 @@ public class StackTest {
                 stack.push(random.nextInt(Integer.MAX_VALUE));
             }
 
-            System.out.println(stack.size());
-
             for (int i = 0; i < NUMS; i++) {
                 stack.pop();
             }
 
-            System.out.println("Array Queue cost: " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("ArrayStack cost: " + (System.currentTimeMillis() - start) + " ms");
 
         }
 
@@ -119,13 +118,12 @@ public class StackTest {
             for (int i = 0; i < NUMS; i++) {
                 stack.push(random.nextInt(Integer.MAX_VALUE));
             }
-            System.out.println(stack);
 
             for (int i = 0; i < NUMS; i++) {
-                System.out.println(stack.pop());
+                stack.pop();
             }
 
-            System.out.println("Array Queue cost: " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("LinkedListStack cost: " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 

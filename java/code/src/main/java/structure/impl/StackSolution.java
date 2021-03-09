@@ -1,5 +1,6 @@
 package structure.impl;
 
+import structure.impl.stack.ArrayStack;
 import structure.interfaces.Stack;
 
 /**
