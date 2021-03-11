@@ -200,11 +200,16 @@ int arr2[] = {10, 20, 30, 40, 50};
 
 http://www.geeksforgeeks.org/fundamentals-of-algorithms/
 http://www.geeksforgeeks.org/data-structures/
+cslibrary.stanford.edu/105/
 
 &nbsp;
 
 可视化的方式，利于更好的理解数据结构：
 
 https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
+
+http://www.getssin.com/in/4odbu09m5p
+
+
 
 
