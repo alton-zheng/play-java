@@ -1,6 +1,7 @@
 package structure.impl;
 
-import javax.swing.tree.TreeNode;
+import structure.impl.stack.LinkedListStack;
+import structure.interfaces.Stack;
 
 /**
  * @Author: alton
@@ -56,7 +57,6 @@ public class BST<E extends Comparable<E>> {
         if (node == null) {
             size++;
             return new Node(item);
-
         }
 
         if (item.compareTo(node.item) < 0) {
@@ -110,6 +110,95 @@ public class BST<E extends Comparable<E>> {
             preOrder(node.left);
             preOrder(node.right);
         }
+    }
+
+    public void preOrderNR() {
+        preOrderNR(root);
+    }
+
+    public void preOrderNR(Node node) {
+
+        Stack<Node> stack = new LinkedListStack<>();
+        stack.push(node);
+
+        while (!stack.empty()) {
+
+            Node cur = stack.pop();
+            System.out.print(cur.item + ",");
+            if (cur.right != null) stack.push(cur.right);
+            if (cur.left != null) stack.push(cur.left);
+
+        }
+
+    }
+
+
+    public void inOrder() {
+        inOrder(root);
+    }
+
+    public void inOrder(Node node) {
+
+        if (node != null) {
+
+            inOrder(node.left);
+            System.out.print(node.item + ",");
+            inOrder(node.right);
+
+        }
+    }
+
+    public void suOrder() {
+        suOrder(root);
+    }
+
+    private void suOrder(Node node) {
+
+        if (node != null) {
+
+            suOrder(node.left);
+            System.out.print(node.item + ",");
+            suOrder(node.right);
+
+        }
+
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder res = new StringBuilder();
+
+        generateBSTString(root, 0, res);
+
+        return res.toString();
+
+    }
+
+    private void generateBSTString(Node node, int depth, StringBuilder res) {
+
+        if (node == null) {
+            res.append(generateDepth(depth)).append("NULL\n");
+            return;
+        }
+
+        res.append(generateDepth(depth)).append(node.item).append("\n");
+
+        depth++;
+        generateBSTString(node.left, depth, res);
+        generateBSTString(node.right, depth, res);
+
+    }
+
+    private String generateDepth(int depth) {
+        StringBuilder res = new StringBuilder();
+
+        for (int i = 0; i < depth; i++) {
+            res.append("--");
+        }
+
+        return res.toString();
+
     }
 
 }

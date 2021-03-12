@@ -33,7 +33,7 @@ public class BSTTest {
 
             bst = new BST<>();
 
-            int[] d = {1, 6, 10, 9, 7, 8, 4, 3, 16};
+            int[] d = {5, 3, 6, 8, 4, 2};
 
             for (int i : d) {
                 bst.add(i);
@@ -64,10 +64,26 @@ public class BSTTest {
 
         }
 
-        @DisplayName("case2: 遍历数据")
+        @DisplayName("case2: 递归遍历数据")
         @Test
         void testSecondTest() {
+
+            System.out.print("前序遍历(递归): ");
             bst.preOrder();
+            System.out.println();
+
+            System.out.print("前序遍历（非递归）：");
+            bst.preOrderNR();
+            System.out.println();
+
+            System.out.print("中序遍历: ");
+            bst.inOrder();
+            System.out.println();
+
+            System.out.print("后续遍历: ");
+            bst.suOrder();
+            System.out.println();
+
         }
 
         @DisplayName("case 3: 判断元素是否存在")
@@ -76,6 +92,14 @@ public class BSTTest {
 
             System.out.println(bst.contains(6));
             System.out.print(bst.contains(11));
+
+        }
+
+        @DisplayName("case 4: 打印 bst")
+        @Test
+        void testFourTest() {
+
+            System.out.println(bst);
 
         }
 
