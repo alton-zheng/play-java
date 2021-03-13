@@ -1,6 +1,8 @@
 package structure.impl;
 
+import structure.impl.queue.LoopQueue;
 import structure.impl.stack.LinkedListStack;
+import structure.interfaces.Queue;
 import structure.interfaces.Stack;
 
 /**
@@ -148,18 +150,38 @@ public class BST<E extends Comparable<E>> {
         }
     }
 
-    public void suOrder() {
-        suOrder(root);
+    public void postOder() {
+        postOder(root);
     }
 
-    private void suOrder(Node node) {
+    private void postOder(Node node) {
 
         if (node != null) {
 
-            suOrder(node.left);
+            postOder(node.left);
             System.out.print(node.item + ",");
-            suOrder(node.right);
+            postOder(node.right);
 
+        }
+
+    }
+
+    public void levelOrder() {
+
+        Queue<Node> queue = new LoopQueue<>();
+        queue.add(root);
+
+        while (!queue.empty()) {
+            Node cur = queue.remove();
+            System.out.print(cur.item + ",");
+
+            if (cur.left != null) {
+                queue.add(cur.left);
+            }
+
+            if (cur.right != null) {
+                queue.add(cur.right);
+            }
         }
 
     }

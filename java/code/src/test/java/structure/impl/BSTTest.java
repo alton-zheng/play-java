@@ -81,7 +81,11 @@ public class BSTTest {
             System.out.println();
 
             System.out.print("后续遍历: ");
-            bst.suOrder();
+            bst.postOder();
+            System.out.println();
+
+            System.out.print("层级遍历（广度遍历）：");
+            bst.levelOrder();
             System.out.println();
 
         }
