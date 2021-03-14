@@ -8,7 +8,7 @@ import structure.interfaces.Stack;
 /**
  * @Author: alton
  * @Date: Created in 2021/3/11 1:32 PM
- * @Description: BST
+ * @Description: Binary Search Tree
  */
 public class BST<E extends Comparable<E>> {
 
@@ -41,19 +41,17 @@ public class BST<E extends Comparable<E>> {
         return size == 0;
     }
 
+
+    /**
+     * Add the item element to the binary search tree.
+     * @param item item element to be added.
+     */
     public void add(E item) {
 
         root = add(root, item);
 
     }
 
-    /**
-     * 向以 node 为根的二分搜索树插入元素 e, 递归算法
-     *
-     * @param node
-     * @param item
-     * @return 返回插入新节点后二分搜索树的根
-     */
     private Node add(Node node, E item) {
 
         if (node == null) {
@@ -72,11 +70,11 @@ public class BST<E extends Comparable<E>> {
     }
 
     /**
-     * 看二分搜索树中是否包含元素 item
+     * Determine if the binary search tree contains item
      *
      * @param item
-     * @return {<code>true</code> 包含
-     * <code>false</code> 不包含}
+     * @return {<code>true</code> Contains the item element
+     * <code>false</code> Does not contain the item element}
      */
     public boolean contains(E item) {
         return contains(root, item);
@@ -101,6 +99,9 @@ public class BST<E extends Comparable<E>> {
     }
 
 
+    /**
+     * Pre-Order Traversal (recursive)
+     */
     public void preOrder() {
         preOrder(root);
     }
@@ -114,6 +115,9 @@ public class BST<E extends Comparable<E>> {
         }
     }
 
+    /**
+     * Pre-Order Traversal (non-recursive)
+     */
     public void preOrderNR() {
         preOrderNR(root);
     }
@@ -135,6 +139,9 @@ public class BST<E extends Comparable<E>> {
     }
 
 
+    /**
+     * In-Order Traversal
+     */
     public void inOrder() {
         inOrder(root);
     }
@@ -150,6 +157,9 @@ public class BST<E extends Comparable<E>> {
         }
     }
 
+    /**
+     * Post-Order Traversal
+     */
     public void postOder() {
         postOder(root);
     }
@@ -166,6 +176,9 @@ public class BST<E extends Comparable<E>> {
 
     }
 
+    /**
+     * Breadth First Traversal
+     */
     public void levelOrder() {
 
         Queue<Node> queue = new LoopQueue<>();

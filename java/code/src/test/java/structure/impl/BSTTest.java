@@ -7,21 +7,21 @@ import org.junit.jupiter.api.*;
  * @Date: Created in 2021/3/11 5:12 PM
  * @Description:
  */
-@DisplayName("BST 测试用例")
+@DisplayName("BST Test Case")
 public class BSTTest {
 
     @BeforeAll
     public static void init() {
-        System.out.println("开始执行 List 测试用例");
+        System.out.println("started");
     }
 
     @AfterAll
     public static void cleanup() {
-        System.out.println("用例执行完毕，清理数据");
+        System.out.println("finished");
     }
 
     @Nested
-    @DisplayName("测试用例")
+    @DisplayName("test case")
     class CaseTest {
 
         private BST<Integer> bst;
@@ -48,11 +48,11 @@ public class BSTTest {
 
         }
 
-        @DisplayName("case1: 新增数据")
+        @DisplayName("case1: add elements")
         @Test
         void testFirstTest() {
 
-            System.out.println("BST 新增数据前，大小： " + bst.size());
+            System.out.println("BST size before adding elements: " + bst.size());
 
             int[] source = {11, 12};
 
@@ -60,37 +60,37 @@ public class BSTTest {
                 bst.add(i);
             }
 
-            System.out.println("LinkedList 新增数据后， 大小： : " + bst.size());
+            System.out.println("BST size ater adding elements: " + bst.size());
 
         }
 
-        @DisplayName("case2: 递归遍历数据")
+        @DisplayName("case2: Traversal data")
         @Test
         void testSecondTest() {
 
-            System.out.print("前序遍历(递归): ");
+            System.out.print("Pre-Order Traversal (recursive)");
             bst.preOrder();
             System.out.println();
 
-            System.out.print("前序遍历（非递归）：");
+            System.out.print("Pre-Order Traversal (non-recursive)：");
             bst.preOrderNR();
             System.out.println();
 
-            System.out.print("中序遍历: ");
+            System.out.print("In-Order Traversal ");
             bst.inOrder();
             System.out.println();
 
-            System.out.print("后续遍历: ");
+            System.out.print("Post-Order Traversal: ");
             bst.postOder();
             System.out.println();
 
-            System.out.print("层级遍历（广度遍历）：");
+            System.out.print("Level Order Traversal：");
             bst.levelOrder();
             System.out.println();
 
         }
 
-        @DisplayName("case 3: 判断元素是否存在")
+        @DisplayName("case 3: Determine if the binary search tree contains tree")
         @Test
         void testThreeTest() {
 
@@ -99,7 +99,7 @@ public class BSTTest {
 
         }
 
-        @DisplayName("case 4: 打印 bst")
+        @DisplayName("case 4: printing bst")
         @Test
         void testFourTest() {
 
