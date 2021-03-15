@@ -42,7 +42,7 @@ objB.instance = objA
 
 &nbsp;
 
-- 可达性分析: JVM 用
+- 可达性分析: JVM 用 (Root Searching)
   - 从 `gc Roots` 开始向下搜索，如果一个对象到 Gc Roots 没有引用则说明该对象不可达。
   - `Gc Roots`
     - 对下列引用的对象
@@ -70,7 +70,7 @@ objB.instance = objA
 
 垃圾收集算法大致有三种:
 
-- 标记-清除
+- 标记-清除 (Mark-Sweep)
 
   - 基础算法
   - 缺点
@@ -94,7 +94,9 @@ objB.instance = objA
         - 并发清除
           - 耗时长
 
-- 标记-复制
+&nbsp;
+
+- 标记-复制 (Copying)
 
   - 解决 标记-清除算法执行效率不高的问题
   - “半区复制”
@@ -107,6 +109,8 @@ objB.instance = objA
     - `Paraller Scavenge` 新生代收集器
       - 达到可控的吞吐量（Throughput)
         - 运行用户代码时间/（运行用户代码时间 + 运行垃圾收集时间）
+
+&nbsp;
 
 - 标记-整理（Mark - Compact）
 
@@ -131,6 +135,8 @@ objB.instance = objA
 
 Java中垃圾回收器：
 
+分区
+
 - G1
 
   - 面向堆内存任何部分来组成回收集（Collection Set, CSet）进行回收
@@ -142,12 +148,33 @@ Java中垃圾回收器：
     - 将 heap 划分为大小相等的独立区域
     - 初始标记，并发标记，最后标记，筛选回收
 - ZGC
-- Serial:单线程收集器，只会使用一个线程完成垃圾收集工作。在进行垃圾收集时必须暂停其余线程。
-- Parnew：Serial收集器的多线程版本，使用多条线程进行垃圾回收工作。
+- Shenandoah
+
+分代
+
+- Serial: 单线程收集器，只会使用一个线程完成垃圾收集工作。在进行垃圾收集时必须暂停其余线程。
+- ParNew：Serial 收集器的多线程版本，使用多条线程进行垃圾回收工作。
 - Parallel Scavenge：吞吐量优先，主要适合在后台运算而不需要太多交互的任务。配合有自适应策略。
-- Serial old：serial收集器的老年代版本
-- Parallel old：parallel 收集器的老年代版本
-- CMS收集器：最短回收停顿；
+- `Serial old`：
+  - `serial` 收集器的老年代版本
+  - a stop-the-world, copying collector which users a single GC
+- `Parallel old`：
+  - `parallel Scavenage` 收集器的老年代版本
+  - a stop-the-world, copying collector which uses a multi GC
+- CMS收集器：
+  - ParNew 的老年代
+  - 最短回收停顿；
+  - concurrent mark sweep
+  - a mostly concurrent, low-pause collector
+  - 4 phases
+    - initial mark
+    - concurrent mark
+    - remark
+    - concurrent sweep
+  - 三色标记算法
+    - 白色： 未被标记的对象
+    - 灰色： 自身被标记，成员变量未被标记
+    - 黑色： 自身和成员变量均已标记完成
 
 &nbsp;
 

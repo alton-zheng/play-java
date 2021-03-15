@@ -33,7 +33,7 @@ public class BSTTest {
 
             bst = new BST<>();
 
-            int[] d = {5, 3, 6, 8, 4, 2};
+            int[] d = {5, 3, 6, 8, 4, 2, 1, 7, 9, 10};
 
             for (int i : d) {
                 bst.add(i);
@@ -104,6 +104,40 @@ public class BSTTest {
         void testFourTest() {
 
             System.out.println(bst);
+
+        }
+
+        @DisplayName("case 5: get minimum and maximum")
+        @Test
+        void testFiveTest() {
+
+            System.out.println("maximum: " + bst.maximum());
+            System.out.println("minimum: " + bst.minimum());
+
+        }
+
+        @DisplayName("case 6: remove minimum and maximum")
+        @Test
+        void testSixTest() {
+
+            System.out.println("Before remove minimum and maximum item: \n" + bst);
+
+            bst.removeMinimum();
+            bst.removeMaximum();
+
+            System.out.println("After remove minimum and maximum item: \n" + bst);
+
+        }
+
+        @DisplayName("case 7: remove a specified item")
+        @Test
+        void testSevenTest() {
+
+            System.out.println("Before remove a specified item: \n" + bst);
+
+            bst.remove(5);
+
+            System.out.println("after remove a specified item: \n" + bst);
 
         }
 

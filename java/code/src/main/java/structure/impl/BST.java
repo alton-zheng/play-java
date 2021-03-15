@@ -44,6 +44,7 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Add the item element to the binary search tree.
+     *
      * @param item item element to be added.
      */
     public void add(E item) {
@@ -199,13 +200,153 @@ public class BST<E extends Comparable<E>> {
 
     }
 
+    /**
+     * The minimum item of BST
+     *
+     * @return minimum item
+     */
+    public E minimum() {
+
+        return minimum(root).item;
+
+    }
+
+    private Node minimum(Node node) {
+
+        if (node.left == null) {
+            return node;
+        }
+
+        return minimum(node.left);
+
+    }
+
+    /**
+     * The maximum item of BST
+     *
+     * @return the maximum item
+     */
+    public E maximum() {
+
+        return maximum(root).item;
+
+    }
+
+    private Node maximum(Node node) {
+
+        if (node.right == null) {
+            return node;
+        }
+
+        return maximum(node.right);
+
+    }
+
+    /**
+     * remove maximum item of BST
+     *
+     * @return maximum item
+     */
+    public E removeMaximum() {
+        E maximum = maximum();
+
+        root = removeMaximum(root);
+
+        return maximum;
+    }
+
+    private Node removeMaximum(Node node) {
+
+        if (node.right == null) {
+            Node n = node.left;
+            node.left = null;
+            return n;
+        }
+
+        node.right = removeMaximum(node.right);
+        return node;
+
+    }
+
+    /**
+     * remove minimum item of BST
+     *
+     * @return minimum item
+     */
+    public E removeMinimum() {
+        E minimum = minimum();
+
+        root = removeMinimum(root);
+
+        return minimum;
+    }
+
+    private Node removeMinimum(Node node) {
+
+        if (node.left == null) {
+            Node n = node.right;
+            node.right = null;
+            return n;
+        }
+
+        node.left = removeMinimum(node.left);
+        return node;
+
+    }
+
+    /**
+     * Remove a specified Item
+     */
+    public void remove(E item) {
+
+        root = remove(root, item);
+
+    }
+
+    private Node remove(Node node, E item) {
+
+        if (node == null) {
+            return node;
+        }
+
+        if (item.compareTo(node.item) < 0) {
+            node.left = remove(node.left, item);
+            return node;
+        }
+
+        if (item.compareTo(node.item) > 0) {
+            node.right = remove(node.right, item);
+            return node;
+        }
+
+        if (node.left == null) {
+            final Node n = node.right;
+            node.right = null;
+            return n;
+        }
+
+        if (node.right == null) {
+            final Node n = node.left;
+            node.left = null;
+            return n;
+        }
+
+        Node newNode = new Node(minimum(node.right).item);
+        newNode.right = removeMinimum(node.right);
+        newNode.left = node.left;
+
+        node = null;
+
+        return newNode;
+
+    }
+
     @Override
     public String toString() {
 
         StringBuilder res = new StringBuilder();
 
         generateBSTString(root, 0, res);
-
         return res.toString();
 
     }
