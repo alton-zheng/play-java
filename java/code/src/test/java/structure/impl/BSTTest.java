@@ -138,6 +138,7 @@ public class BSTTest {
             bst.remove(5);
 
             System.out.println("after remove a specified item: \n" + bst);
+            System.out.println("BST size: " + bst.size());
 
         }
 

@@ -258,9 +258,10 @@ public class BST<E extends Comparable<E>> {
     private Node removeMaximum(Node node) {
 
         if (node.right == null) {
-            Node n = node.left;
+            Node leftNode = node.left;
             node.left = null;
-            return n;
+            size--;
+            return leftNode;
         }
 
         node.right = removeMaximum(node.right);
@@ -284,9 +285,10 @@ public class BST<E extends Comparable<E>> {
     private Node removeMinimum(Node node) {
 
         if (node.left == null) {
-            Node n = node.right;
+            Node rightNode = node.right;
             node.right = null;
-            return n;
+            size--;
+            return rightNode;
         }
 
         node.left = removeMinimum(node.left);
@@ -320,24 +322,26 @@ public class BST<E extends Comparable<E>> {
         }
 
         if (node.left == null) {
-            final Node n = node.right;
+            final Node rightNode = node.right;
+            size--;
             node.right = null;
-            return n;
+            return rightNode;
         }
 
         if (node.right == null) {
-            final Node n = node.left;
+            final Node leftNode = node.left;
+            size--;
             node.left = null;
-            return n;
+            return leftNode;
         }
 
-        Node newNode = new Node(minimum(node.right).item);
-        newNode.right = removeMinimum(node.right);
-        newNode.left = node.left;
+        Node successor = new Node(minimum(node.right).item);
+        successor.right = removeMinimum(node.right);
+        successor.left = node.left;
 
-        node = null;
+        node.right = node.left = null;
 
-        return newNode;
+        return successor;
 
     }
 
