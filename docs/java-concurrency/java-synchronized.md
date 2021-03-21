@@ -250,9 +250,12 @@ synchronized (lock) {
 >
 >&nbsp;
 >
-> synchronized(Object)
+> synchronized(o)
 >
 >- 不能用 String 常量， Integer, Long
+>- o 在使用的过程，不能被重新定义，不然并发会出现问题
+>
+>
 
 &nbsp;
 

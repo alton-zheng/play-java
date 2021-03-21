@@ -111,6 +111,20 @@ Thread t2 = new Thread(
 
 每个线程在 CPU 中执行， CPU 不断的切换，切换到处理某个线程，一会将这个线程移出去到等待队列，然后另一个线程进入 CPU 执行，一会又释放出去，.... 依次类推，直到所有线程执行完毕
 
+&nbsp;
+
+## 解析自旋锁CAS操作与volatile
+
+- --XX:PretenureSizeThreshold 的默认值和作用
+  - 作用： 不管对象多大，都是先在 eden 分配内存, 放不下后，到 old 去
+  - 默认值为 0 
+
+&nbsp;
+
+> Lock 底层用 CAS
+
+
+
 
 
 &nbsp;
