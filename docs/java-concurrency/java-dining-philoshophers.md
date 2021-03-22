@@ -20,7 +20,7 @@ The present formulation was given by Tony Hoare, who is also known for inventing
 
 ## **2. The Problem**
 
-[![img](https://www.baeldung.com/wp-content/uploads/2017/05/dp0-297x300.png)](https://www.baeldung.com/wp-content/uploads/2017/05/dp0.png)
+[![img](/Users/alton/Documents/profile/notebook/Java/play-java/docs/java-concurrency/images/dp0-297x300.png)
 
 The diagram above represents the problem. There are five silent philosophers (P1 – P5) sitting around a circular table, spending their lives eating and thinking.
 

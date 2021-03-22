@@ -112,3 +112,15 @@ volatile 原理和
 
 后续细化，目前先整理这么多
 
+
+
+### `synchronized​` 和  `reentrant-lock​` 的区别?
+
+>synchronized 自动加解锁, reentrantLock  手动加解锁
+>
+>reentrantLock 可以有不同 condition（等待队列）
+>
+>reentrantLock 底层 CAS 的实现， synchronized 4种状态锁升级
+
+&nbsp;
+

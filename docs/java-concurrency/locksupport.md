@@ -37,3 +37,14 @@ public class T13_TestLockSupport {
 }
 ```
 
+>LockSupport 可以实现暂停线程运行（停车）
+>
+>在需要的时候，将线程 t 重新出发
+>
+>unpark(t) 可以在 park 前调用，相当于给了车特权，后面可以不听指挥，不停车。
+>
+>比 wait notify() 更灵活
+
+
+
+ArrayList 不是线程安全的。

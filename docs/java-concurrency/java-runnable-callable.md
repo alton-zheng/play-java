@@ -1,20 +1,6 @@
 # Runnable vs. Callable in Java
 
-Last modified: May 7, 2019
-
-by [baeldung](https://www.baeldung.com/author/baeldung/)
-
-
-
-- [Java](https://www.baeldung.com/category/java/)**+**
-
-- [Java Concurrency](https://www.baeldung.com/tag/java-concurrency/)
-
-### **Get started with Spring 5 and Spring Boot 2, through the \*Learn Spring\* course:**
-
-**[>> CHECK OUT THE COURSE](https://www.baeldung.com/ls-course-start)**
-
-If you have a few years of experience in the Java ecosystem, and you're interested in sharing that experience with the community (and getting paid for your work of course), have a look at the ["Write for Us" page](https://www.baeldung.com/contribution-guidelines). Cheers, Eugen
+&nbsp;
 
 ## **1. Overview**
 

@@ -1,20 +1,18 @@
-# Overview of the java.util.concurrent
+# java.util.concurrent 概览
 
 
 
-## **1. Overview**
+## **1. 概览**
 
-The *java.util.concurrent* package provides tools for creating concurrent applications.
-
-In this article, we will do an overview of the whole package.
-
-* java.util。concurrent* package提供创建并发应用程序的工具。
+`*java.util.concurrent*` 包提供创建并发应用程序的工具。
 
 在本文中，我们将对整个包进行概述。
 
-## **2. Main Components**
+&nbsp;
 
-The *java.util.concurrent* contains way too many features to discuss in a single write-up. In this article, we will mainly focus on some of the most useful utilities from this package like:
+## 2. 主要的组件
+
+**java.util.concurrent**  包含太多 feature，无法在一篇文章中讨论完全。在本文中，我们将主要关注这个包中一些最有用的实用程序，比如:
 
 - *Executor*
 - *ExecutorService*
@@ -29,44 +27,19 @@ The *java.util.concurrent* contains way too many features to discuss in a single
 - *Locks*
 - *Phaser*
 
-You can also find many dedicated articles to individual classes here.
-
-* java.util。concurrent*包含太多的特性，无法在一篇文章中讨论。在本文中，我们将主要关注这个包中一些最有用的实用程序，比如:
-
-- *执行人*
-- * ExecutorService *
-- * ScheduledExecutorService *
-未来- * *
-- * CountDownLatch *
-- * CyclicBarrier *
-信号- * *
-ThreadFactory - * *
-- * BlockingQueue *
-- * DelayQueue *
-* - *锁
-- *移相器*
-
 您还可以在这里找到许多专门针对各个类的文章。
 
+&nbsp;
 
+### 2.1 Executor
 
-### **2.1. \*Executor\***
-
-***[Executor](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Executor.html)\* is an interface that represents an object that executes provided tasks.**
-
-It depends on the particular implementation (from where the invocation is initiated) if the task should be run on a new or current thread. Hence, using this interface, we can decouple the task execution flow from the actual task execution mechanism.
-
-One point to note here is that *Executor* does not strictly require the task execution to be asynchronous. In the simplest case, an executor can invoke the submitted task instantly in the invoking thread.
-
-We need to create an invoker to create the executor instance:
-
-***[Executor](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Executor.html)\*是一个接口，表示执行提供的任务的对象
+[Executor](https://docs.oracle.com/javase/8/docs/fapi/java/util/concurrent/Executor.html) 是一个接口，表示执行提供的任务的对象
 
 它取决于特定的实现(从调用开始的地方)，任务是否应该在新的线程或当前线程上运行。因此，使用这个接口，我们可以将任务执行流与实际的任务执行机制解耦。
 
-这里需要注意的一点是，*Executor*并不严格要求任务执行是异步的。在最简单的情况下，执行程序可以在调用线程中立即调用提交的任务。
+这里需要注意的一点是，*Executor* 并不严格要求任务执行是异步的。在最简单的情况下，执行程序可以在调用线程中立即调用提交的任务。
 
-我们需要创建一个调用器来创建executor实例:
+我们需要创建一个 invoker 来创建 executor 实例:
 
 ```java
 public class Invoker implements Executor {
@@ -77,7 +50,9 @@ public class Invoker implements Executor {
 }
 ```
 
-Now, we can use this invoker to execute the task.
+&nbsp;
+
+现在，我们可以使用这个 `invoker` 执行任务。
 
 ```java
 public void execute() {
@@ -88,19 +63,15 @@ public void execute() {
 }
 ```
 
-Point to note here is that if the executor can't accept the task for execution, it will throw *[RejectedExecutionException](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RejectedExecutionException.html)*.
+这里需要注意的是，如果 executor 不能接受任务执行，它将抛出 [RejectedExecutionException](https://docs.oracle.com/javase/8/dfocs/api/java/util/concurrent/RejectedExecutionException.html) 。
 
-这里需要注意的是，如果执行器不能接受任务执行，它将抛出*[RejectedExecutionException](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RejectedExecutionException.html)*. exe)。
+&nbsp;
 
-### **2.2. \*ExecutorService\***
+### 2.2. ExecutorService
 
-*ExecutorService* is a complete solution for asynchronous processing. It manages an in-memory queue and schedules submitted tasks based on thread availability.
+*ExecutorService* 是一个完整的异步处理解决方案。它管理 `in-memory` 中的队列，并根据线程可用性调度提交的任务。
 
-To use *ExecutorService,* we need to create one *Runnable* class.
-
-*ExecutorService*是一个完整的异步处理解决方案。它管理内存中的队列，并根据线程可用性调度提交的任务。
-
-要使用*ExecutorService，*我们需要创建一个*Runnable*类。
+要使用 *ExecutorService* ，我们需要创建一个 *Runnable* 类。
 
 ```java
 public class Task implements Runnable {
@@ -111,19 +82,19 @@ public class Task implements Runnable {
 }
 ```
 
-Now we can create the *ExecutorService* instance and assign this task. At the time of creation, we need to specify the thread-pool size.
+&nbsp;
+
+现在我们能创建 *ExecutorService* 实例和分配这个任务。 在创建的同时，我们需要指定 `thread-pool` 的大小。
 
 ```java
 ExecutorService executor = Executors.newFixedThreadPool(10);
 ```
 
-If we want to create a single-threaded *ExecutorService* instance, we can use ***newSingleThreadExecutor(ThreadFactory threadFactory)\*** to create the instance.
+&nbsp;
 
-Once the executor is created, we can use it to submit the task.
+如果我们想创建一个单线程的 *ExecutorService* 实例，我们可以使用 `newSingleThreadExecutor(ThreadFactory ThreadFactory) ` 来创建实例。
 
-如果我们想创建一个单线程的*ExecutorService*实例，我们可以使用***newSingleThreadExecutor(ThreadFactory ThreadFactory)\***来创建实例。
-
-一旦创建了executor，我们就可以使用它来提交任务。
+一旦创建了 executor ，我们就可以使用它来提交任务。
 
 ```java
 public void execute() { 
@@ -131,9 +102,9 @@ public void execute() {
 }
 ```
 
-We can also create the *Runnable* instance while submitting the task.
+&nbsp;
 
-我们还可以在提交任务时创建*Runnable*实例。
+我们还可以在提交任务时创建 *Runnable* 实例。
 
 ```java
 executor.submit(() -> {
@@ -141,13 +112,14 @@ executor.submit(() -> {
 });
 ```
 
-It also comes with two out-of-the-box execution termination methods. The first one is *shutdown()*; it waits until all the submitted tasks finish executing. The other method is *shutdownNow()* whic*h* immediately terminates all the pending/executing tasks.
+&nbsp;
 
-There is also another method *awaitTermination(long timeout, TimeUnit unit)* which forcefully blocks until all tasks have completed execution after a shutdown event triggered or execution-timeout occurred, or the execution thread itself is interrupted,
+它还提供了两个 `out-of-the-box` 的 termination 方法。
 
-它还提供了两个开箱即用的执行终止方法。第一个是*shutdown()*;它会一直等待，直到所有提交的任务完成执行。另一个方法是*shutdownNow()*，它*h*立即终止所有挂起/正在执行的任务。
+- 第一个是 *shutdown()* ; 它会一直等待，直到所有提交的任务完成执行。
+- 另一个方法是 *shutdownNow()*，它会立即终止所有挂起和正在执行的任务。
 
-还有另一个方法* awaitterminate (long timeout, TimeUnit unit)*强制阻塞，直到触发关机事件或发生执行超时，或执行线程本身被中断后，所有任务都完成执行。
+还有另一个方法 `awaitTermination(long timeout, TimeUnit unit)` 强制阻塞，直到触发 `shutdown` 事件或发生 `execution-timeout`，或执行线程本身被中断后，所有任务都完成执行。
 
 ```java
 try {
@@ -157,19 +129,15 @@ try {
 }
 ```
 
-### **2.3. \*ScheduledExecutorService\*
+&nbsp;
 
-*ScheduledExecutorService* is a similar interface to *ExecutorService,* but it can perform tasks periodically.
+### 2.3. ScheduledExecutorService
 
-***Executor and ExecutorService\*‘s methods are scheduled on the spot without introducing any artificial delay.** Zero or any negative value signifies that the request needs to be executed instantly.
+*ScheduledExecutorService* 是一个类似于 *ExecutorService* 的接口，它可以定期执行任务。
 
-We can use both *Runnable* and *Callable* interface to define the task.
+`Executor` 和 `ExecutorService` 的方法在当场调度，不引入任何人为的延迟。 `0` 或任何 **负值** 表示请求需要立即执行。
 
-*ScheduledExecutorService*是一个类似于*ExecutorService的接口，*但它可以定期执行任务。
-
-***Executor和execuorservice的方法在现场安排，不引入任何人为的延迟。** 0或任何负值表示请求需要立即执行。
-
-我们可以使用*Runnable*和*Callable*接口来定义任务。
+我们可以使用 *Runnable* 和 *Callable* 接口来定义任务。
 
 ```java
 public void execute() {
@@ -189,7 +157,9 @@ public void execute() {
 }
 ```
 
-*ScheduledExecutorService* can also schedule the task **after some given fixed delay**:
+&nbsp;
+
+*ScheduledExecutorService* 也能设定固定的延迟进行调度。
 
 ```java
 executorService.scheduleAtFixedRate(() -> {
@@ -201,15 +171,15 @@ executorService.scheduleWithFixedDelay(() -> {
 }, 1, 10, TimeUnit.SECONDS);
 ```
 
-Here, the ***scheduleAtFixedRate( Runnable command, long initialDelay, long period, TimeUnit unit )*** method creates and executes a periodic action that is invoked firstly after the provided initial delay, and subsequently with the given period until the service instance shutdowns.
+&nbsp;
 
-The ***scheduleWithFixedDelay( Runnable command, long initialDelay, long delay, TimeUnit unit )*** method creates and executes a periodic action that is invoked firstly after the provided initial delay, and repeatedly with the given delay between the termination of the executing one and the invocation of the next one.
+这里，***scheduleAtFixedRate( Runnable command, long initialDelay, long period, TimeUnit unit )*** 方法创建并执行一个周期性操作，该操作在提供的初始延迟之后首先被调用，然后在给定的时间段内调用，直到服务实例关闭。
 
-这里，***scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)***方法创建并执行一个周期性操作，该操作在提供的初始延迟之后首先被调用，然后在给定的时间段内调用，直到服务实例关闭。
+***scheduleWithFixedDelay( Runnable command, long initialDelay, long delay, TimeUnit unit )***  方法创建并执行一个周期性动作，该动作在提供的初始延迟之后首先被调用，并在当前执行的操作终止和下一个操作调用之间的给定延迟中重复调用。
 
-***scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)***方法创建并执行一个周期性动作，该动作在提供的初始延迟之后首先被调用，并在当前执行的操作终止和下一个操作调用之间的给定延迟中重复调用。
+&nbsp;
 
-### **2.4. \*Future\***
+### 2.4. Future
 
 ***Future\* is used to represent the result of an asynchronous operation.** It comes with methods for checking if the asynchronous operation is completed or not, getting the computed result, etc.
 
@@ -261,7 +231,9 @@ try {
 }
 ```
 
-### **2.5. \*CountDownLatch\***
+&nbsp;
+
+### 2.5. CountDownLatch
 
 *CountDownLatch* (introduced in *JDK 5*) is a utility class which blocks a set of threads until some operation completes.
 
@@ -473,10 +445,9 @@ More information and a working example on this is available [here](https://www.b
 
 更多信息和工作示例可以在[这里](https://www.baeldung.com/java-phaser)获得。
 
-## **3. Conclusion**
+&nbsp;
 
-In this high-level, overview article, we've focused on the different utilities available of *java.util.concurrent* package.
+## 3. 总结
 
-As always, the full source code is available [over on GitHub](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-basic).
+在这篇 high-level 的概述文章中，我们重点讨论了 *java.util.concurrent* 包不同的可用的实用工具。
 
-在这篇高级的概述文章中，我们重点讨论了*java.util的不同实用程序。并发*包。
