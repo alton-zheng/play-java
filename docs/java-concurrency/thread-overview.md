@@ -79,6 +79,18 @@ Executors.newFixedThreadPool(5, ...)
 
 &nbsp;
 
+> 锁级别，锁的定义
+>
+> 无锁 00
+>
+> 偏向锁 01
+>
+> 轻量级锁 10
+>
+> 重量级锁 11
+
+&nbsp;
+
 ### 方法
 
 - `start()`
@@ -123,7 +135,84 @@ Thread t2 = new Thread(
 
 > Lock 底层用 CAS
 
+&nbsp;
 
+
+
+### AQS 源码
+
+> VarHandle 
+>
+> - 普通属性原子操作
+> - 比反射块，直接操作二进制码
+
+
+
+### ThreadLocal
+
+> 不用后，需要 remove(), 不然会一直占用内存空间。消耗资源
+
+> Reference
+>
+> 强软弱虚
+>
+> - 强： 普通对象，按 GC 规则进行回收
+>
+> - 软:  内存不够用时才会被收回
+>
+>   - memCache
+>   - 平常用 redis 即可
+>
+>   ```java
+>   SoftReference<byte[]> m = new SoftReference<>(new byte[1024*1024*10]);
+>   System.out.println(m.get()); // value
+>   System.gc();
+>   
+>   byte[] b = new byte[1024*1024*15];
+>   System.out.println(m.get());  // null
+>   ```
+
+> 弱： 
+>
+> - 只要遭遇到 GC ， 就会被回收
+> - 一般用在容器里（强引用指向弱引用，一旦强引用消失，弱引用会被自动回收）
+> - WeekHashMap(需要深入源码了解)
+>
+> ```java
+> WeekReference<M> m = new WeekReference<>(new M());
+> System.out.println(m.get());
+> System.gc();
+> System.out.println(m.get());
+> 
+> ThreadLocal<M> t1 = new ThreadLocal<>();
+> t1.set(new M());
+> t1.remove();
+> ```
+>
+> 
+>
+> 虚： 
+>
+> 管理堆外内存（不被 JVM 管理）
+>
+> 写 JVM 的人用的
+>
+> - 通知用，当锁使用的堆外内存被赋值为 null 时，不能被 JVM 自动回收，所以需要有想对应的通知机制。
+> - 当然 JVM 可以回收堆外内存，通过 UNSAFE 类进行处理
+>   - 1.8 可以通知反射机制来使用 unsafe, 后续版本被隐藏
+>
+> ```java
+> PhantomReference<M> phantomRefence   = new PhantomReference<>(new M(), QUEUE); // 当被回收时，会将虚引用放入到 Queue 中。
+> // 也就是说， Queue.poll() 有内容时，说明虚引用已经被回收
+> ```
+>
+> 
+>
+> 等待
+>
+> 等待
+>
+> 等待
 
 
 

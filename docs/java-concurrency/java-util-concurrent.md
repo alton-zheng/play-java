@@ -181,19 +181,15 @@ executorService.scheduleWithFixedDelay(() -> {
 
 ### 2.4. Future
 
-***Future\* is used to represent the result of an asynchronous operation.** It comes with methods for checking if the asynchronous operation is completed or not, getting the computed result, etc.
+Future 用于表示异步操作的结果。它附带了检查异步操作是否完成、获取计算结果等方法。
 
-What's more, the *cancel(boolean mayInterruptIfRunning)* API cancels the operation and releases the executing thread. If the value of *mayInterruptIfRunning* is true, the thread executing the task will be terminated instantly.
-
-Otherwise, in-progress tasks will be allowed to complete.
-
-***Future\*用于表示异步操作的结果。**它附带了检查异步操作是否完成、获取计算结果等方法。
-
-此外，*cancel(boolean mayInterruptIfRunning)* API取消操作并释放正在执行的线程。如果* mayinterruptirunning *的值为true，执行该任务的线程将立即终止。
+此外，*cancel(boolean mayInterruptIfRunning)*  API 取消操作并释放正在执行的线程。如果 *mayInterruptIfRunning* 的值为 `true`，执行该任务的线程将立即终止。
 
 否则，将允许正在进行的任务完成。
 
-We can use below code snippet to create a future instance:
+&nbsp;
+
+我们能用下面的代码片段创建一个 future 实例：
 
 ```java
 public void invoke() {
@@ -207,7 +203,9 @@ public void invoke() {
 }
 ```
 
-We can use following code snippet to check if the future result is ready and fetch the data if the computation is done:
+&nbsp;
+
+我们能使用下面代码片段检查 future 结果是否 ready 和计算完成时，抓取数据。
 
 ```java
 if (future.isDone() && !future.isCancelled()) {
@@ -219,9 +217,7 @@ if (future.isDone() && !future.isCancelled()) {
 }
 ```
 
-We can also specify a timeout for a given operation. If the task takes more than this time, a *TimeoutException* is thrown:
-
-我们还可以为给定的操作指定超时。如果任务花费的时间超过这个时间，则抛出一个*TimeoutException*:
+我们还可以为给定的操作指定超时。如果任务花费的时间超过这个时间，则抛出一个 *TimeoutException* :
 
 ```java
 try {
@@ -235,27 +231,19 @@ try {
 
 ### 2.5. CountDownLatch
 
-*CountDownLatch* (introduced in *JDK 5*) is a utility class which blocks a set of threads until some operation completes.
+*CountDownLatch* (引入于 *JDK 5*)  是一个工具类，它会阻塞一组线程，直到一些操作完成。
 
-A *CountDownLatch* is initialized with a *counter(Integer* type); this counter decrements as the dependent threads complete execution. But once the counter reaches zero, other threads get released.
+一个 *CountDownLatch* 被初始化为一个 *counter(Integer* type) ;当依赖线程完成执行时，此计数器递减。但是一旦计数器达到 0，其他线程就会被释放。
 
-You can learn more about *CountDownLatch* [here](https://www.baeldung.com/java-countdown-latch).
+你可以在 [这里](java-countdown-latch.md) 了解更多关于 CountDownLatch 的信息。
 
-CountDownLatch*(引入于*JDK 5*)是一个工具类，它会阻塞一组线程，直到一些操作完成。
+&nbsp;
 
-一个*CountDownLatch*被初始化为一个*counter(Integer* type);当依赖线程完成执行时，此计数器递减。但是一旦计数器达到0，其他线程就会被释放。
+### 2.6. CyclicBarrier
 
-你可以在这里(https://www.baeldung.com/java-countdown-latch)了解更多关于CountDownLatch的信息。
+*CyclicBarrier* 的工作原理与 *CountDownLatch* 几乎相同，除了我们可以重用它。与 *CountDownLatch* 不同，它允许多个线程在调用最终任务之前使用 *await()* 方法 (称为barrier condition) 等待对方。
 
-### **2.6. \*CyclicBarrier\***
-
-*CyclicBarrier* works almost the same as *CountDownLatch* except that we can reuse it. Unlike *CountDownLatch*, it allows multiple threads to wait for each other using *await()* method(known as barrier condition) before invoking the final task.
-
-We need to create a *Runnable* task instance to initiate the barrier condition:
-
-*CyclicBarrier*的工作原理与*CountDownLatch*几乎相同，除了我们可以重用它。与*CountDownLatch*不同，它允许多个线程在调用最终任务之前使用*await()*方法(称为barrier condition)等待对方。
-
-我们需要创建一个*Runnable* task实例来初始化barrier条件:
+我们需要创建一个*Runnable* task 实例来初始化 barrier 条件:
 
 ```java
 public class Task implements Runnable {
@@ -282,7 +270,9 @@ public class Task implements Runnable {
 }
 ```
 
-Now we can invoke some threads to race for the barrier condition:
+&nbsp;
+
+现在我们可以调用一些线程来竞争 barrier 条件:
 
 ```java
 public void start() {
@@ -304,35 +294,23 @@ public void start() {
 }
 ```
 
-Here, the *isBroken()* method checks if any of the threads got interrupted during the execution time. We should always perform this check before performing the actual process.
+这里，*isBroken()* 方法检查在执行期间是否有任何线程被中断。我们应该总是在执行实际过程之前执行这个检查。
 
-这里，*isBroken()*方法检查在执行期间是否有任何线程被中断。我们应该总是在执行实际过程之前执行这个检查。
+&nbsp;
 
-### **2.7. \*Semaphore\***
+### 2.7. Semaphore
 
-The *Semaphore* is used for blocking thread level access to some part of the physical or logical resource. A [semaphore](https://www.baeldung.com/cs/semaphore) contains a set of permits; whenever a thread tries to enter the critical section, it needs to check the semaphore if a permit is available or not.
+*Semaphore* 用于阻塞对物理或逻辑资源的某些部分的线程级访问。一个 [semaphore](semaphore.md) 包含一组许可; 当线程试图进入临界区时，它需要检查信号量是否有许可。
 
-**If a permit is not available (via \*tryAcquire()\*), the thread is not allowed to jump into the critical section; however, if the permit is available the access is granted, and the permit counter decreases.**
+如果一个许可不可用 (通过 *tryAcquire()* )，线程不允许跳转到临界区; 但是，如果允许可用，则授予访问权，并且允许计数器减少。
 
-Once the executing thread releases the critical section, again the permit counter increases (done by *release()* method).
+一旦正在执行的线程释放临界区，允许计数器再次增加(由 *release()* 方法完成)。
 
-We can specify a timeout for acquiring access by using the *tryAcquire(long timeout, TimeUnit unit)* method.
-
-**We can also check the number of available permits or the number of threads waiting to acquire the semaphore.**
-
-Following code snippet can be used to implement a semaphore:
-
-*Semaphore*用于阻塞对物理或逻辑资源的某些部分的线程级访问。一个[semaphore](https://www.baeldung.com/cs/semaphore)包含一组许可;当线程试图进入临界区时，它需要检查信号量是否有许可。
-
-**如果一个许可不可用(通过\*tryAcquire()\*)，线程不允许跳转到临界区;但是，如果允许可用，则授予访问权，并且允许计数器减少。**
-
-一旦正在执行的线程释放临界区，允许计数器再次增加(由*release()*方法完成)。
-
-我们可以使用*tryAcquire(long timeout, TimeUnit unit)*方法指定获取访问的超时时间。
+我们可以使用 *tryAcquire(long timeout, TimeUnit unit)* 方法指定获取访问的超时时间。
 
 我们也可以检查可用的许可数或等待获取信号量的线程数
 
-以下代码片段可以用来实现信号量:
+以下代码片段可以用来实现信号量：
 
 ```java
 static Semaphore semaphore = new Semaphore(10);
@@ -355,19 +333,17 @@ public void execute() throws InterruptedException {
 }
 ```
 
-We can implement a *Mutex* like data-structure using *Semaphore*. More details on this[ can be found here.](https://www.baeldung.com/java-semaphore)
+我们可以使用 $Semaphore$ 实现一个类似 `data-structure` 的互斥锁( `Mutex` )。更多细节 [可以在这里找到](java-semaphore.md)
 
-我们可以使用信号量实现一个类似数据结构的互斥锁。更多细节[可以在这里找到](https://www.baeldung.com/java-semaphore)
+&nbsp;
 
-### **2.8. \*ThreadFactory\***
+### 2.8. ThreadFactory
 
-As the name suggests, *ThreadFactory* acts as a thread (non-existing) pool which creates a new thread on demand. It eliminates the need of a lot of boilerplate coding for implementing efficient thread creation mechanisms.
+顾名思义，*ThreadFactory* 作为一个线程 (non-existing) 池，根据需要创建一个新的线程。它消除了实现高效线程创建机制所需的大量样板代码。
 
-顾名思义，*ThreadFactory*作为一个线程(不存在)池，根据需要创建一个新的线程。它消除了实现高效线程创建机制所需的大量样板代码。
+&nbsp;
 
-
-
-We can define a *ThreadFactory*:
+我们可以定义一个 $ThreadFactory$：
 
 ```java
 public class BaeldungThreadFactory implements ThreadFactory {
@@ -390,7 +366,9 @@ public class BaeldungThreadFactory implements ThreadFactory {
 }
 ```
 
-We can use this *newThread(Runnable r)* method to create a new thread at runtime:
+&nbsp;
+
+我们可以在 runtime 使用 *newThread(Runnable r)* 方法创建一个新线程：
 
 ```java
 BaeldungThreadFactory factory = new BaeldungThreadFactory( 
@@ -401,53 +379,46 @@ for (int i = 0; i < 10; i++) {
 }
 ```
 
+&nbsp;
+
 ### **2.9.** *BlockingQueue*
 
-In asynchronous programming, one of the most common integration patterns is the [producer-consumer pattern](https://en.wikipedia.org/wiki/Producer–consumer_problem). The *java.util.concurrent* package comes with a data-structure know as *BlockingQueue* – which can be very useful in these async scenarios.
+在异步编程中，最常见的集成模式之一是 [producer-consumer 模式](Producer -consumer_problem.md)。`java.util.concurrent` 包中附带了一个称为 *BlockingQueue* 的 `data-structure` - 在这些异步场景中非常有用。
 
-More information and a working example on this is available [here](https://www.baeldung.com/java-blocking-queue).
+更多信息和工作示例可以在 [这里](java-blocking-queue.md) 获得。
 
-在异步编程中，最常见的集成模式之一是[生产者-消费者模式](https://en.wikipedia.org/wiki/Producer -consumer_problem)。* java.util。concurrent* package附带了一个称为*BlockingQueue*的数据结构——这在这些异步场景中非常有用。
+&nbsp;
 
-更多信息和工作示例可以在[这里](https://www.baeldung.com/java-blocking-queue)获得。
+### 2.10. DelayQueue
 
-### **2.10. \*DelayQueue\***
+*DelayQueue* 是一个无限大小的阻塞队列，其中一个元素只有在它的过期时间(称为用户定义的延迟)完成时才能被拉出。因此，最顶层的元素 (*head*) 将有最大的延迟，它将在最后被轮询。
 
-*DelayQueue* is an infinite-size blocking queue of elements where an element can only be pulled if it's expiration time (known as user defined delay) is completed. Hence, the topmost element (*head*) will have the most amount delay and it will be polled last.
+更多信息和工作示例可以在 [这里](java-delay-queue.md) 获得。
 
-More information and a working example on this is available [here](https://www.baeldung.com/java-delay-queue).
+&nbsp;
 
-*DelayQueue*是一个无限大小的阻塞队列，其中一个元素只有在它的过期时间(称为用户定义的延迟)完成时才能被拉出。因此，最顶层的元素(*head*)将有最大的延迟，它将在最后被轮询。
+### 2.11. Locks
 
-更多信息和工作示例可以在[这里](https://www.baeldung.com/java-delay-queue)获得。
+毫不奇怪，*Lock* 是一个用于阻止其他线程访问正在执行特定代码段（仅有正在执行它的线程才能访问）的工具。
 
-### **2.11. \*Locks\***
+`Lock` 和 `Synchronized` 的主要区别是
 
-Not surprisingly, *Lock* is a utility for blocking other threads from accessing a certain segment of code, apart from the thread that's executing it currently.
+- `Synchronized` 完全包含在一个方法中;  
+- 但是，我们可以在不同的方法中使用 Lock API 的 Lock() 和 unlock() 操作。
 
-The main difference between a Lock and a Synchronized block is that synchronized block is fully contained in a method; however, we can have Lock API’s lock() and unlock() operation in separate methods.
+更多信息和工作示例可以在 [这里](java-concurrent-locks.md) 获得。
 
-More information and a working example on this is available [here](https://www.baeldung.com/java-concurrent-locks).
+&nbsp;
 
-毫不奇怪，*Lock*是一个用于阻止其他线程访问特定代码段的工具，除了当前正在执行它的线程。
+### 2.12. Phaser
 
-锁和同步块的主要区别是同步块完全包含在一个方法中;但是，我们可以在不同的方法中使用Lock API的Lock()和unlock()操作。
+*Phaser* 是一个比 *CyclicBarrier* 和 *CountDownLatch* 更灵活的解决方案-用于作为一个可重用的 `barrier`，在继续执行之前动态线程数量需要等待。我们可以协调多个执行阶段，为每个程序阶段重用一个 *Phaser* 实例。
 
-更多信息和工作示例可以在[这里](https://www.baeldung.com/java-concurrent-locks)获得。
-
-### **2.12. \*Phaser\*
-
-*Phaser* is a more flexible solution than *CyclicBarrier* and *CountDownLatch* – used to act as a reusable barrier on which the dynamic number of threads need to wait before continuing execution. We can coordinate multiple phases of execution, reusing a *Phaser* instance for each program phase.
-
-More information and a working example on this is available [here](https://www.baeldung.com/java-phaser).
-
-*Phaser*是一个比*CyclicBarrier*和*CountDownLatch*更灵活的解决方案-用于作为一个可重用的barrier，在继续执行之前动态线程数量需要等待。我们可以协调多个执行阶段，为每个程序阶段重用一个*Phaser*实例。
-
-更多信息和工作示例可以在[这里](https://www.baeldung.com/java-phaser)获得。
+更多信息和工作示例可以在 [这里](java-phaser.md) 获得。
 
 &nbsp;
 
 ## 3. 总结
 
-在这篇 high-level 的概述文章中，我们重点讨论了 *java.util.concurrent* 包不同的可用的实用工具。
+在这篇 high-level 的概述文章中，我们重点讨论了 *`java.util.concurrent`* 包不同的可用的实用工具。
 
