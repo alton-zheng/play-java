@@ -28,7 +28,7 @@
     - [ ] [>> Java CyclicBarrier](docs/java-concurrency/java-cyclic-barrier.md)
     - [ ] [>> An Introduction to Atomic Variables in Java](docs/java-concurrency/java-atomic-variables.md)
     - [ ] [>> Semaphores in Java](docs/java-concurrency/java-semaphore.md)
-    - [ ] [>> Binary Semaphore vs Reentrant Lock](docs/java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
+  - [ ] [>> Binary Semaphore vs Reentrant Lock](docs/java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
     - [ ] [Guide to the Java Phaser](docs/java-concurrency/java-phaser.md)
     - [ ] [>> The Dining Philosophers Problem in Java](docs/java-concurrency/java-dining-philoshophers.md)
     - [ ] [Guide to CountDownLatch in Java](docs/java-concurrency/java-countdown-latch.md)
@@ -187,7 +187,7 @@
 - [IO](docs/io.md)
 - [锁](docs/lock.md)
 - 设计模式
-- 
+- [jvm-高并发-interview](docs/java-concurrency-jvm-interview.md)
 
 
 
