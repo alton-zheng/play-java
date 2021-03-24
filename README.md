@@ -21,7 +21,7 @@
   - **Java Concurrency Basics**
     - [x] [>> java.util.concurrent 概览](docs/java-concurrency/java-util-concurrent.md)
     - [ ] [>> Java 如何启动一个线程](docs/java-concurrency/java-start-thread.md)
-    - [ ] [>> Runnable vs. Callable in Java](docs/java-concurrency/java-runnable-callable.md)
+    - [ ] [>> Java Runnable vs. Callable](docs/java-concurrency/java-runnable-callable.md)
     - [x] [>>  Java Synchronized 关键字](docs/java-concurrency/java-synchronized.md)
     - [x] [>> Java Volatile 关键字](docs/java-concurrency/java-volatile.md)
     - [ ] [>> Guide to java.util.concurrent.Locks](docs/java-concurrency/java-concurrent-locks.md)
