@@ -1,26 +1,30 @@
-# Runnable vs. Callable in Java
+# Java Runnable vs. Callable
 
 &nbsp;
 
-## **1. Overview**
+## 1. 概览
 
-Since the early days of Java, multithreading has been a major aspect of the language. *Runnable* is the core interface provided for representing multi-threaded tasks and *Callable* is an improved version of *Runnable* that was added in Java 1.5.
+​		自从 Java 初期以来， 多线程已经成为了语言的重要组成部分。 Runnable 为表示多线程任务提供了核心接口， Java 1.5 版本中， 添加了 $Callable$ 作为 Runnable 的升级版本。
 
-In this article, we'll explore the differences and the applications of both interfaces.
+​		在这篇文章中， 我们游览这两个接口在应用中的不同。
 
-## **2. Execution Mechanism**
+&nbsp;
 
-Both interfaces are designed to represent a task that can be executed by multiple threads. *Runnable* tasks can be run using the *Thread* class or *ExecutorService* whereas *Callables* can be run only using the latter.
+## 2. 执行机制
 
-## **3. Return Values**
+​		这两个接口设计用来表示一个可以由多线程执行的任务。Runnable 任务可以使用 Thread 类或 ExecutorService 来运行， 而 Callable 对象只能用 ExecutorService 来运行。
 
-Let's have a deeper look at the way these interfaces handle return values.
+&nbsp;
 
-### **3.1. With \*Runnable\***
+## 3. 返回值
 
-The *Runnable* interface is a functional interface and has a single *run()* method which doesn't accept any parameters and does not return any values.
+​		让我们深入了解一下这些接口处理返回值的方式。
 
-This is suitable for situations where we are not looking for a result of the thread execution, for example, incoming events logging:
+&nbsp;
+
+### 3.1. Runnable
+
+​		Runnable 接口是一个函数接口， 有一个 run() 方法，它不接受任何参数，也不返回任何值。这适用于我们不需要用到线程执行结果的情况，e.g. 传入事件日志：
 
 ```java
 public interface Runnable {
@@ -28,7 +32,9 @@ public interface Runnable {
 }
 ```
 
-Let's understand this with an example:
+&nbsp;
+
+​		让我们通过一个例子来理解这一点：
 
 ```java
 public class EventLoggingTask implements  Runnable{
@@ -42,7 +48,9 @@ public class EventLoggingTask implements  Runnable{
 }
 ```
 
-In this example, the thread will just read a message from the queue and log it in a log file. There's no value returned from the task; the task can be launched using *ExecutorService:*
+&nbsp;
+
+​		在这个例子中， 线程将从 queue 中读取一条信息并将其记录到日志文件中。 这个任务没有返回任何值；该任务可以使用 $ExecutorService$ 启动： 
 
 ```java
 public void executeTask() {
@@ -52,15 +60,13 @@ public void executeTask() {
 }
 ```
 
-In this case, the *Future* object will not hold any value.
+​		在这个例子中， $Future$ 对象不持有任何值。
 
-### **3.2. With \*Callable\***
+&nbsp; 
 
-<iframe frameborder="0" src="https://a1f9e7d686387035b42443e57d7431dc.safeframe.googlesyndication.com/safeframe/1-0-37/html/container.html" id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="300" height="250" data-is-safeframe="true" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" data-google-container-id="5" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+### 3.2. Callable
 
-[![Freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-The *Callable* interface is a generic interface containing a single *call()* method – which returns a generic value *V*:
+​		$Callable$ 是包含一个 call() 方法的普通接口 - 它返回一个普通的值 V：
 
 ```java
 public interface Callable<V> {
@@ -68,7 +74,9 @@ public interface Callable<V> {
 }
 ```
 
-Let's have a look at calculating the factorial of a number:
+&nbsp;
+
+​		让我们来看看如何计算一个数字阶乘：
 
 ```java
 public class FactorialTask implements Callable<Integer> {
@@ -88,7 +96,9 @@ public class FactorialTask implements Callable<Integer> {
 }
 ```
 
-The result of *call()* method is returned within a *Future* object:
+&nbsp;
+
+​		$call()$ 方法的结果在 $Future$ 对象中返回： 
 
 ```java
 @Test
@@ -100,17 +110,23 @@ public void whenTaskSubmitted_ThenFutureResultObtained(){
 }
 ```
 
-## **4. Exception Handling**
+&nbsp;
 
-Let's see how suitable they are for exception handling.
+## 4. 异常处理
 
-### **4.1. With \*Runnable\***
+​		让我们看看它们是否适合异常处理
 
-**Since the method signature does not have the “throws” clause specified, there is no way to propagate further checked exceptions.**
+&nbsp;
 
-### **4.2. With \*Callable\***
+### 4.1. Runnable
 
-*Callable's call()* method contains “throws *Exception”* clause so we can easily propagate checked exceptions further:
+​		因为方法签名没有指定 『throw』 子句， 所以没有办法传播进一步的 $checked$ 异常。
+
+&nbsp;
+
+### 4.2. Callable
+
+​		Callable 的 $call()$ 包含了 『throws Exception』 子句， 因此我们可以很容易地进一步传播 $checked$ 异常。
 
 ```java
 public class FactorialTask implements Callable<Integer> {
@@ -125,7 +141,9 @@ public class FactorialTask implements Callable<Integer> {
 }
 ```
 
-In case of running a *Callable using* an *ExecutorService,* the exceptions are collected in the *Future* object, which can be checked by making a call to the *Future.get()* method. This will throw an *ExecutionException –* which wraps the original exception:
+&nbsp;
+
+​		在使用 ExecutorService 运行 Callable 的情况下， 异常会在 $Future$ 对象中收集， 可以通过调用 `Future.get()` 方法来检查。 这将抛出一个 ExecutionException - 它包装了原始的异常：
 
 ```java
 @Test(expected = ExecutionException.class)
@@ -137,9 +155,11 @@ public void whenException_ThenCallableThrowsIt() {
 }
 ```
 
-In the above test, the *ExecutionException* is being thrown as we are passing an invalid number. We can call the *getCause()* method on this exception object to get the original checked exception.
+&nbsp;
 
-If we don't make the call to the *get()* method of *Future* class – then the exception thrown by *call()* method will not be reported back, and the task will still be marked as completed:
+​		在上面的测试中，当我们传递一个无效的数字时，会抛出 `ExecutionException` 。我们可以调用这个异常对象的 $getCause()$ 方法来获得原始的 $checked$ 异常。
+
+​		如果我们不 call Future 的 $get()$ 方法 - 那么由 $call()$ 方法抛出的异常将不会被报告， 任务仍然标记为完成。
 
 ```java
 @Test
@@ -151,14 +171,10 @@ public void whenException_ThenCallableDoesntThrowsItIfGetIsNotCalled(){
 }
 ```
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_1" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_1" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="6" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+​		上面的测试将成功通过，即便我们已经为 *FactorialCallableTask* 的形参的负值抛出了一个异常。
 
-[![Freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
+&nbsp;
 
-The above test will pass successfully even though we've thrown an exception for the negative values of the parameter to *FactorialCallableTask.*
+## 5. 总结
 
-## **5. Conclusion**
-
-In this article, we've explored the differences between the *Runnable* and *Callable* interfaces.
-
-As always, the complete code for this article is available [over on GitHub](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-basic).
+在这篇文章中， 我们游览了 $Runnable$ 和 $Callable$  两个接口的不同。

@@ -101,15 +101,9 @@ public class MultipleThreadsExample {
 
 ## 4. Executor 
 
-
-
 感谢这个强大的框架，我们可以从开始线程转换到提交任务
 
-&nbsp;
-
-Let's look at how we can submit an asynchronous task to our executor:
-
-让我们看看如何向执行程序提交异步任务:
+看看如何向执行程序提交异步任务:
 
 ```java
 ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -119,33 +113,25 @@ executor.submit(() -> {
 });
 ```
 
-There are two methods we can use: *execute*, which returns nothing, and *submit*, which returns a *Future* encapsulating the computation's result.
+我们可以使用两个方法: 
 
-For more information about *Futures,* please read our [Guide to java.util.concurrent.Future](https://www.baeldung.com/java-future).
+- *execute*，它不返回任何结果; 
 
-我们可以使用两个方法:*execute*，它不返回任何结果;*submit*，它返回封装了计算结果的*Future*。
+- *submit*，它返回封装了计算结果的 *Future*。
 
-更多关于*Futures的信息，请阅读我们的[Guide to java.util.concurrent.Future](https://www.baeldung.com/java-future)。
+更多关于 *Future* 的信息，请阅读我们的 [java.util.concurrent.Future 指导](java-future.md)。
 
-## 5. Starting a Task with *CompletableFutures*
+&nbsp;
 
-To retrieve the final result from a *Future* object we can use the *get* method available in the object, but this would block the parent thread until the end of the computation.
+## 5. CompletableFuture 启动线程
 
-Alternatively, we could avoid the block by adding more logic to our task, but we have to increase the complexity of our code.
-
-**Java 1.8 introduced a new framework on top of the \*Future\* construct to better work with the computation's result: the \*CompletableFuture\*.**
-
-***CompletableFuture\* implements \*CompletableStage\*, which adds a vast selection of methods to attach callbacks and avoid all the plumbing needed to run operations on the result after it's ready.**
-
-The implementation to submit a task is a lot simpler:
-
-要从一个*Future*对象中检索最终结果，我们可以使用对象中可用的*get*方法，但这会阻塞父线程，直到计算结束。
+要从一个 *Future* 对象中检索最终结果，我们可以使用对象中可用的 *get* 方法，但这会阻塞 parent 线程，直到计算结束。
 
 另外，我们也可以通过向任务添加更多逻辑来避免阻塞，但是我们必须增加代码的复杂性。
 
-**Java 1.8在\*Future\*之上引入了一个新的框架来更好地处理计算结果:\*CompletableFuture\*.**
+Java 1.8在 Future 之上引入了一个新的框架来更好地处理计算结果: $CompletableFuture$
 
-***CompletableFuture实现了\*CompletableStage\*，它添加了大量的方法选择来附加回调，并避免在结果准备好后运行操作所需的所有通道
+CompletableFuture 实现了 CompletableStage，它添加了大量的方法选择来附加 `callback`，并避免在结果准备好后运行操作所需的所有通道
 
 提交任务的实现要简单得多:
 
@@ -153,34 +139,25 @@ The implementation to submit a task is a lot simpler:
 CompletableFuture.supplyAsync(() -> "Hello");
 ```
 
-*supplyAsync* takes a *Supplier* containing the code we want to execute asynchronously — in our case the lambda parameter.
+*supplyAsync* 接受一个 *Supplier* 包含我们想要异步执行的代码——在我们的例子中是 lambda 参数。
 
-*supplyAsync*接受一个*Supplier*包含我们想要异步执行的代码——在我们的例子中是lambda参数。
+任务现在隐式地提交给  ForkJoinPool.commonPool()，或者我们可以指定我们喜欢的 *Executor* 作为第二个参数
 
-**The task is now implicitly submitted to the \*ForkJoinPool.commonPool()\*, or we can specify the \*Executor\* we prefer as a second parameter.**
+要了解更多关于 *CompletableFuture* 请阅读我们的 [CompletableFuture 指导](java-completablefuture.md)。
 
-To know more about *CompletableFuture,* please read our [Guide To CompletableFuture](https://www.baeldung.com/java-completablefuture).
+&nbsp;
 
-**任务现在隐式地提交给\*ForkJoinPool.commonPool()\*，或者我们可以指定我们喜欢的\*Executor\*作为第二个参数
+## 6. Running 延迟或周期性 Task
 
-要了解更多关于*CompletableFuture，*请阅读我们的[Guide To CompletableFuture](https://www.baeldung.com/java-completablefuture)。
 
-## 6. Running Delayed or Periodic Tasks
+当处理复杂的 web 应用程序时，我们可能需要在特定的时间运行任务，可能定期运行
 
-**When working with complex web applications, we may need to run tasks at specific times, maybe regularly.**
+Java很少有工具可以帮助我们运行延迟或重复的操作:
 
-Java has few tools that can help us to run delayed or recurring operations:
+- `java.util.Timer`
+- `java.util.concurrent.ScheduledThreadPoolExecutor`
 
-- *java.util.Timer*
-
-- *java.util.concurrent.ScheduledThreadPoolExecutor*
-
-- **当处理复杂的web应用程序时，我们可能需要在特定的时间运行任务，可能定期运行
-
-  Java很少有工具可以帮助我们运行延迟或重复的操作:
-
-  - * java.util.Timer *
-  - * java.util.concurrent.ScheduledThreadPoolExecutor *
+&nbsp;
 
 ### 6.1. *Timer*
 
@@ -190,7 +167,7 @@ Tasks may be scheduled for one-time execution, or for repeated execution at regu
 
 Let's see what the code looks if we want to run a task after one second of delay:
 
-*Timer*是一个用于在后台线程中调度任务的工具。
+*Timer* 是一个用于在后台线程中调度任务的工具。
 
 可以将任务安排为一次性执行，或定期重复执行。
 
@@ -206,9 +183,10 @@ TimerTask task = new TimerTask() {
 Timer timer = new Timer("Timer");
 long delay = 1000L;
 timer.schedule(task, delay);
+
 ```
 
-Now let's add a recurring schedule:
+&nbsp;
 
 现在让我们添加一个循环的时间表:
 
@@ -216,21 +194,15 @@ Now let's add a recurring schedule:
 timer.scheduleAtFixedRate(repeatedTask, delay, period);
 ```
 
-This time, the task will run after the delay specified and it'll be recurrent after the period of time passed.
-
 这一次，任务将在指定的延迟后运行，并在一段时间后重复运行。
 
+欲了解更多信息，请阅读我们的 [Java Timer](java-timer-and-timertask.md)。
 
-
-For more information, please read our guide to [Java Timer](https://www.baeldung.com/java-timer-and-timertask).
-
-欲了解更多信息，请阅读我们的[Java Timer]指南(https://www.baeldung.com/java-timer-and-timertask)。
+&nbsp;
 
 ### 6.2. *ScheduledThreadPoolExecutor*
 
-*ScheduledThreadPoolExecutor* has methods similar to the *Timer* class:
-
-* schedulethreadpoolexecutor *有类似于*Timer*类的方法:
+* *schedulethreadpoolexecutor* 有类似于 *Timer* 类的方法:
 
 ```java
 ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
@@ -238,32 +210,26 @@ ScheduledFuture<Object> resultFuture
   = executorService.schedule(callableTask, 1, TimeUnit.SECONDS);
 ```
 
-To end our example, we use *scheduleAtFixedRate()* for recurring tasks:
-
-在结束我们的示例时，我们使用*scheduleAtFixedRate()*来完成重复的任务:
+在结束我们的示例时，我们使用 *scheduleAtFixedRate()* 来完成重复的任务:
 
 ```java
 ScheduledFuture<Object> resultFuture
  = executorService.scheduleAtFixedRate(runnableTask, 100, 450, TimeUnit.MILLISECONDS);
 ```
 
-The code above will execute a task after an initial delay of 100 milliseconds, and after that, it'll execute the same task every 450 milliseconds.
+&nbsp;
 
-**If the processor can't finish processing the task in time before the next occurrence, the \*ScheduledExecutorService\* will wait until the current task is completed, before starting the next.**
+上面的代码将在初始延迟 100 ms 后执行一个任务，之后，它将每 450 ms 执行一次相同的任务。
 
-To avoid this waiting time, we can use *scheduleWithFixedDelay()*, which, as described by its name, guarantees a fixed length delay between iterations of the task.
+如果处理器不能在下一次发生前及时完成任务处理，则 `ScheduledExecutorService` 将等待当前任务完成，然后再启动下一个任务。
 
-For more details about *ScheduledExecutorService,* please read our [Guide to the Java ExecutorService](https://www.baeldung.com/java-executor-service-tutorial).
+为了避免这个等待时间，我们可以使用 *scheduleWithFixedDelay()* ，正如其名称所描述的那样，它保证了任务迭代之间的固定长度延迟。
 
-上面的代码将在初始延迟100毫秒后执行一个任务，之后，它将每450毫秒执行一次相同的任务。
+有关 *ScheduledExecutorService* 的更多信息，请阅读我们的 [Java ExecutorService指南](java-executor-service-tutorial)。
 
-**如果处理器不能在下一次发生前及时完成任务处理，则ScheduledExecutorService\*将等待当前任务完成，然后再启动下一个任务。**
+&nbsp;
 
-为了避免这个等待时间，我们可以使用*scheduleWithFixedDelay()*，正如其名称所描述的那样，它保证了任务迭代之间的固定长度延迟。
-
-有关*ScheduledExecutorService的更多信息，请阅读我们的[Java ExecutorService指南](https://www.baeldung.com/java-executor-service-tutorial)。
-
-### 6.3. Which Tool Is Better?
+### 6.3. 那个工具 Better?
 
 If we run the examples above, the computation's result looks the same.
 
@@ -282,71 +248,56 @@ Let's try to dive a bit deeper under the hood.
 ***ScheduledThreadPoolExecutor\*:**
 
 - can be configured with any number of threads
-
 - can take advantage of all available CPU cores
-
 - catches runtime exceptions and lets us handle them if we want to (by overriding *afterExecute* method from *ThreadPoolExecutor*)
-
 - cancels the task that threw the exception, while letting others continue to run
-
 - relies on the OS scheduling system to keep track of time zones, delays, solar time, etc.
-
 - provides collaborative API if we need coordination between multiple tasks, like waiting for the completion of all tasks submitted
-
 - provides better API for management of the thread life cycle
 
-- 如果我们运行上面的例子，计算结果看起来是一样的。
+如果我们运行上面的例子，计算结果看起来是一样的。
 
-  那么，我们如何选择合适的工具呢?
+那么，我们如何选择合适的工具呢?
 
-  **当一个框架提供多个选择时，理解底层技术以便做出明智的决定是很重要的
+当一个框架提供多个选择时，理解底层技术以便做出明智的决定是很重要的
 
-  让我们试着再深入一点。
+让我们试着再深入一点。
 
-  * * *计时器\ *:* *
+&nbsp;
 
-  —不提供实时保证:它使用*Object.wait(long)*方法调度任务
-  -有一个单一的后台线程，所以任务按顺序运行，一个长时间运行的任务会延迟其他任务
-  在*TimerTask*中抛出的运行时异常会杀死唯一可用的线程，从而杀死*Timer*
+**Timer** ：
 
-  * * * ScheduledThreadPoolExecutor \ *: * *
+- 不提供实时保证: 它使用 *Object.wait(long)* 方法调度任务
+- 有一个单一的后台线程，所以任务按顺序运行，一个长时间运行的任务会延迟其他任务
+- 在 *TimerTask* 中抛出的运行时异常会杀死唯一可用的线程，从而杀死 *Timer*
 
-  —可以配置任意数量的线程
-  —可以利用所有可用的CPU内核
-  捕获运行时异常并允许我们处理它们(通过重写*ThreadPoolExecutor*中的*afterExecute*方法)
-  -取消抛出异常的任务，同时让其他任务继续运行
-  -依赖于操作系统的调度系统来跟踪时区、延迟、太阳时间等。
-  -提供协作API，如果我们需要协调多个任务，如等待完成所有提交的任务
-  —为线程生命周期的管理提供更好的API
+&nbsp;
+**ScheduledThreadPoolExecutor**：
 
-The choice now is obvious, right?
+- 可以配置任意数量的线程
+- 可以利用所有可用的 CPU 内核
+- 捕获运行时异常并允许我们处理它们(通过重写 *ThreadPoolExecutor* 中的 *afterExecute* 方法)
+- 取消抛出异常的任务，同时让其他任务继续运行
+- 依赖于操作系统的调度系统来跟踪 zone、delay、solar time 等。
+- 提供协作API，如果我们需要协调多个任务，如等待完成所有提交的任务
+- 为线程生命周期的管理提供更好的 `API`
 
 现在的选择是显而易见的，对吧?
 
 &nbsp;
 
-## 7. Difference Between *Future* and *ScheduledFuture*
+## 7. Future 和 *ScheduledFuture* 区别
 
-**In our code examples, we can observe that \*ScheduledThreadPoolExecutor\* returns a specific type of \*Future\*: \*ScheduledFuture\*.**
+在我们的代码示例中，我们可以看到 $ScheduledThreadPoolExecutor$ 返回特定类型的 Future: $ScheduledFuture$
 
-*ScheduledFuture* extends both *Future* and *Delayed* interfaces, thus inheriting the additional method *getDelay* that returns the remaining delay associated with the current task. It's extended by *RunnableScheduledFuture* that adds a method to check if the task is periodic.
+$ScheduledFuture$  extends 了 *Future* 和 *Delayed* 接口，因此继承了额外的方法 getDelay*，该方法返回与当前任务相关的剩余延迟。它由 *RunnableScheduledFuture* 扩展，添加了一个检查任务是否周期性的方法。
 
-***ScheduledThreadPoolExecutor\* implements all these constructs through the inner class \*ScheduledFutureTask\* and uses them to control the task life cycle.**
-
-
-
-**在我们的代码示例中，我们可以看到\*ScheduledThreadPoolExecutor\*返回特定类型的\*Future\*: \*ScheduledFuture\*.**
-
-ScheduledFuture*扩展了*Future*和*Delayed*接口，因此继承了额外的方法getDelay*，该方法返回与当前任务相关的剩余延迟。它由*RunnableScheduledFuture*扩展，添加了一个检查任务是否周期性的方法。
-
-ScheduledThreadPoolExecutor通过内部类ScheduledFutureTask实现了所有这些构造，并使用它们来控制任务的生命周期
+$ScheduledThreadPoolExecutor$ 通过内部类 $ScheduledFutureTask$ 实现了所有这些构造，并使用它们来控制任务的生命周期
 
 &nbsp;
 
-## 8 Conclusions
+## 8 总结
 
-在本教程中，我们试验了可用来启动线程和并行运行任务的不同框架。
+在本教程中，我们尝试使用了可用来启动 $Thread$ 和并行运行任务的不同框架。
 
-然后，我们深入研究了*Timer*和*ScheduledThreadPoolExecutor.*之间的差异
-
-本文的源代码可以[在GitHub上](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-basic)获得。
+然后，我们深入研究了 $Timer$ 和 $ScheduledThreadPoolExecutor$ 之间的差异！

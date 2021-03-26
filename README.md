@@ -2,7 +2,7 @@
 
 - 语言知识总结 - 非项目
 
-  
+&nbsp;
 
 ## Java
 
@@ -20,15 +20,15 @@
 
   - **Java Concurrency Basics**
     - [x] [>> java.util.concurrent 概览](docs/java-concurrency/java-util-concurrent.md)
-    - [ ] [>> Java 如何启动一个线程](docs/java-concurrency/java-start-thread.md)
-    - [ ] [>> Java Runnable vs. Callable](docs/java-concurrency/java-runnable-callable.md)
+    - [x] [>> Java 如何启动一个线程](docs/java-concurrency/java-start-thread.md)
+    - [x] [>> Java Runnable vs. Callable](docs/java-concurrency/java-runnable-callable.md)
     - [x] [>>  Java Synchronized 关键字](docs/java-concurrency/java-synchronized.md)
     - [x] [>> Java Volatile 关键字](docs/java-concurrency/java-volatile.md)
     - [ ] [>> Guide to java.util.concurrent.Locks](docs/java-concurrency/java-concurrent-locks.md)
     - [ ] [>> Java CyclicBarrier](docs/java-concurrency/java-cyclic-barrier.md)
     - [ ] [>> An Introduction to Atomic Variables in Java](docs/java-concurrency/java-atomic-variables.md)
     - [ ] [>> Semaphores in Java](docs/java-concurrency/java-semaphore.md)
-  - [ ] [>> Binary Semaphore vs Reentrant Lock](docs/java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
+    - [ ] [>> Binary Semaphore vs Reentrant Lock](docs/java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
     - [ ] [Guide to the Java Phaser](docs/java-concurrency/java-phaser.md)
     - [ ] [>> The Dining Philosophers Problem in Java](docs/java-concurrency/java-dining-philoshophers.md)
     - [ ] [Guide to CountDownLatch in Java](docs/java-concurrency/java-countdown-latch.md)
@@ -46,8 +46,7 @@
     - [ ] [Using a Mutex Object in Java](https://www.baeldung.com/java-mutex)
     - [ ] [ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](https://www.baeldung.com/java-threadpooltaskexecutor-core-vs-max-poolsize)
 
-
-    &nbsp;
+&nbsp;
 
   - **Advanced Concurrency in Java**
     - [ ] [Daemon Threads in Java](https://www.baeldung.com/java-daemon-thread)
@@ -188,8 +187,10 @@
 - [锁](docs/lock.md)
 - 设计模式
 - [jvm-高并发-interview](docs/java-concurrency-jvm-interview.md)
+- [项目-interview](docs/project-interview.md)
+- [多线程面试题](docs/java-concurrency/interview.md)
 
-
+&nbsp;
 
 ## 操作系统
 
