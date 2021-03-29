@@ -62,7 +62,7 @@ public void executeTask() {
 
 ​		在这个例子中， $Future$ 对象不持有任何值。
 
-&nbsp; 
+&nbsp; &nbsp;
 
 ### 3.2. Callable
 
@@ -126,7 +126,7 @@ public void whenTaskSubmitted_ThenFutureResultObtained(){
 
 ### 4.2. Callable
 
-​		Callable 的 $call()$ 包含了 『throws Exception』 子句， 因此我们可以很容易地进一步传播 $checked$ 异常。
+​		Callable 的 $call()$ 包含了 "throws Exception" 子句， 因此我们可以很容易地进一步传播 $checked$ 异常。
 
 ```java
 public class FactorialTask implements Callable<Integer> {
@@ -159,7 +159,7 @@ public void whenException_ThenCallableThrowsIt() {
 
 ​		在上面的测试中，当我们传递一个无效的数字时，会抛出 `ExecutionException` 。我们可以调用这个异常对象的 $getCause()$ 方法来获得原始的 $checked$ 异常。
 
-​		如果我们不 call Future 的 $get()$ 方法 - 那么由 $call()$ 方法抛出的异常将不会被报告， 任务仍然标记为完成。
+​		如果我们不调用 Future 的 $get()$ 方法 - 那么由 $call()$ 方法抛出的异常将不会被报告， 任务仍然标记为完成。
 
 ```java
 @Test
@@ -171,7 +171,7 @@ public void whenException_ThenCallableDoesntThrowsItIfGetIsNotCalled(){
 }
 ```
 
-​		上面的测试将成功通过，即便我们已经为 *FactorialCallableTask* 的形参的负值抛出了一个异常。
+​		即便我们已经为 *FactorialCallableTask* 的形参的负值抛出了一个异常， 上面的测试将成功通过。
 
 &nbsp;
 
