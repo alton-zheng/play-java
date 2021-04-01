@@ -12,24 +12,6 @@
 
 &nbsp;
 
-## Collections
-
-- Collections.synchronizedMap(Map<K, V> m)
-  - 可以将 m 锁化， 可以通过参数可以细化到需要锁化对象
-  - 和 HashTable 性能上没有多大差异
-
-&nbsp;
-
-## ConcurrentHashMap vs. HashTable HashMap 
-
-> 写性能上，它比 HashTable , HashMap 慢
->
-> - 底层红黑树， cas 构建树慢
->
-> 它主要的优化点在读性能上
->
-> - 速度快 20x+
-
 &nbsp;
 
 ## ArrayList vs. Vector
@@ -76,8 +58,6 @@
 
 &nbsp;
 
-
-
 ## synchronized 
 
 > 以下场景适合用它:
@@ -96,16 +76,6 @@
 >- 排序
 
 &nbsp;
-
-## ConcurrentSkipListMap<K,V>
-
-> 因 ConcurrentHashMap 本身实现复杂
->
-> 所以没有基于它 TreeMap 相关的底层实现
->
-> 因此设计了 ConcurrentSkipListMap<K, V> 
->
-> - 底层是跳表机构
 
 &nbsp;
 

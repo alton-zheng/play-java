@@ -26,7 +26,7 @@
  - [x] [>> java.util.concurrent 概览](java/docs/java-concurrency/java-util-concurrent.md)
  - [x] [>> Java 如何启动一个线程](java/docs/java-concurrency/java-start-thread.md)
  - [x] [>> Java Runnable vs. Callable](java/docs/java-concurrency/java-runnable-callable.md)
- - [ ] [>> Implementing a Runnable vs Extending a Thread](java/docs/java-concurrency/java-runnable-vs-extending-thread.md)
+ - [x] [>> Implementing a Runnable vs Extending a Thread](java/docs/java-concurrency/java-runnable-vs-extending-thread.md)
  - [x] [>>  Java Synchronized 关键字](java/docs/java-concurrency/java-synchronized.md)
  - [x] [>> Java Volatile 关键字](java/docs/java-concurrency/java-volatile.md)
  - [ ] [>> Guide to java.util.concurrent.Locks](java/docs/java-concurrency/java-concurrent-locks.md)
@@ -54,8 +54,8 @@
 ### **Advanced Concurrency in Java**
 
 - [x] [Java 容器](java/docs/java-concurrency/java-container.md)
-  - [ ] [>> A Guide to ConcurrentMap](java/docs/java-concurrency/java-concurrent-map.md)
-  - [ ] [>> Guide to java.util.concurrent.BlockingQueue](java/docs/java-concurrency/java-blocking-queue.md)
+  - [x] [>> ConcurrentMap 指导](java/docs/java-concurrency/java-concurrent-map.md)
+  - [ ] [>>  java.util.concurrent.BlockingQueue 指导](java/docs/java-concurrency/java-blocking-queue.md)
   - [ ] [>> Collections.synchronizedMap vs. ConcurrentHashMap](java/docs/java-concurrency/java-synchronizedmap-vs-concurrenthashmap.md)
   - [ ] [>> LinkedBlockingQueue vs ConcurrentLinkedQueue](java/docs/java-concurrency/java-queue-linkedblocking-concurrentlinked)
   - [ ] [>> Guide to the ConcurrentSkipListMap](java/docs/java-concurrency/java-concurrent-skip-list-map.md)
@@ -123,7 +123,7 @@
 &nbsp;
 
 ### JVM
- - [ ] [jvm 面试题](jvm/jvm-interview.md)
+ - [ ] [jvm 面试题](java/docs/jvm/jvm-interview.md)
 
 &nbsp;
 
@@ -186,7 +186,7 @@
 ## 面试题
 
 - [运维 安全 DevOps 网络 DBA 等面试专题](java/docs/other/safe-interview.md)
-- [jvm-高并发-interview](java/docs/java-concurrency/interview.md)
+- [jvm-高并发-interview](java/docs/jvm/jvm-interview.md)
 - [项目-interview](java/docs/project-interview.md)
 
 

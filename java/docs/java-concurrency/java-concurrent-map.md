@@ -1,34 +1,28 @@
-# A Guide to ConcurrentMap
+# ConcurrentMap 指引
 
-## **1. Overview**
+&nbsp;
 
-*Maps* are naturally one of the most widely style of Java collection.
+## 1. 概览
 
-And, importantly, [*HashMap*](https://www.baeldung.com/java-hashmap) is not a thread-safe implementation, while *Hashtable* does provide thread-safety by synchronizing operations.
+Map 是用途最广泛的 Java 集合之一。
 
-Even though *Hashtable* is thread safe, it is not very efficient. Another fully synchronized *Map,* *Collections.synchronizedMap,* does not exhibit great efficiency either. If we want thread-safety with high throughput under high concurrency, these implementations aren't the way to go.
+更重要的是，[HashMap](java-hashmap.md) 不是线程安全的实现，而 *Hashtable* 通过同步操作提供了线程安全。
 
-To solve the problem, the *Java Collections Framework* **introduced \*ConcurrentMap\* in \*Java 1.5\*.**
+即使 *Hashtable* 是线程安全的，它的效率也不是很高。另一个完全同步的 *Map* *Collections.synchronizedMap*，也没有表现出很大的效率。如果我们想在高并发的情况下实现线程安全和高吞吐量，这些实现不是可行的。
 
-The following discussions are based on *Java 1.8*.
+为了解决这个问题，Java 集合框架在 **Java 1.5** 引入了 $ConcurrentMap$ 
 
-* map *自然是最广泛的Java集合之一。
+下面的讨论是基于 Java 1.8 的。
 
-更重要的是，[*HashMap*](https://www.baeldung.com/java-hashmap)不是线程安全的实现，而*Hashtable*通过同步操作提供了线程安全。
+&nbsp;
 
-即使*Hashtable*是线程安全的，它的效率也不是很高。另一个完全同步的*Map，* *集合。synchronizedMap，*也没有表现出很大的效率。如果我们想在高并发的情况下实现线程安全和高吞吐量，这些实现不是可行的。
+## 2. ConcurrentMap
 
-为了解决这个问题，*Java集合框架** *在** Java 1.5 ** .**中引入了** ConcurrentMap **
+*ConcurrentMap* 是 *Map* 接口的扩展。它旨在为解决吞吐量与线程安全之间的协调问题提供一种结构和指导。
 
-下面的讨论是基于*Java 1.8*的。
+通过重写几个接口默认方法，*ConcurrentMap* 为有效的实现提供了指导方针，以提供线程安全和内存一致的原子操作。
 
-## **2. \*ConcurrentMap\***
-
-*ConcurrentMap* is an extension of the *Map* interface. It aims to provides a structure and guidance to solving the problem of reconciling throughput with thread-safety.
-
-By overriding several interface default methods, *ConcurrentMap* gives guidelines for valid implementations to provide thread-safety and memory-consistent atomic operations.
-
-Several default implementations are overridden, disabling the *null* key/value support:
+一些默认实现被覆盖，禁用 *null* key/value 支持：
 
 - *getOrDefault*
 - *forEach*
@@ -38,46 +32,53 @@ Several default implementations are overridden, disabling the *null* key/value s
 - *compute*
 - *merge*
 
-The following *APIs* are also overridden to support atomicity, without a default interface implementation:
+&nbsp;
+
+下面的 api 也被覆盖以支持原子性，但没有默认的接口实现: 
 
 - *putIfAbsent*
 - *remove*
 - *replace(key, oldValue, newValue)*
-- *replace(key, value)![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)
+- *replace(key, value)
 
-The rest of actions are directly inherited with basically consistent with *Map*.
+其余的操作都是直接继承的，基本上与 *Map* 一致。
 
-## **3. \*ConcurrentHashMap\***
+&nbsp;
 
-*ConcurrentHashMap* is the out-of-box ready *ConcurrentMap* implementation.
+## 3. ConcurrentHashMap
 
-For better performance, it consists of an array of nodes as table buckets (used to be table segments prior to *Java 8*) under the hood, and mainly uses [CAS](https://en.wikipedia.org/wiki/Compare-and-swap) operations during updating.
+*ConcurrentHashMap* 通过实现 *ConcurrentMap* 的方式来达到 *out-of-box*。 
 
-The table buckets are initialized lazily, upon the first insertion. Each bucket can be independently locked by locking the very first node in the bucket. Read operations do not block, and update contentions are minimized.
+为了获得更好的性能，它在底层由作为表 bucket 的节点数组( 在 *Java 8* 之前是表 segments ) 组成，主要在更新期间使用 [CAS](https://en.wikipedia.org/wiki/Compare-and-swap) 操作。
 
-The number of segments required is relative to the number of threads accessing the table so that the update in progress per segment would be no more than one most of time.
+在第一次插入时，表 bucket 被惰性初始化。通过锁定 bucket 中的第一个节点，每个桶都可以被独立地锁定。读取操作不会阻塞，并且更新争用最小化。
 
-**Before \*Java 8\*, the number of “segments” required was relative to the number of threads accessing the table so that the update in progress per segment would be no more than one most of time.**
+所需的 segment 数量与访问表的线程数量相关，这样每个段正在进行的更新在大多数情况下不会超过一个。
 
-That's why constructors, compared to *HashMap*, provides the extra *concurrencyLevel* argument to control the number of estimated threads to use:
+在 Java 8 之前，需要的 *segment* 的数量与访问表的线程数量有关，这样每个段的更新进度在大多数情况下不会超过一个
+
+这就是为什么与 *HashMap* 相比，构造函数提供了额外的 *concurrencyLevel* 参数来控制估计使用的线程数量：
 
 ```java
 public ConcurrentHashMap(
-public ConcurrentHashMap(
- int initialCapacity, float loadFactor, int concurrencyLevel)
+public ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel)
 ```
 
-The other two arguments: *initialCapacity* and *loadFactor* worked quite the same [as *HashMap*](https://www.baeldung.com/java-hashmap).
+&nbsp;
 
-**However, since \*Java 8\*, the constructors are only present for backward compatibility: the parameters can only affect the initial size of the map**.
+其他两个参数: *initialCapacity* 和 *loadFactor* 与 [*HashMap*](java-hashmap.md) 的参数一样。
 
-### **3.1. Thread-Safety**
+然而，由于 Java 8，构造函数的存在只是为了向后兼容: 形参只能影响 **map** 的初始大小。
 
-*ConcurrentMap* guarantees memory consistency on key/value operations in a multi-threading environment.
+&nbsp;
+### 3.1. Thread-Safety
 
-Actions in a thread prior to placing an object into a *ConcurrentMap* as a key or value *happen-before* actions subsequent to the access or removal of that object in another thread.
 
-To confirm, let's have a look at a memory inconsistent case:
+在多线程环境中，保证 key/value 操作的内存一致性。
+
+*happens-before* 保证了在另一个线程中访问或删除该对象之前，当前线程将一个对象放入一个 *ConcurrentMap* 作为一个 key 或 value 。
+
+为了证实这一点，让我们来看看一个内存不一致的情况:
 
 ```java
 @Test
@@ -121,9 +122,9 @@ private List<Integer> parallelSum100(Map<String, Integer> map,
 }
 ```
 
-For each *map.computeIfPresent* action in parallel, *HashMap* does not provide a consistent view of what should be the present integer value, leading to inconsistent and undesirable results.
+对于每个并行的 *map.computeIfPresent* 操作，*HashMap* 不提供一个一致的当前整数值视图，导致不一致和不期望的结果。
 
-As for *ConcurrentHashMap*, we can get a consistent and correct result:
+对于 *ConcurrentHashMap* ，我们可以得到一致且正确的结果： 
 
 ```java
 @Test
@@ -144,10 +145,11 @@ public void givenConcurrentMap_whenSumParallel_thenCorrect()
     assertEquals(0, wrongResultCount);
 }
 ```
+&nbsp;
+### 3.2.Null Key/Value
 
-### **3.2. \*Null\* Key/Value**
 
-Most *API*s provided by *ConcurrentMap* does not allow *null* key or value, for example:
+大多数由 ConcurrentMap 提供的 API 不允许 *null* key或value，例如：
 
 ```java
 @Test(expected = NullPointerException.class)
@@ -161,7 +163,7 @@ public void givenConcurrentHashMap_whenPutNullValue_thenThrowsNPE() {
 }
 ```
 
-However, **for \*compute\** and \*merge\* actions, the computed value can be \*null\*, which indicates the key-value mapping is removed if present or remains absent if previously absent**.
+然而，对于 compute 和 merge 操作，计算值可以是 null，这表示如果 key-value 映射存在，则删除，如果之前没有，则仍然没有 key-value 映射。
 
 ```java
 @Test
@@ -174,19 +176,23 @@ public void givenKeyPresent_whenComputeRemappingNull_thenMappingRemoved() {
 }
 ```
 
-### **3.3. Stream Support**
+&nbsp;
 
-*Java 8* provides *Stream* support in the *ConcurrentHashMap* as well.
+### 3.3. Stream 支持
 
-Unlike most stream methods, the bulk (sequential and parallel) operations allow concurrent modification safely. *ConcurrentModificationException* won't be thrown, which also applies to its iterators. Relevant to streams, several *forEach**, *search*, and *reduce** methods are also added to support richer traversal and map-reduce operations.
+Java 8 在 *ConcurrentHashMap* 中也提供了 *Stream* 支持。
 
-### **3.4. Performance**
+与大多数流方法不同，批量 (顺序和并行) 操作允许安全地并发修改。 *ConcurrentModificationException* 不会被抛出，这也适用于它的迭代器。与流相关，几个 forEach*， *search*，和 *reduce* 方法也被添加，以支持更丰富的遍历和 map-reduce 操作。
 
-**Under the hood, \*ConcurrentHashMap\* is somewhat similar to \*HashMap\***, with data access and update based on a hash table (though more complex).
+&nbsp;
 
-And of course, the *ConcurrentHashMap* should yield much better performance in most concurrent cases for data retrieval and update.
+### 3.4. 性能
 
-Let's write a quick micro-benchmark for *get* and *put* performance and compare that to *Hashtable* and *Collections.synchronizedMap*, running both operations for 500,000 times in 4 threads.
+在底层，ConcurrentHashMap 有点类似于 HashMap ，基于哈希表进行数据访问和更新(尽管更复杂)。
+
+当然，在大多数并发情况下，*ConcurrentHashMap* 应该为数据检索和更新提供更好的性能。
+
+让我们为 *get* 和 *put* 的性能编写一个快速的微基准测试，并将其与 *Hashtable* 和 *Collections.synchronizedMap\** 比较测试，在4个线程中运行这 get 和 put 操作 500,000次。
 
 ```java
 @Test
@@ -230,9 +236,11 @@ private long timeElapseForGetPut(Map<String, Object> map)
 }
 ```
 
-Keep in mind micro-benchmarks are only looking at a single scenario and aren't always a good reflection of real world performance.
+&nbsp;
 
-That being said, on an OS X system with an average dev system, we're seeing an average sample result for 100 consecutive runs (in nanoseconds):
+请记住，微基准测试只关注一个场景，并不总是能很好地反映现实世界的性能。
+
+也就是说，在一个具有平均开发系统的 OS X 系统上，我们可以看到连续运行 100 次的平均样本结果(以纳秒为单位)：
 
 ```plaintext
 Hashtable: 1142.45
@@ -240,17 +248,37 @@ SynchronizedHashMap: 1273.89
 ConcurrentHashMap: 230.2
 ```
 
-In a multi-threading environment, where multiple threads are expected to access a common *Map*, the *ConcurrentHashMap* is clearly preferable.
+在多线程环境中，期望多个线程访问一个公共的 *Map* ， *ConcurrentHashMap* 显然是更可取的。
 
-However, when the *Map* is only accessible to a single thread, *HashMap* can be a better choice for its simplicity and solid performance.
+然而，当 *Map* 只能被单个线程访问时，*HashMap* 因其简单和可靠的性能而成为更好的选择。
+
+&nbsp;
+
+>ConcurrentHashMap vs Hashtable HashMap, Collections.synchronizedMap() 读写测试： 
+>
+>写性能上，ConcurrentHashMap 比 HashTable , HashMap , Collections.synchronizedMap() 慢
+>
+>- ConcurrentHashMap 底层红黑树， cas 构建树慢
+>
+>ConcurrentHashMap 主要的优化点在读性能上
+>
+>- 速度快 20x+
+
+&nbsp;
+
+>- Collections.synchronizedMap(Map<K, V> m)
+>  - 可以将 m 锁化， 可以通过参数可以细化到需要锁化对象
+>  - 和 HashTable 性能上没有多大差异
+
+&nbsp;
 
 ### **3.5. Pitfalls**
 
-Retrieval operations generally do not block in *ConcurrentHashMap* and could overlap with update operations. So for better performance, they only reflect the results of the most recently completed update operations, as stated in the [official Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html).
+在 *ConcurrentHashMap* 中， 检索操作通常不会阻塞，并且可能与更新操作重叠。因此，为了获得更好的性能，它们只反映最近完成的更新操作的结果，如 [官方Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html) 所述。
 
-There are several other facts to bear in mind:
+还有一些其他的情况需要记住：
 
-- results of aggregate status methods including *size*, *isEmpty*, and *containsValue* are typically useful only when a map is not undergoing concurrent updates in other threads:
+- 聚合状态方法的结果包括 *size*， *isEmpty* 和 *containsValue* 通常只有在 map 没有在其他线程中并发更新时才有用：
 
 ```java
 @Test
@@ -276,18 +304,22 @@ public void givenConcurrentMap_whenUpdatingAndGetSize_thenError()
 }
 ```
 
-If concurrent updates are under strict control, aggregate status would still be reliable.
 
-Although these **aggregate status methods do not guarantee the real-time accuracy, they may be adequate for monitoring or estimation purposes**.
 
-Note that usage of *size()* of *ConcurrentHashMap* should be replaced by *mappingCount()*, for the latter method returns a *long* count, although deep down they are based on the same estimation.
+如果并发更新受到严格的控制，聚合状态仍然是可靠的。
 
-- ***hashCode\* matters**: note that using many keys with exactly the same *hashCode()* is a sure way to slow down a performance of any hash table.
+虽然这些聚合状态方法不能保证实时准确性，但对于监测或评估目的来说，它们可能足够了。
 
-To ameliorate impact when keys are *Comparable*, *ConcurrentHashMap* may use comparison order among keys to help break ties. Still, we should avoid using the same *hashCode()* as much as we can.
+请注意，*ConcurrentHashMap* 的 *size()* 的用法应该被 *mappingCount()* 所取代，因为后者返回一个 *long* 的计数，尽管实际上它们是基于相同的估计。
 
-- iterators are only designed to use in a single thread as they provide weak consistency rather than fast-fail traversal, and they will never throw *ConcurrentModificationException.*
-- the default initial table capacity is 16, and it's adjusted by the specified concurrency level:
+- **hashCode matters**：注意，使用许多 key 与完全相同的 *hashCode()* 是一个确保减慢任何哈希表的性能的方法。
+
+为了改善 key 具有*可比性*时的影响，*ConcurrentHashMap* 可以使用 key 之间的比较顺序来帮助打破联系。尽管如此，我们还是应该尽量避免使用相同的 *hashCode()*。
+
+- 迭代器只设计用于单个线程，因为它们提供弱一致性而不是快速失败遍历，而且它们永远不会抛出 *ConcurrentModificationException.*
+- 默认的初始表容量是 16，并根据指定的并发级别进行调整
+
+&nbsp;
 
 ```java
 public ConcurrentHashMap(
@@ -301,14 +333,16 @@ public ConcurrentHashMap(
 }
 ```
 
-- caution on remapping functions: though we can do remapping operations with provided *compute* and *merge** methods, we should keep them fast, short and simple, and focus on the current mapping to avoid unexpected blocking.
-- keys in *ConcurrentHashMap* are not in sorted order, so for cases when ordering is required, *ConcurrentSkipListMap* is a suitable choice.
+- 注意 remapping 函数: 虽然我们可以使用提供的 *compute* 和 *merge* 方法来进行重映射操作，但我们应该保持它们快速、简短和简单，并关注当前的映射，以避免意外阻塞。
+- *ConcurrentHashMap* 中的 key 不是排序，所以当需要排序时，*ConcurrentSkipListMap*是一个合适的选择。
 
-## **4. \*ConcurrentNavigableMap\***
+&nbsp;
 
-For cases when ordering of keys is required, we can use *ConcurrentSkipListMap*, a concurrent version of *TreeMap*.
+## 4. ConcurrentNavigableMap
 
-As a supplement for *ConcurrentMap*, *ConcurrentNavigableMap* supports total ordering of its keys (in ascending order by default) and is concurrently navigable. Methods that return views of the map are overridden for concurrency compatibility:
+对于需要排序 key 的情况，可以使用 *ConcurrentSkipListMap*，它是 *TreeMap* 的并发版本。
+
+作为对 *ConcurrentMap* 的补充，*ConcurrentNavigableMap* 支持 key 的总排序(默认为升序) 。返回 map 视图的方法将被重写，以实现并发兼容性:
 
 - *subMap*
 - *headMap*
@@ -318,19 +352,23 @@ As a supplement for *ConcurrentMap*, *ConcurrentNavigableMap* supports total ord
 - *tailMap*
 - *descendingMap*
 
-*keySet()* views' iterators and spliterators are enhanced with weak-memory-consistency:
+&nbsp;
+
+keySet() 视图的 iterator 和 spliterator 通过 `week-memory-consistency` 增强:
 
 - *navigableKeySet*
 - *keySet*
 - *descendingKeySet*
 
-## **5. \*ConcurrentSkipListMap\***
+&nbsp;
 
-Previously, we have covered *NavigableMap* interface and its implementation [*TreeMap*](https://www.baeldung.com/java-treemap). *ConcurrentSkipListMap* can be seen a scalable concurrent version of *TreeMap*.
+## 5. ConcurrentSkipListMap
 
-In practice, there's no concurrent implementation of the red-black tree in Java. A concurrent variant of [*SkipLists*](https://en.wikipedia.org/wiki/Skip_list) is implemented in *ConcurrentSkipListMap*, providing an expected average log(n) time cost for the *containsKey*, *get*, *put* and *remove* operations and their variants.
+在前面，我们已经介绍了 *NavigableMap* 接口及其实现 [*TreeMap*](java-treemap.md)。 `ConcurrentSkipListMap` 可以看作是 *TreeMap* 的可扩展并发版本。
 
-In addition to *TreeMap*‘s features, key insertion, removal, update and access operations are guaranteed with thread-safety. Here's a comparison to *TreeMap* when navigating concurrently:
+实际上，在 Java 中没有红黑树的并发实现。[*SkipList*](https://en.wikipedia.org/wiki/Skip_list) 的并发变量在 *ConcurrentSkipListMap* 中实现，为 *containsKey*， *get*， *put* 和 *remove* 操作及其变量提供了一个期望的平均日志(n) 时间成本。
+
+除了 *TreeMap* 的特性之外，key 插入、删除、更新和访问操作都是通过线程安全来保证的。以下是与*TreeMap*在同时导航时的比较
 
 ```java
 @Test
@@ -379,10 +417,18 @@ private int countMapElementByPollingFirstEntry(
 }
 ```
 
-A full explanation of the performance concerns behind the scenes is beyond the scope of this article. The details can be found in *ConcurrentSkipListMap's* Javadoc, which is located under *java/util/concurrent* in the *src.zip* file.
+对幕后性能问题的完整解释超出了本文的范围。详细信息可以在 *ConcurrentSkipListMap* 的 Javadoc 中找到，它位于 *src.zip* 中的*java/util/concurrent* 下 
 
-## **6. Conclusion**
+> 因 ConcurrentHashMap 本身实现复杂
+>
+> 所以没有基于它 TreeMap 相关的底层实现
+>
+> 因此设计了 ConcurrentSkipListMap<K, V> 
+>
+> - 底层是跳表机构
 
-In this article, we mainly introduced the *ConcurrentMap* interface and the features of *ConcurrentHashMap* and covered on *ConcurrentNavigableMap* being key-ordering required.
+&nbsp;
 
-The full source code for all the examples used in this article can be found [in the GitHub project](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-collections).
+## 6. 总结
+
+在本文中，我们主要介绍了 *ConcurrentMap* 接口和 *ConcurrentHashMap* 的特性，并介绍了 *ConcurrentNavigableMap* 作为 key 排序所需的特性。

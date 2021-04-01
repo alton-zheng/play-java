@@ -1,28 +1,16 @@
-# Implementing a Runnable vs Extending a Thread
+# 实现 Runnable vs 继承 Thread
 
-Last modified: May 7, 2019
+&nbsp;
 
-by [baeldung](https://www.baeldung.com/author/baeldung/)
+## 1. 介绍
 
+​		“我应该实现一个 *Runnable* 或继承 *Thread* 类”? 这是一个很常见的问题。在本文中，我们将看到哪种方法在实践中更有意义，以及为什么。
 
+&nbsp;
 
-- [Java](https://www.baeldung.com/category/java/)**+**
+## 2. 使用 Thread
 
-- [Java Concurrency](https://www.baeldung.com/tag/java-concurrency/)
-
-### **Get started with Spring 5 and Spring Boot 2, through the \*Learn Spring\* course:**
-
-**[>> CHECK OUT THE COURSE](https://www.baeldung.com/ls-course-start)**
-
-## **1. Introduction**
-
-“Should I implement a *Runnable* or extend the *Thread* class”? is quite a common question.
-
-In this article, we'll see which approach makes more sense in practice and why.
-
-## **2. Using \*Thread\***
-
-Let's first define a *SimpleThread* class that extends *Thread*:
+首先定义一个继承了 Thread 的 *SimpleThread* 类:
 
 ```java
 public class SimpleThread extends Thread {
@@ -38,7 +26,7 @@ public class SimpleThread extends Thread {
 }
 ```
 
-Let's also see how we can run a thread of this type:
+运行这种类型的线程：
 
 ```java
 @Test
@@ -52,7 +40,9 @@ public void givenAThread_whenRunIt_thenResult()
 }
 ```
 
-We can also use an *ExecutorService* to execute the thread:
+&nbsp;
+
+我们也可以使用 *ExecutorService* 来执行线程:
 
 ```java
 @Test
@@ -64,13 +54,15 @@ public void givenAThread_whenSubmitToES_thenResult()
 }
 ```
 
-That's quite a lot of code for running a single log operation in a separate thread.
+对于在单独的线程中运行单个日志操作来说，这是相当多的代码。
 
-Also, note that ***SimpleThread\* cannot extend any other class**, as Java doesn't support multiple inheritance.
+另外，请注意，$SimpleThread$ 不能扩展任何其他类，因为 Java 不支持多重继承。
 
-## **3. Implementing a \*Runnable\***
+&nbsp;
 
-Now, let's create a simple task which implements the *java.lang.Runnable* interface:
+## 3. 实现 Runnable
+
+现在，让我们创建一个实现 `java.lang.Runnable` 的简单任务 ：
 
 ```java
 class SimpleRunnable implements Runnable {
@@ -86,13 +78,9 @@ class SimpleRunnable implements Runnable {
 }
 ```
 
-The above *SimpleRunnable* is just a task which we want to run in a separate thread.
+上面的 *SimpleRunnable* 只是一个我们想在单独的线程中运行的任务。
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" width="728" height="90" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" srcdoc="" data-google-container-id="5" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-There're various approaches we can use for running it; one of them is to use the *Thread* class:
+有很多方法可以用来运行它; 其中一种是使用 *Thread* 类：
 
 ```java
 @Test
@@ -105,7 +93,9 @@ public void givenRunnable_whenRunIt_thenResult()
 }
 ```
 
-We can even use an *ExecutorService*:
+&nbsp;
+
+我们甚至可以使用 *ExecutorService* :
 
 ```java
 @Test
@@ -117,13 +107,15 @@ public void givenARunnable_whenSubmitToES_thenResult()
 }
 ```
 
-We can read more about *ExecutorService* in [here](https://www.baeldung.com/java-executor-service-tutorial).
+&nbsp;
 
-Since we're now implementing an interface, we're free to extend another base class if we need to.
+我们可以在 [这里](java-executor-service-tutorial.md) 阅读更多关于 *ExecutorService* 的内容。
 
-Starting with Java 8, any interface which exposes a single abstract method is treated as a functional interface, which makes it a valid lambda expression target.
+实现 Runnable 的同时，可以继承另一个父类。
 
-**We can rewrite the above \*Runnable\* code using a lambda expression**:
+从 Java 8 开始，任何公开单个抽象方法的接口都被视为函数接口，这使得它可以用 lambda表达式来表达。
+
+我们可以用 lambda 表达式重写上面的 *Runnable* 代码：
 
 ```java
 @Test
@@ -135,17 +127,20 @@ public void givenARunnableLambda_whenSubmitToES_thenResult()
 }
 ```
 
-## **4. \*Runnable\* or \*Thread\*?**
+&nbsp;
 
-Simply put, we generally encourage the use of *Runnable* over *Thread*:
+## 4. Runnable 或 Thread?
 
-- When extending the *Thread* class, we're not overriding any of its methods. Instead, we override the method of *Runnable (*which *Thread* happens to implement*)*. This is a clear violation of IS-A *Thread* principle
-- Creating an implementation of *Runnable* and passing it to the *Thread* class utilizes composition and not inheritance – which is more flexible
-- After extending the *Thread* class, we can't extend any other class
-- From Java 8 onwards, *Runnables* can be represented as lambda expressions
+简单地说，比起继承 Thread， 通常鼓励使用 *Runnable* :
 
-## **5. Conclusion**
+- 当扩展 *Thread* 类时，我们不会覆盖它的任何方法。相反，我们覆盖了 *Runnable*  的方法(*Thread* 碰巧实现了*)*。这显然违反了 `IS-A` Thread 的原则。
+- 创建一个 *Runnable* 的实现，并将它传递给 *Thread* 类使用复合而不是继承 - 这是更灵活的
+- 在扩展 *Thread* 类之后，我们不能扩展任何其他类
+- 从 Java 8 开始，Runnable 可以用 lambda 表达式表示
 
-In this quick tutorial, we saw how implementing *Runnable* is typically a better approach than extending the *Thread* class.
+&nbsp;
 
-The code for this post can be found [over on GitHub](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-basic).
+## 5. 总结
+
+在这篇快速教程中，我们看到了实现 *Runnable* 通常是比扩展 *Thread* 类更好的方法。
+

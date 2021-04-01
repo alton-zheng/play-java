@@ -1,19 +1,13 @@
 # 网络 和 IO 面试题
 
-```
-常见问题
-1，【网络到分布式lvs+redis+zk】http://mashibing.com/pc.html
-2，网络的小课
-3，内存与IO，磁盘IO，网络IO
+> 常见问题
+> 1，【网络到分布式lvs+redis+zk】http://mashibing.com/pc.html
+> 2，网络的小课
+> 3，内存与IO，磁盘IO，网络IO
+>
+> 从程序员的角度理解网络通信
 
-从程序员的角度理解网络通信
-
-面试突击班怎么学，自己时间衡量，一点带面，能够应付变种问题
-你有点体系的基础
-查漏补缺，建立体系的过程
-
-做规划，面试辅导，又几个进了腾讯：redis+网络+IO
-```
+&nbsp;
 
 ![面试突击班-网络和IO面试题](/Users/alton/Documents/profile/notebook/Java/play-java/io/docs/images/网络和IO模型.png)
 
@@ -25,25 +19,105 @@
 >
 > https : http + ssl/tls
 
+&nbsp;
 
+## OSI七层网络协议
+
+- **OSI** 是 **Open System Interconnect** 的缩写，意为**开放式系统互联**。
+
+> 用户态
+>
+> - 应用层
+> - 表示层
+> - 会话层
+>
+> 内核态
+>
+> - 传输控制层
+> - 网络层
+> - 链路层
+> - 物理层
+>
+> ![img](/Users/alton/Documents/profile/notebook/Java/play-java/io/docs/images/webp.png)
+
+&nbsp;
+
+## TCP/IP ？
+
+| TCP/IP 层  | 协议                                                         |
+| ---------- | ------------------------------------------------------------ |
+| 应用层     | `HTTP`/`FTP`（文件传输） /`SMTP`（电邮） /`DNS`（域名解析） /` Telnet` (远程登录) 等 |
+| 传输层     | `TCP`、`UDP`、`UGP` 等                                       |
+| 网络层     | `IP`、`ICMP`、`IGMP`  等                                     |
+| 数据链路层 | `ARP`、`RARP` 等                                             |
+
+&nbsp;
+
+### TCP vs UDP?
+
+**`TCP`(Transmission Control Protocol：传输控制协议)和`UDP`(User Datagram Protocol：用户数据报协议)协议属于传输层协议。其中:**
+ 1)`TCP`提供IP环境下的数据可靠传输，它提供的服务包括数据流传送、可靠性、有效流控、全双工操作和多路复用。通过面向连接、端到端和可靠的数据包发送。通俗说，它是事先为所发送的数据开辟出连接好的通道，然后再进行数据发送;
+ 2)`UDP` 则不为 IP 提供可靠性、流控或差错恢复功能。一般来说，TCP对应的是可靠性要求高的应用，而UDP对应的则是可靠性要求低、传输经济的应用。
+
+TCP支持的应用协议主要有：Telnet、FTP、SMTP等;
+ UDP支持的应用层协议主要有：NFS(网络文件系统)、SNMP(简单网络管理协议)、DNS(主域名称系统)、TFTP(通用文件传输协议)等。
+ TCP/IP协议与低层的数据链路层和物理层无关，这也是TCP/IP的重要特点。
 
 &nbsp;
 
 ## TCP三次握手
 
 > 内核态完成
+>
+> ![img](images/three-way-handshake.png)
 
+- 1）第一次握手：`Client`将标志位`SYN`置为 `1`，随机产生一个值`seq=J`，并将该数据包发送给`Server`，`Client`进入`SYN_SENT`状态，等待 `Server` 确认。
+-  2）第二次握手：$Server$ 收到数据包后由标志位 `SYN=1` 知道 `Client` 请求建立连接，`Server`将标志位`SYN`和`ACK`都置为1，`ack=J+1`，随机产生一个值`seq=K`，并将该数据包发送给`Client`以确认连接请求，`Server`进入`SYN_RCVD`状态。
+-  3）第三次握手：`Client`收到确认后，检查`ack`是否为J+1，`ACK`是否为1，如果正确则将标志位`ACK`置为1，`ack=K+1`，并将该数据包发送给`Server`，`Server`检查`ack`是否为K+1，`ACK`是否为1，如果正确则连接建立成功，`Client`和`Server`进入 `ESTABLISHED` 状态，完成三次握手，随后 Client 与 Server 之间可以开始传输数据了。
 
+&nbsp;
 
-1. ## TCP四次分手
+>  **SYN攻击解释：**
+>  三次握手过程中，Server 发送 SYN-ACK 之后，收到 Client 的 ACK 之前的TCP连接称为半连接（half-open connect），此时 Server 处于SYN_RCVD状态，当收到 ACK 后，Server 转入ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向 Server 不断地发送SYN包，Server回复确认包，并等待Client的确认，由于源地址是不存在的，因此，Server需要不断重发直至超时，这些伪造的SYN包将产时间占用未连接队列，导致正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：
+>
+> ```bash
+> $ netstat -nap | grep SYN_RECV
+> ```
+
+&nbsp;
+
+## TCP四次分手
+
+> 内核态完成
+>
+> ![img](images/four-way-wavehand.png)
+
+&nbsp;
+
+由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭，上图描述的即是如此。
+ 1）第一次挥手：`Client`发送一个`FIN`，用来关闭`Client`到`Server`的数据传送，`Client`进入`FIN_WAIT_1`状态。
+ 2）第二次挥手：`Server`收到 `FIN` 后，发送一个 `ACK` 给`Client`，确认序号为收到序号+1（与`SYN`相同，一个`FIN`占用一个序号），`Server`进入`CLOSE_WAIT`状态。
+ 3）第三次挥手：`Server`发送一个`FIN`，用来关闭`Server`到`Client`的数据传送，`Server`进入`LAST_ACK`状态。
+ 4）第四次挥手：`Client`收到`FIN`后，`Client`进入`TIME_WAIT`状态，接着发送一个`ACK`给`Server`，确认序号为收到序号+1，`Server`进入`CLOSED`状态，完成四次挥手。
+
+&nbsp;
+
+上面是一方主动关闭，另一方被动关闭的情况（由一方发起挥手），实际中还会出现同时发起主动关闭的情况，具体流程如下图（同时挥手）：
+
+![img](https:////upload-images.jianshu.io/upload_images/1674835-c46460762c1c124f.png?imageMogr2/auto-orient/strip|imageView2/2/w/510/format/webp)
 
 
 
 &nbsp;
 
+## 为什么连接的时候是三次握手，关闭的时候却是四次握手？
+
+ 这是因为当Server端收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文。其中ACK报文是用来应答的，SYN报文是用来同步的。
+ 但是关闭连接时，当Client端发送FIN报文仅仅表示它不再发送数据了但是还能接收数据，Server端收到FIN报文时，很可能并不会立即关闭SOCKET，所以只能先回复一个ACK报文，告诉Client端，"你发的FIN报文我收到了"。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手。
+
+&nbsp;
+
 ## TCP连接状态
-
-
 
 &nbsp;
 
@@ -51,7 +125,7 @@
 
 > accept 队列  
 >
-> - 等待程序接受的连接
+> - 等待程序接收的连接
 >
 > - 有大小限制 （backlog）不被程序取走
 >
@@ -68,7 +142,7 @@
 >
 >     - `cat /proc/sys/net/ipv4/tcp_max_syn_backlog  DDOS`
 >       - 默认 `2048`
->       - `backlog` 满了 `accept` 队列满了，新客户端直接 `Connection refused`
+>       - `backlog` 满了 `accept` 队列满了，新 client 直接 `Connection refused`
 
 &nbsp;
 
@@ -94,23 +168,6 @@ $ ss -lna
 
 &nbsp;
 
-## OSI七层参考模型
-
-> 用户态
->
-> - 应用层
-> - 表示层
-> - 会话层
->
-> 内核态
->
-> - 传输控制层
-> - 网络层
-> - 链路层
-> - 物理层
-
-
-
 ## 什么是长连接和短连接？有状态，无状态？
 
 > TCP是长连接吗？
@@ -129,7 +186,7 @@ $ ss -lna
 
 ## IO模型
 
->0：IO是程序对着内核的socket-queue的包装
+>0：IO 是程序对内核的 $socket-queue$ 的包装
 >
 >BIO：读取，一直等queue里有才返回，阻塞模型，每连接对应一个线程
 >

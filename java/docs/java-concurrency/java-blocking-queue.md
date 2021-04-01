@@ -4,87 +4,61 @@
 
 ## 1. 概览
 
-In this article, we will look at one of the most useful constructs *java.util.concurrent* to solve the concurrent producer-consumer problem. We'll look at an API of the *[BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html)* interface and how methods from that interface make writing concurrent programs easier.
+在本文中，我们将研究最有用的结构之一 *java.util.concurrent* 解决并发的 producer-consumer 问题。我们将研究 *[BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html)* 接口的API，以及该接口的方法如何使编写并发程序变得更容易。
 
-Later in the article, we will show an example of a simple program that has multiple producer threads and multiple consumer threads.
-
-在本文中，我们将研究最有用的结构之一*java.util。concurrent*解决并发的生产者-消费者问题。我们将研究*[BlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html)*接口的API，以及该接口的方法如何使编写并发程序变得更容易。
-
-在本文后面，我们将展示一个具有多个生产者线程和多个消费者线程的简单程序示例。
+在本文后面，我们将展示一个具有多个 producer 线程和 多个 consumer 线程的简单程序示例。
 
 &nbsp;
 
-## 2. BlockingQueue Types
+## 2. BlockingQueue 类型
 
-We can distinguish two types of *BlockingQueue*:
+我们可以区分两种类型的 BlockingQueue :
 
-- unbounded queue – can grow almost indefinitely
-
-- bounded queue – with maximal capacity defined
-
-- 我们可以区分两种类型的BlockingQueue*:
-
-  -无界队列-几乎可以无限增长
-  -有界队列-定义了最大容量
+- unbounded queue - 几乎可以无限增长
+- bounded queue - 定义了最大容量
 
 &nbsp;
 
 ### 2.1. Unbounded Queue
 
-Creating unbounded queues is simple:
+创建一个简单的 `unbounded queue`：
 
 ```java
 BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>();
 ```
 
-The Capacity of *blockingQueue* will be set to *Integer.MAX_VALUE.* All operations that add an element to the unbounded queue will never block, thus it could grow to a very large size.
+*blockingQueue* 的容量将被设置为 *Integer.MAX_VALUE。* 所有向无界队列添加元素的操作都不会阻塞，因此它可能会增长到非常大的大小。
 
-The most important thing when designing a producer-consumer program using unbounded BlockingQueue is that consumers should be able to consume messages as quickly as producers are adding messages to the queue. Otherwise, the memory could fill up and we would get an *OutOfMemory* exception.
-
-*blockingQueue*的容量将被设置为*Integer.MAX_VALUE。*所有向无界队列添加元素的操作都不会阻塞，因此它可能会增长到非常大的大小。
-
-在使用无界BlockingQueue设计生产者-消费者程序时，最重要的一点是，消费者应该能够以生产者向队列中添加消息的速度消费消息。否则，内存可能被填满，我们将得到一个*OutOfMemory*异常。
+在使用  unbounded BlockingQueue 设计 producer-consumer 程序时，最重要的一点是，consumer 应该能够以 producer 向队列中添加消息的速度消费消息。否则，内存可能被填满，我们将得到一个 *OutOfMemory* 异常。
 
 &nbsp;
 
 ### 2.2. Bounded Queue
 
-The second type of queues is the bounded queue. We can create such queues by passing the capacity as an argument to a constructor:
-
-第二种类型的队列是有界队列。我们可以通过将容量作为参数传递给构造函数来创建这样的队列:
+第二种类型的队列是 `bounded queue`。我们可以通过将容量作为参数传递给构造函数来创建这样的队列:
 
 ```java
 BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>(10);
 ```
 
-Here we have a *blockingQueue* that has a capacity equal to 10. It means that when a producer tries to add an element to an already full queue, depending on a method that was used to add it (*offer()*, *add()* or *put()*), it will block until space for inserting object becomes available. Otherwise, the operations will fail.
+这里我们有一个 *blockingQueue*，它的容量等于10。这意味着当 producer 试图将一个元素添加到一个已经满的队列中时，它将阻塞直到插入对象的空间可用。否则会导致操作失败。
 
-Using bounded queue is a good way to design concurrent programs because when we insert an element to an already full queue, that operations need to wait until consumers catch up and make some space available in the queue. It gives us throttling without any effort on our part.
-
-这里我们有一个*blockingQueue*，它的容量等于10。这意味着当生产者试图将一个元素添加到一个已经满的队列中时，它将阻塞直到插入对象的空间可用。否则会导致操作失败。
-
-使用有界队列是设计并发程序的好方法，因为当我们向已经满了的队列插入元素时，操作需要等待，直到消费者赶上来并在队列中留出一些可用空间。它让我们无需任何努力就可以进行节流。
+使用 `bounded queue` 是设计并发程序的好方法，因为当我们向已经满了的队列插入元素时，操作需要等待，直到 comsumer 赶上来并在队列中留出一些可用空间。
 
 &nbsp;
 
 ## 3. BlockingQueue API
 
-There are two types of methods in the *BlockingQueue* interface *–* methods responsible for adding elements to a queue and methods that retrieve those elements. Each method from those two groups behaves differently in case the queue is full/empty.
-
-在*BlockingQueue*接口* - *中有两种方法，一种是负责向队列添加元素的方法，另一种是负责检索这些元素的方法。在队列是满的/空的情况下，这两个组中的每个方法的行为是不同的。
+在 *BlockingQueue* 接口中有两种方法，一种是负责向队列添加元素的方法，另一种是负责检索这些元素的方法。在队列是 full/empty 情况下，这两个组中的每个方法的行为是不同的。
 
 &nbsp;
 
-### **3.1. Adding Elements**
+### 3.1. 添加元素
 
-- *add() –* returns *true* if insertion was successful, otherwise throws an *IllegalStateException*
-- *put() –* inserts the specified element into a queue, waiting for a free slot if necessary
-- *offer() –* returns *true* if insertion was successful, otherwise *false*
-- *offer(E e, long timeout, TimeUnit unit) –* tries to insert element into a queue and waits for an available slot within a specified timeout
-- *add() - *如果插入成功，返回*true*，否则抛出*IllegalStateException*
-- *put() - *将指定的元素插入到队列中，如果需要，等待一个空闲的槽位
-- *offer() - *如果插入成功则返回*true*，否则返回*false*
-- *offer(E E, long timeout, TimeUnit unit) - *尝试插入一个元素到队列中，并在指定的超时时间内等待一个可用的插槽
+- *add() –* 如果插入成功，返回 *true*，否则抛出 *IllegalStateException*
+- *put() –* 将指定的元素插入到 queue 中， 如果需要，等待一个空闲的 slot。
+- *offer() –* 如果插入成功则返回 *true*，否则返回 *false*
+- *offer(E e, long timeout, TimeUnit unit) –* 尝试插入一个元素到 queue 中， 并在指定的超时时间内等待一个可用的插槽。
 
 &nbsp;
 

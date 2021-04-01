@@ -7,7 +7,9 @@
   - 在该区很少发生 `gc`，一般 `gc` 是针对常量池和对类型的卸载。
   - 主要用于存储已经被 `jvm`加载的 `类信息`，`常量`，`静态变量`，`代码`等。
   - 线程共享。
-
+- JDK 8 中已经用 `Metaspace`(元数据区) 完全替代了 `PermGen`（即方法区）
+    - `Metadata` 不在 JVM 中，而是使用的是本地内存， 默认情况下受操作系统内存限制。
+  
 - 虚拟机栈：
   - 为方法服务，每个方法在执行时会创建一个栈帧，用于存储局部变量表，方法出口等。
   - 线程私有。
@@ -19,10 +21,13 @@
 - 堆：
   - 存储对象的实例。
   - 线程共享。
-
+- GC 优化，主要考虑它即可
+  
 - 程序计数器：
-  - pc
+  - `PC`
   - 存储下一条所需要执行的字节码的地址
+    - 每个线程必须分开程序计数器登记
+      - 更新指令
 
 &nbsp;
 
@@ -131,9 +136,9 @@ objB.instance = objA
       - 老年代
       - 多线程并发
 
+&nbsp;
 
-
-Java中垃圾回收器：
+## Java中垃圾回收器：
 
 分区
 
@@ -153,11 +158,11 @@ Java中垃圾回收器：
 分代
 
 - Serial: 单线程收集器，只会使用一个线程完成垃圾收集工作。在进行垃圾收集时必须暂停其余线程。
-- ParNew：Serial 收集器的多线程版本，使用多条线程进行垃圾回收工作。
-- Parallel Scavenge：吞吐量优先，主要适合在后台运算而不需要太多交互的任务。配合有自适应策略。
 - `Serial old`：
   - `serial` 收集器的老年代版本
   - a stop-the-world, copying collector which users a single GC
+- `ParNew`：Serial 收集器的多线程版本，使用多条线程进行垃圾回收工作。
+- `Parallel Scavenge`：吞吐量优先，主要适合在后台运算而不需要太多交互的任务。配合有自适应策略。
 - `Parallel old`：
   - `parallel Scavenage` 收集器的老年代版本
   - a stop-the-world, copying collector which uses a multi GC
