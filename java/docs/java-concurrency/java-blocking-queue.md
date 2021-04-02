@@ -62,43 +62,26 @@ BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>(10);
 
 &nbsp;
 
-### **3.2. Retrieving Elements**
+### 3.2. 获取元素
 
-- *take()* – waits for a head element of a queue and removes it. If the queue is empty, it blocks and waits for an element to become available
-- *poll(long timeout, TimeUnit unit) –* retrieves and removes the head of the queue, waiting up to the specified wait time if necessary for an element to become available. Returns *null* after a timeout*
-  *
+- *take()* – 获取一个队列的头元素并删除它。如果队列为空，它将阻塞并等待一个元素变为可用
+- *poll(long timeout, TimeUnit unit) –* 获取并删除队列的头，如果需要，等待指定的时间，以便元素可用。超时后返回 $null$
 
-These methods are the most important building blocks from *BlockingQueue* interface when building producer-consumer programs.
-
-- *take()* -等待一个队列的头元素并删除它。如果队列为空，它将阻塞并等待一个元素变为可用
-- *poll(long timeout, TimeUnit unit) - *获取并删除队列的头，如果需要，等待到指定的等待时间，以便元素可用。超时后返回*null*
-*
-
-在构建生产者-消费者程序时，这些方法是*BlockingQueue*接口中最重要的构建块。
+在构建 producer-consumer 程序时，这些方法是 *BlockingQueue* 接口中最重要的构建块。
 
 &nbsp;
 
-## **4. Multithreaded Producer-Consumer Example**
+## 4. 多线程 Producer-Consumer 示例
 
-Let's create a program that consists of two parts – a Producer and a Consumer.
+让我们创建一个由两个部分组成的程序 - Producer 和 Consumer。
 
-The Producer will be producing a random number from 0 to 100 and will put that number in a *BlockingQueue*. We'll have 4 producer threads and use the *put()* method to block until there's space available in the queue.
+Producer 将产生一个从 0 到 100 的随机数，并将该数字放入一个 *BlockingQueue* 中。我们将有 4 个 producer 线程，并使用 *put()* 方法阻塞，直到队列中有可用的空间。
 
-The important thing to remember is that we need to stop our consumer threads from waiting for an element to appear in a queue indefinitely.
+需要记住的重要一点是，我们需要停止 consumer 线程无限期地等待一个元素出现在队列中。
 
-A good technique to signal from producer to the consumer that there are no more messages to process is to send a special message called a poison pill. We need to send as many poison pills as we have consumers. Then when a consumer will take that special poison pill message from a queue, it will finish execution gracefully.
+从 producer 向 consumer 发出没有更多信息需要处理的信号的一种好方法是发送一个被称为 poison 的特殊信息。有多少 consumer ，我们就送多少 poison。然后，当 consumer 从队列中获取这个特殊的 `poison` 消息时，它将优雅地完成执行。
 
-Let's look at a producer class:
-
-让我们创建一个由两个部分组成的程序——生产者和消费者。
-
-生产者将产生一个从0到100的随机数，并将该数字放入一个*BlockingQueue*中。我们将有4个producer线程，并使用*put()*方法阻塞，直到队列中有可用的空间。
-
-需要记住的重要一点是，我们需要停止消费者线程无限期地等待一个元素出现在队列中。
-
-从生产者向消费者发出没有更多信息需要处理的信号的一种好方法是发送一个被称为毒丸的特殊信息。有多少消费者，我们就送多少毒丸。然后，当消费者从队列中获取这个特殊的毒丸消息时，它将优雅地完成执行。
-
-让我们来看看一个producer类:
+让我们来看看一个 producer 类:
 
 ```java
 public class NumbersProducer implements Runnable {
@@ -130,17 +113,13 @@ public class NumbersProducer implements Runnable {
 }
 ```
 
-Our producer constructor takes as an argument the *BlockingQueue* that is used to coordinate processing between the producer and the consumer. We see that method *generateNumbers()* will put 100 elements in a queue. It takes also poison pill message, to know what type of message must be put into a queue when the execution will be finished. That message needs to be put *poisonPillPerProducer* times into a queue.
+我们的 producer 构造函数接受 *BlockingQueue* 作为参数，该参数用于协调 producer 和 consumer 之间的处理。我们看到方法 *generateNumbers()* 将在一个队列中放入 100 个元素。还需要 poison 消息，以便知道在执行完成时必须将哪种类型的消息放入队列。需要将该消息放入队列中 *poisonPillPerProducer* 次。
 
-Each consumer will take an element from a *BlockingQueue* using *take()* method so it will block until there is an element in a queue. After taking an *Integer* from a queue it checks if the message is a poison pill, if yes then execution of a thread is finished. Otherwise, it will print out the result on standard output along with current thread's name.
+&nbsp;
 
-This will give us insight into inner workings of our consumers:
+每个 consuer 将使用 *take()* 方法从 *BlockingQueue* 中获取一个元素，因此它将阻塞，直到队列中有一个元素为止。在从队列中获取一个 *Integer* 后，它检查消息是否为 poison，如果是，则线程的执行结束。否则，它将在标准输出上打印结果以及当前 thread 的名称。
 
-我们的生产者构造函数接受*BlockingQueue*作为参数，该参数用于协调生产者和消费者之间的处理。我们看到方法*generateNumbers()*将在一个队列中放入100个元素。还需要毒丸消息，以便知道在执行完成时必须将哪种类型的消息放入队列。需要将该消息放入队列中*poisonPillPerProducer*次。
-
-每个消费者将使用*take()*方法从*BlockingQueue*中获取一个元素，因此它将阻塞，直到队列中有一个元素为止。在从队列中获取一个*Integer*后，它检查消息是否为毒丸，如果是，则线程的执行结束。否则，它将在标准输出上打印结果以及当前线程的名称。
-
-这将使我们深入了解我们的消费者的内部工作:
+这将使我们深入了解我们的 consumer 的内部工作:
 
 ```java
 public class NumbersConsumer implements Runnable {
@@ -167,17 +146,11 @@ public class NumbersConsumer implements Runnable {
 }
 ```
 
-The important thing to notice is the usage of a queue. Same as in the producer constructor, a queue is passed as an argument. We can do it because *BlockingQueue* can be shared between threads without any explicit synchronization.
+需要注意的重要一点是 $queue$ 的使用。与 producer 构造函数中一样，队列作为参数传递。我们可以这样做，因为 *$BlockingQueue$* 可以在线程之间共享，而不需要任何显式的同步。
 
-Now that we have our producer and consumer, we can start our program. We need to define the queue's capacity, and we set it to 100 elements.
+既然我们有了 $producer$ 和 $consumer$ ，就可以开始程序了。我们需要定义 $queue$ 容量，并将其设置为 $100$ 个元素。
 
-We want to have 4 producer threads and a number of consumers threads will be equal to the number of available processors:
-
-需要注意的重要一点是队列的使用。与生产者构造函数中一样，队列作为参数传递。我们可以这样做，因为*BlockingQueue*可以在线程之间共享，而不需要任何显式的同步。
-
-既然我们有了生产者和消费者，就可以开始程序了。我们需要定义队列的容量，并将其设置为100个元素。
-
-我们希望有4个生产者线程，而消费者线程的数量将等于可用处理器的数量:
+我们希望有 4 个生产者线程，而 $consumer$ 线程的数量将等于可用处理器的数量:
 
 ```java
 int BOUND = 10;
@@ -200,22 +173,14 @@ for (int j = 0; j < N_CONSUMERS; j++) {
 new Thread(new NumbersProducer(queue, poisonPill, poisonPillPerProducer + mod)).start();
 ```
 
-*BlockingQueue* is created using construct with a capacity. We're creating 4 producers and N consumers. We specify our poison pill message to be an *Integer.MAX_VALUE* because such value will never be sent by our producer under normal working conditions. The most important thing to notice here is that *BlockingQueue* is used to coordinate work between them.
+&nbsp;
 
-When we run the program, 4 producer threads will be putting random *Integers* in a *BlockingQueue* and consumers will be taking those elements from the queue. Each thread will print to standard output the name of the thread together with a result.
+*BlockingQueue* 是使用带容量的构造创建的。我们创造了 $4$ 个 producer 和 N 个 consumer 。我们将 poison 消息指定为一个*整数。MAX_VALUE* 因为在正常的工作条件下，这个值永远不会被我们的 producer 发送。这里需要注意的最重要的一点是，*BlockingQueue* 用于协调它们之间的工作。
 
-*BlockingQueue*是使用带容量的构造创建的。我们创造了4个生产者和N个消费者。我们将毒丸消息指定为一个*整数。MAX_VALUE*因为在正常的工作条件下，这个值永远不会被我们的生产者发送。这里需要注意的最重要的一点是，*BlockingQueue*用于协调它们之间的工作。
-
-当我们运行程序时，4个生产者线程将把随机的*整数*放入*BlockingQueue*中，而消费者将从队列中取出这些元素。每个线程将向标准输出输出线程的名称和结果。
+当我们运行程序时，$4$ 个 producer 线程将把随机的*整数*放入 *BlockingQueue* 中，而 consumer 将从 queue 中取出这些元素。每个 thread 将向标准输出输出 thread 的名称和结果。
 
 &nbsp;
 
-## **5. Conclusion**
+## 5. 总结
 
-This article shows a practical use of *BlockingQueue* and explains methods that are used to add and retrieve elements from it. Also, we've shown how to build a multithreaded producer-consumer program using *BlockingQueue* to coordinate work between producers and consumers.
-
-The implementation of all these examples and code snippets can be found in the [GitHub project](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-collections) – this is a Maven-based project, so it should be easy to import and run as it is.
-
-本文展示了*BlockingQueue*的实际用途，并解释了用于添加和从中检索元素的方法。此外，我们还展示了如何使用*BlockingQueue*构建一个多线程的生产者-消费者程序来协调生产者和消费者之间的工作。
-
-所有这些例子的实现和代码片段可以找到(GitHub项目)(https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-collections)——这是一个Maven-based项目,所以它应该易于导入并运行。
+本文展示了 *BlockingQueue* 的实际用途，并解释了用于添加和从中获取元素的方法。此外，我们还展示了如何使用 *BlockingQueue* 构建一个多线程的 producer-consumer 程序来协调 producer 和 consumer 之间的工作。
