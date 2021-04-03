@@ -1,62 +1,38 @@
-# Guide To CompletableFuture
+# CompletableFuture 指南
 
-Last modified: January 30, 2021
+&nbsp;
 
-by [baeldung](https://www.baeldung.com/author/baeldung/)
+## **1. **简介
 
+本教程是 *CompletableFuture* 类的功能和场景指南，该类是 Java 8 Concurrency API 的改进而引入的。
 
+&nbsp;
 
-- [Java](https://www.baeldung.com/category/java/)**+**
+## 2. Java 异步计算
 
-- [Java Concurrency](https://www.baeldung.com/tag/java-concurrency/)
+异步计算很难推理。通常，我们希望将任何计算都视为一系列步骤，但是在异步计算的情况下，**以回调表示的动作往往分散在代码中或彼此深深地嵌套在一起**。当我们需要处理其中一个步骤中可能发生的错误时，情况变得更加糟糕。
 
-### **Get started with Spring 5 and Spring Boot 2, through the \*Learn Spring\* course:**
+ Future 接口是 Java 5 中添加作为异步计算的结果，但它没有任何方法去合并这些计算或处理可能出现的错误。
 
-**[>> CHECK OUT THE COURSE](https://www.baeldung.com/ls-course-start)**
+Java 8 引入了 *CompletableFuture* 类。除 *Future* 接口外，它还实现了 *CompletionStage* 接口。该接口为异步计算步骤定义了 contract，我们可以将其与其他步骤结合使用。
 
-## **1. Introduction**
+*CompletableFuture* 同时是一个 build block 和一个 framework，具有**大约 50 种不同的方法来构成，组合和执行异步计算步骤以及处理错误**。
 
-This tutorial is a guide to the functionality and use cases of the *CompletableFuture* class that was introduced as a Java 8 Concurrency API improvement.
+如此庞大的 API 可能会让人不知所措，但是这些 API 大多属于几种清晰且截然不同的用例。
 
-## Further reading:
+&nbsp;
 
-## [Runnable vs. Callable in Java](https://www.baeldung.com/java-runnable-callable)
+## 3. 使用 *CompletableFuture* 作为简单的 Future
 
-Learn the difference between Runnable and Callable interfaces in Java.
+ 首先，*CompletableFuture* 类实现了 *Future* 接口，因此我们可以将其用作 *Future* 实现，但需要附加完成逻辑。
 
-[Read more](https://www.baeldung.com/java-runnable-callable) →
+例如，我们可以使用 no-arg 构造方法创建此类的实例，以表示 Future 结果，将其分发给 consumer，并在将来的某个时间使用  *complete* 方法完成该结果。consumer 可以使用 *get* 方法阻塞当前线程，直到提供此结果为止。
 
-## [Guide to java.util.concurrent.Future](https://www.baeldung.com/java-future)
+在下面的示例中，我们有一个方法，该方法创建一个 *CompletableFuture* 实例，然后在另一个线程中分离一些计算并立即返回 *Future* 。
 
-A guide to java.util.concurrent.Future with an overview of its several implementations
+&nbsp;
 
-[Read more](https://www.baeldung.com/java-future) →
-
-## **2. Asynchronous Computation in Java**
-
-Asynchronous computation is difficult to reason about. Usually we want to think of any computation as a series of steps, but in the case of asynchronous computation, **actions represented as callbacks tend to be either scattered across the code or deeply nested inside each other**. Things get even worse when we need to handle errors that might occur during one of the steps.
-
-The *Future* interface was added in Java 5 to serve as a result of an asynchronous computation, but it did not have any methods to combine these computations or handle possible errors.
-
-**Java 8 introduced the \*CompletableFuture\* class.** Along with the *Future* interface, it also implemented the *CompletionStage* interface. This interface defines the contract for an asynchronous computation step that we can combine with other steps.
-
-*CompletableFuture* is at the same time a building block and a framework, with **about 50 different methods for composing, combining, and executing asynchronous computation steps and handling errors**.
-
-Such a large API can be overwhelming, but these mostly fall in several clear and distinct use cases.
-
-## **3. Using \*CompletableFuture\* as a Simple \*Future\***
-
-First of all, the *CompletableFuture* class implements the *Future* interface, so we can **use it as a \*Future\* implementation, but with additional completion logic**.
-
-For example, we can create an instance of this class with a no-arg constructor to represent some future result, hand it out to the consumers, and complete it at some time in the future using the *complete* method. The consumers may use the *get* method to block the current thread until this result is provided.
-
-In the example below, we have a method that creates a *CompletableFuture* instance, then spins off some computation in another thread and returns the *Future* immediately.
-
-<iframe frameborder="0" src="https://21594bf41b3c264c979f154deff61709.safeframe.googlesyndication.com/safeframe/1-0-38/html/container.html" id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="728" height="90" data-is-safeframe="true" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" data-google-container-id="9" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-When the computation is done, the method completes the *Future* by providing the result to the *complete* method:
+完成计算后，该方法通过将结果提供给 *complete* 方法来完成 *Future* ：
 
 ```java
 public Future<String> calculateAsync() throws InterruptedException {
@@ -72,13 +48,15 @@ public Future<String> calculateAsync() throws InterruptedException {
 }
 ```
 
-To spin off the computation, we use the *Executor* API. This method of creating and completing a *CompletableFuture* can be used together with any concurrency mechanism or API, including raw threads.
+&nbsp;
 
-Notice that **the \*calculateAsync\* method returns a \*Future\* instance**.
+为了剥离计算，我们使用 *Executor* API。这种创建和完成 *CompletableFuture* 的方法可以与任何并发机制或 API（包括原始线程）一起使用。
 
-We simply call the method, receive the *Future* instance, and call the *get* method on it when we're ready to block for the result.
+请注意，该 *calculateAsync* 方法返回一个 *Future* 实例。
 
-Also observe that the *get* method throws some checked exceptions, namely *ExecutionException* (encapsulating an exception that occurred during a computation) and *InterruptedException* (an exception signifying that a thread executing a method was interrupted):
+我们只需调用该方法，接收 *Future* 实例，并在准备阻塞结果时对其调用 *get* 方法。
+
+还要注意，*get* 方法抛出一些检查过的异常，即 *ExecutionException*（封装了在计算过程中发生的异常）和*InterruptedException*（表示执行方法的线程被中断的异常）：
 
 ```java
 Future<String> completableFuture = calculateAsync();
@@ -89,7 +67,9 @@ String result = completableFuture.get();
 assertEquals("Hello", result);
 ```
 
-**If we already know the result of a computation**, we can use the static *completedFuture* method with an argument that represents a result of this computation. Consequently, the *get* method of the *Future* will never block, immediately returning this result instead:
+&nbsp;
+
+**如果我们已经知道了计算的结果**，我们可以使用静态 *completedFuture* 方法表示此计算结果。因此，*Future* 的 *get* 方法将永远不会阻塞，而是立即返回以下结果：
 
 ```java
 Future<String> completableFuture = 
@@ -101,25 +81,25 @@ String result = completableFuture.get();
 assertEquals("Hello", result);
 ```
 
-As an alternative scenario, we may want to [**cancel the execution of a \*Future\***](https://www.baeldung.com/java-future#2-canceling-a-future-with-cancel).
+作为替代方案，我们可能要 [**cancel Future 执行**](java-future.md)。
 
-## **4. \*CompletableFuture\* with Encapsulated Computation Logic**
+&nbsp;
 
-The code above allows us to pick any mechanism of concurrent execution, but what if we want to skip this boilerplate and simply execute some code asynchronously?
+## 4. 具有封装计算逻辑的 CompletableFuture
 
-Static methods *runAsync* and *supplyAsync* allow us to create a *CompletableFuture* instance out of *Runnable* and *Supplier* functional types correspondingly.
+上面的 代码允许我们选择任何并行执行机制，但是如果我们想跳过此样板并简单地异步执行一些代码，该怎么办？
 
-<iframe frameborder="0" src="https://21594bf41b3c264c979f154deff61709.safeframe.googlesyndication.com/safeframe/1-0-38/html/container.html" id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_1" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="728" height="90" data-is-safeframe="true" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" data-google-container-id="a" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+静态方法 *runAsync* 和 *supplyAsync* 允许我们相应地从 *Runnable* 和 *Supplier* 功能类型中创建 *CompletableFuture* 实例。
 
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
+&nbsp;
 
-Both *Runnable* and *Supplier* are functional interfaces that allow passing their instances as lambda expressions thanks to the new Java 8 feature.
+*Runnable* 和 *Supplier* 两者都属于函数接口，允许通过得益于 Java 8 新特性的 lambda 表达式进行表达。
 
-The *Runnable* interface is the same old interface that is used in threads and it does not allow to return a value.
+*Runnable* 接口与线程中使用的旧接口相同，它不允许返回值。
 
-The *Supplier* interface is a generic functional interface with a single method that has no arguments and returns a value of a parameterized type.
+*Supplier* 接口是一个泛型函数接口，只有一个没有参数的方法，它返回一个参数化类型的值。
 
-This allows us to **provide an instance of the \*Supplier\* as a lambda expression that does the calculation and returns the result**. It is as simple as:
+这允许我们以 *lambda* 表达式的形式提供 **Supplier** 的实例，该表达式执行计算并返回结果。它很简单:
 
 ```java
 CompletableFuture<String> future
@@ -130,9 +110,11 @@ CompletableFuture<String> future
 assertEquals("Hello", future.get());
 ```
 
-## **5. Processing Results of Asynchronous Computations**
+&nbsp;
 
-The most generic way to process the result of a computation is to feed it to a function. The *thenApply* method does exactly that; it accepts a *Function* instance, uses it to process the result, and returns a *Future* that holds a value returned by a function:
+## 5. 异步计算结果
+
+处理计算结果的最常见方法是将其提供给函数。 *thenApply* 方法正是这样做的; 它接受一个 *Function*  instance，使用它来处理结果，并返回一个 *Future* ，该 *Future* 保存函数返回的值:
 
 ```java
 CompletableFuture<String> completableFuture
@@ -144,9 +126,10 @@ CompletableFuture<String> future = completableFuture
 assertEquals("Hello World", future.get());
 ```
 
-If we don't need to return a value down the *Future* chain, we can use an instance of the *Consumer* functional interface. Its single method takes a parameter and returns *void*.
+&nbsp;
+如果我们不需要在 *Future* 链中返回值，则可以使用 *Consumer* 函数接口的实例。它的单个方法接受一个参数并返回 *void* 。
 
-There's a method for this use case in the *CompletableFuture.* The *thenAccept* method receives a *Consumer* and passes it the result of the computation. Then the final *future.get()* call returns an instance of the *Void* type:
+在 *CompletableFuture* 中有一种用于此场景的方法*。*该 *thenAccept* 方法接收 *Consumer* 并将其传递所述计算的结果。然后，最后的 *future.get()* 调用返回 *Void* 类型的实例：
 
 ```java
 CompletableFuture<String> completableFuture
@@ -158,7 +141,7 @@ CompletableFuture<Void> future = completableFuture
 future.get();
 ```
 
-Finally, if we neither need the value of the computation, nor want to return some value at the end of the chain, then we can pass a *Runnable* lambda to the *thenRun* method. In the following example, we simply print a line in the console after calling the *future.get():*
+最后，如果我们既不需要计算的值，也不想在链的末端返回某个值，则可以将 *Runnable* lambda 传递给 *thenRun* 方法。在以下示例中，我们仅在调用 *future.get()* 之后在控制台中打印一行*：*
 
 ```java
 CompletableFuture<String> completableFuture 
@@ -170,19 +153,19 @@ CompletableFuture<Void> future = completableFuture
 future.get();
 ```
 
-## **6. Combining Futures**
+&nbsp;
 
-The best part of the *CompletableFuture* API is the **ability to combine \*CompletableFuture\* instances in a chain of computation steps**.
+## 6. 合并 Future
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_2" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_2" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="b" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+*CompletableFuture* API 最好的部分是 能够在一系列计算步骤中组合 CompletableFuture 实例的功能。
 
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
+这种链接的结果本身就是一个 *CompletableFuture*，它允许进一步的链接和结合。这种方法在函数式语言中普遍存在，通常被称为一元设计模式。
 
-The result of this chaining is itself a *CompletableFuture* that allows further chaining and combining. This approach is ubiquitous in functional languages and is often referred to as a monadic design pattern.
+&nbsp;
 
-**In the following example we use the \*thenCompose\* method to chain two \*Futures\* sequentially.**
+在下面的例子中，我们使用 *thenCompose* 方法将两个 Future 按顺序连接起来。
 
-Notice that this method takes a function that returns a *CompletableFuture* instance. The argument of this function is the result of the previous computation step. This allows us to use this value inside the next *CompletableFuture*‘s lambda:
+注意，这个方法接受一个返回 *CompletableFuture* 实例的函数。这个函数的参数是前一个计算步骤的结果。这允许我们在下一个 *CompletableFuture* 的 lambda 中使用这个值：
 
 ```java
 CompletableFuture<String> completableFuture 
@@ -192,11 +175,13 @@ CompletableFuture<String> completableFuture
 assertEquals("Hello World", completableFuture.get());
 ```
 
-The *thenCompose* method, together with *thenApply,* implement basic building blocks of the monadic pattern. They closely relate to the *map* and *flatMap* methods of *Stream* and *Optional* classes also available in Java 8.
+*thenCompose* 方法和 *thenApply* 一起实现了一元模式的基本构建块。它们与 Java 8 中可用的 *Stream* 和 *Optional* 类的 *map* 和 *flatMap* 方法密切相关。
 
-Both methods receive a function and apply it to the computation result, but the *thenCompose* (*flatMap*) method **receives a function that returns another object of the same type**. This functional structure allows composing the instances of these classes as building blocks.
+这两个方法都接收一个函数并将其应用于计算结果，但 *thenCompose(flatMap)* 方法**接收一个返回另一个相同类型对象的函数**。这个功能结构允许将这些类的实例组合为构建块。
 
-If we want to execute two independent *Futures* and do something with their results, we can use the *thenCombine* method that accepts a *Future* and a *Function* with two arguments to process both results:
+&nbsp;
+
+如果我们想要执行两个独立的 *Future* 并使用它们的结果做一些事情，我们可以使用 *thenCombine* 方法来接受一个 *Future* 和一个带两个参数的 *Function* 来处理这两个结果:
 
 ```java
 CompletableFuture<String> completableFuture 
@@ -207,7 +192,9 @@ CompletableFuture<String> completableFuture
 assertEquals("Hello World", completableFuture.get());
 ```
 
-A simpler case is when we want to do something with two *Futures*‘ results, but don't need to pass any resulting value down a *Future* chain. The *thenAcceptBoth* method is there to help:
+&nbsp;
+
+一个更简单的场景是，当我们想对两个 *Future* 的结果进行某种处理，而无需将任何结果值传递给 *Future* 链时。该 *thenAcceptBoth* 方法都可以帮助：
 
 ```java
 CompletableFuture future = CompletableFuture.supplyAsync(() -> "Hello")
@@ -215,27 +202,29 @@ CompletableFuture future = CompletableFuture.supplyAsync(() -> "Hello")
     (s1, s2) -> System.out.println(s1 + s2));
 ```
 
-## **7. Difference Between \*thenApply()\* and \*thenCompose()\***
+&nbsp;
 
-In our previous sections, we've shown examples regarding *thenApply()* and *thenCompose()*. Both APIs help chain different *CompletableFuture* calls, but the usage of these 2 functions is different.
+## 7.  *thenApply()* 和 *thenCompose()* 区别
 
-### **7.1. \*thenApply()\***
+在前面的部分中，我们显示了有关 *thenApply()* 和 *thenCompose()* 示例。这两个 API 都有助于链接不同的*CompletableFuture* 调用，但是这两个函数的用法不同。
 
-**We can use this method to work with a result of the previous call.** However, a key point to remember is that the return type will be combined of all calls.
+&nbsp;
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_3" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_3" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="c" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+### 7.1. *thenApply()*
 
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
+**我们可以使用此方法处理上一个调用的结果。** 但是，要记住的关键一点是，返回类型将结合所有调用。
 
-So this method is useful when we want to transform the result of a *CompletableFuture* call:
+因此，当我们要转换 *CompletableFuture* 调用的结果时，此方法很有用 ：
 
 ```java
 CompletableFuture<Integer> finalResult = compute().thenApply(s-> s + 1);
 ```
 
-### **7.2. \*thenCompose()\***
+&nbsp;
 
-The *thenCompose()* method is similar to *thenApply()* in that both return a new Completion Stage. However, ***thenCompose()\* uses the previous stage as the argument**. It will flatten and return a *Future* with the result directly, rather than a nested future as we observed in *thenApply():*
+### 7.2. *thenCompose()*
+
+*thenCompose()* 方法类似于 *thenApply()*，两者都返回一个新的完成阶段。然而，thenCompose() 使用前一阶段作为参数。它将直接平铺并返回一个带有结果的 *Future*，而不是我们在 *thenApply()* 中观察到的嵌套 Future
 
 ```java
 CompletableFuture<Integer> computeAnother(Integer i){
@@ -244,15 +233,19 @@ CompletableFuture<Integer> computeAnother(Integer i){
 CompletableFuture<Integer> finalResult = compute().thenCompose(this::computeAnother);
 ```
 
-So if the idea is to chain *CompletableFuture* methods then it’s better to use *thenCompose()*.
+因此，如果想法是链接 *CompletableFuture* 方法，那么最好使用 *thenCompose()*。
 
-Also, note that the difference between these two methods is analogous to [the difference between *map()* and *flatMap()*](https://www.baeldung.com/java-difference-map-and-flatmap)*.*
+另外，请注意，这两种方法之间的区别类似于 map() 和 flatMap() 之间的区别。
 
-## **8. Running Multiple \*Futures\* in Parallel**
+&nbsp;
 
-When we need to execute multiple *Futures* in parallel, we usually want to wait for all of them to execute and then process their combined results.
+---
 
-The *CompletableFuture.allOf* static method allows to wait for completion of all of the *Futures* provided as a var-arg:
+## 8. 并行运行多个 Future
+
+当我们需要并行执行多个 Future 时，我们通常要等待所有 Future 执行，然后处理它们的合并结果。
+
+该 *CompletableFuture.allOf* 静态方法允许等待所有的完成 Future 作为一个变种 - var-arg：
 
 ```java
 CompletableFuture<String> future1  
@@ -274,7 +267,9 @@ assertTrue(future2.isDone());
 assertTrue(future3.isDone());
 ```
 
-Notice that the return type of the *CompletableFuture.allOf()* is a *CompletableFuture<Void>*. The limitation of this method is that it does not return the combined results of all *Futures*. Instead, we have to manually get results from *Futures*. Fortunately, *CompletableFuture.join()* method and Java 8 Streams API makes it simple:
+&nbsp;
+
+注意，*CompletableFuture.allof()* 的返回类型是 *CompletableFuture<Void>* 。此方法的局限性是它不返回所有 *Future* 的组合结果。相反，我们必须手动从 *Future* 中获取结果。幸运的是，*CompletableFuture.join()* 方法和 Java 8 Streams API 使它变得简单:
 
 ```java
 String combined = Stream.of(future1, future2, future3)
@@ -284,19 +279,17 @@ String combined = Stream.of(future1, future2, future3)
 assertEquals("Hello Beautiful World", combined);
 ```
 
-The *CompletableFuture.join()* method is similar to the *get* method, but it throws an unchecked exception in case the *Future* does not complete normally. This makes it possible to use it as a method reference in the *Stream.map()* method.
+该 *CompletableFuture.join()* 方法类似于 *get* 方法，但是如果 *Future* 没有正常完成，它会抛出一个未检查的异常。这样就可以将其用作 *Stream.map()* 方法中的方法引用。
 
-## **9. Handling Errors**
+&nbsp;
 
-For error handling in a chain of asynchronous computation steps, we have to adapt the *throw/catch* idiom in a similar fashion.
+## 9. Error 处理
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_4" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_4" width="728" height="90" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="d" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+为了在异步计算步骤链中处理错误，我们必须以类似的方式适应 *throw/catch* 习惯用法。
 
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
+*CompletableFuture* 类不是在语法块中捕获异常，而是使我们可以使用特殊的 *handle* 方法对其进行*处理*。此方法接收两个参数：计算结果（如果成功完成）和 引发的异常（如果某些计算步骤未正常完成）。
 
-Instead of catching an exception in a syntactic block, the *CompletableFuture* class allows us to handle it in a special *handle* method. This method receives two parameters: a result of a computation (if it finished successfully), and the exception thrown (if some computation step did not complete normally).
-
-In the following example, we use the *handle* method to provide a default value when the asynchronous computation of a greeting was finished with an error because no name was provided:
+在下面的示例中，当问候语的异步计算由于没有提供名称而结束错误时，我们使用 *handle* 方法提供默认值：
 
 ```java
 String name = null;
@@ -314,7 +307,9 @@ CompletableFuture<String> completableFuture
 assertEquals("Hello, Stranger!", completableFuture.get());
 ```
 
-As an alternative scenario, suppose we want to manually complete the *Future* with a value, as in the first example, but also have the ability to complete it with an exception. The *completeExceptionally* method is intended for just that. The *completableFuture.get()* method in the following example throws an *ExecutionException* with a *RuntimeException* as its cause:
+&nbsp;
+
+作为另一种场景，假设我们想手动使用一个值来完成 *Future*，就像第一个示例中那样，但是我们也能够使用一个异常来完成它。*completeExceptionly* 方法就是为此而设计的。下面的例子中的 *completableFuture.get()* 方法抛出一个 *ExecutionException* 和一个 *RuntimeException* 作为其原因：
 
 ```java
 CompletableFuture<String> completableFuture = new CompletableFuture<>();
@@ -329,15 +324,17 @@ completableFuture.completeExceptionally(
 completableFuture.get(); // ExecutionException
 ```
 
-In the example above, we could have handled the exception with the *handle* method asynchronously, but with the *get* method we can use the more typical approach of a synchronous exception processing.
+在上面的示例中，我们可以使用 *handle* 方法异步处理异常，但是通过 *get* 方法，我们可以使用更典型的同步异常处理方法。
 
-## **10. Async Methods**
+&nbsp;
 
-Most methods of the fluent API in *CompletableFuture* class have two additional variants with the *Async* postfix. These methods are usually intended for **running a corresponding step of execution in another thread**.
+## 10. 异步方法
 
-The methods without the *Async* postfix run the next execution stage using a calling thread. In contrast, the *Async* method without the *Executor* argument runs a step using the common *fork/join* pool implementation of *Executor* that is accessed with the *ForkJoinPool.commonPool()* method. Finally, the *Async* method with an *Executor* argument runs a step using the passed *Executor*.
+*CompletableFuture* 类中的大多数 fluent API 方法都有两个带有 *Async* 后缀的附加变量。这些方法通常用于在另一个线程中运行相应的执行步骤。
 
-Here's a modified example that processes the result of a computation with a *Function* instance. The only visible difference is the *thenApplyAsync* method, but under the hood the application of a function is wrapped into a *ForkJoinTask* instance (for more information on the *fork/join* framework, see the article [“Guide to the Fork/Join Framework in Java”](https://www.baeldung.com/java-fork-join)). This allows us to parallelize our computation even more and use system resources more efficiently:
+没有 *Async* 后缀的方法使用调用线程运行下一个执行阶段。相反，不带 *Executor* 参数的 *Async* 方法使用 *Executor* 的公共 fork/join pool 实现来运行步骤，该实现是通过 *`ForkJoinPool.commonPool()`* 方法访问的。最后，带有 *Executor* 参数的 *Async* 方法使用传递的 *Executor* 运行一个步骤。
+
+下面是一个经过修改的示例，它使用一个 *Function* 实例来处理计算结果。唯一可见的区别是 *thenApplyAsync* 方法，但在内部，函数的应用被包装成 *ForkJoinTask* 实例(更多关于 *fork/join* 框架的信息，参见文章 [" Java fork/join框架指南"](java-fork-join.md))。这使得我们可以更加并行地进行计算，并更有效地使用系统资源:
 
 ```java
 CompletableFuture<String> completableFuture  
@@ -349,15 +346,19 @@ CompletableFuture<String> future = completableFuture
 assertEquals("Hello World", future.get());
 ```
 
+&nbsp;
+
 ## 11. JDK 9 *CompletableFuture* API
 
-Java 9 enhances the *CompletableFuture* API with the following changes:
+Java 9通过以下更改增强了*CompletableFuture* API：
 
-- New factory methods added
-- Support for delays and timeouts
-- Improved support for subclassing
+- 添加了新的工厂方法
+- 支持延迟和超时
+- 改进了对子类的支持
 
-and new instance APIs:
+&nbsp;
+
+和新的实例 API：
 
 - *Executor defaultExecutor()*
 - *CompletableFuture<U> newIncompleteFuture()*
@@ -368,11 +369,8 @@ and new instance APIs:
 - *CompletableFuture<T> orTimeout(long timeout, TimeUnit unit)*
 - *CompletableFuture<T> completeOnTimeout(T value, long timeout, TimeUnit unit)*
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_5" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_5" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="e" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-We also now have a few static utility methods:
+&nbsp;
+然后，还有一些静态实用程序方法：
 
 - *Executor delayedExecutor(long delay, TimeUnit unit, Executor executor)*
 - *Executor delayedExecutor(long delay, TimeUnit unit)*
@@ -380,15 +378,18 @@ We also now have a few static utility methods:
 - *<U> CompletionStage<U> failedStage(Throwable ex)*
 - *<U> CompletableFuture<U> failedFuture(Throwable ex)*
 
-Finally, to address timeout, Java 9 has introduced two more new functions:
+&nbsp;
+
+最后，为了解决超时问题，Java 9引入了另外两个新功能：
 
 - *orTimeout()*
 - *completeOnTimeout()*
 
-Here's the detailed article for further reading: [Java 9 CompletableFuture API Improvements](https://www.baeldung.com/java-9-completablefuture).
+以下是详细的文章，进一步阅读： [Java 9 CompletableFuture API改进](java-9-completablefuture.md)。
 
-## **12. Conclusion**
+&nbsp;
 
-In this article, we've described the methods and typical use cases of the *CompletableFuture* class.
+## 12. 小节
 
-The source code for the article is available [over on GitHub](https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-concurrency-basic).
+在本文中，我们描述了*CompletableFuture* 类的方法和典型场景。
+
