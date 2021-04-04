@@ -4,29 +4,19 @@
 
 ## **1. **简介
 
-Core Java provides a basic API for asynchronous computations – *Future.* *CompletableFuture* is one of its newest implementations.
-
-Vavr provides its new functional alternative to the *Future* API. In this article, we'll discuss the new API and show how to make use of some of its new features.
-
-More articles on Vavr can be found [here](https://www.baeldung.com/vavr-tutorial).
-
-核心Java提供了用于异步计算的基本API- *Future。* *CompletableFuture*是其最新的实现之一。
+核心 Java 提供了用于异步计算的基本API- *Future。* *CompletableFuture* 是其最新的实现之一。
 
 Vavr提供了它的新功能替代*Future* API。在本文中，我们将讨论新的API，并展示如何利用其一些新功能。
 
-关于Vavr的更多文章可以在[这里](https://www.baeldung.com/vavr-tutorial)找到。
+关于Vavr的更多文章可以在 [这里](vavr-tutorial.md) 找到。
 
 &nbsp;
 
-## **2. **Maven 依赖
+## 2. Maven 依赖
 
-The *Future* API is included in the Vavr Maven dependency.
+在 Future 的 API 包括在 Vavr Maven 的依赖。
 
-So, let's add it to our *pom.xml*:
-
-在*未来的*API包括在Vavr Maven的依赖。
-
-因此，让我们将其添加到我们的*pom.xml中*：
+因此，让我们将其添加到我们的 *pom.xml* 中：
 
 ```xml
 <dependency>
@@ -36,76 +26,58 @@ So, let's add it to our *pom.xml*:
 </dependency>
 ```
 
-We can find the latest version of the dependency on [Maven Central](https://search.maven.org/classic/#search|ga|1|a%3A"vavr" AND g%3A"io.vavr").我们可以找到对[Maven Central](https://search.maven.org/classic/#search|ga|1|a%3A"vavr" AND g%3A"io.vavr")的依赖的最新版本。
-
-
-
-## 3. Vavr 的 Future
-
-**The \*Future\* can be in one of two states:**
-
-- Pending – the computation is ongoing
-- Completed – the computation finished successfully with a result, failed with an exception or was canceled
-
-**The main advantage over the core Java \*Future\* is that we can easily register callbacks and compose operations in a non-blocking way.**
-
-**在\*未来\*可以有两种状态之一：**
-
-- 待定-计算正在进行中
-- 已完成–计算成功完成并显示结果，失败并显示异常或被取消
-
-**与核心Java \*Future\*相比，主要优点是我们可以轻松地以非阻塞方式注册回调和编写操作。**
+我们可以找到对 [Maven Central](https://search.maven.org/classic/#search|ga|1|a%3A"vavr" AND g%3A"io.vavr") 的依赖的最新版本。
 
 &nbsp;
 
-## 4. Future 的基本操作
+## 3. Vavr 的 Future
 
-### **4.1. Starting Asynchronous Computations**
+在 `Future` 可以有以下两种状态之一：
 
-Now, let's see how we can start asynchronous computations using Vavr:
+- Pending - 计算正在进行中
+- Completed – 计算成功完成并显示结果，失败并显示异常或被取消
 
-现在，让我们看看如何使用Vavr启动异步计算：
+> 与核心 Java Future 相比，主要优点是我们可以轻松地以非阻塞方式注册回调和编写操作。
+
+&nbsp;
+
+## 4. Future 的 基本操作
+
+### 4.1. 开始异步计算
+
+现在，让我们看看如何使用 Vavr 启动异步计算：
 
 ```java
 String initialValue = "Welcome to ";
 Future<String> resultFuture = Future.of(() -> someComputation());
 ```
 
-### 
+&nbsp;
 
 ### 4.2 从 Future 获取 value
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_0" width="336" height="280" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="d" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-We can extract values from a *Future* by simply calling one of the *get()* or *getOrElse()* methods:
-
-我们可以通过简单地调用*get（）*或*getOrElse（）*方法之一来从*Future中*提取值：
+我们可以通过简单地调用 *get()* 或 *getOrElse()* 方法之一来从 Future 中提取值：
 
 ```java
 String result = resultFuture.getOrElse("Failed to get underlying value.");
 ```
 
-The difference between *get()* and *getOrElse()* is that *get()* is the simplest solution, while *getOrElse()* enables us to return a value of any type in case we weren't able to retrieve the value inside the *Future*.
+差别： 
 
-It's recommended to use *getOrElse()* so we can handle any errors that occur while trying to retrieve the value from a *Future*. **For the sake of simplicity, we'll just use \*get()\* in the next few examples.**
+- *get()* - 是最简单的解决方案
+- *getOrElse()* - 使我们能够在无法检索到 Future 的内部值的情况下，下返回默认值。
 
-Note that the *get()* method blocks the current thread if it's necessary to wait for the result.
+&nbsp;
 
-A different approach is to call the nonblocking *getValue()* method, which returns an *Option<Try<T>>* which **will be empty as long as computation is pending.**
+建议使用 *getOrElse()*，这样我们就可以处理尝试从 *Future* 检索值时发生的任何错误。**为了简单起见，在接下来的几个示例中，我们将仅使用 *get()*
 
-We can then extract the computation result which is inside the *Try* object:
+> 请注意，如果有必要等待结果，get() 方法将阻止当前线程。
 
-之间的差别*的get（）*和*getOrElse（）*是*get（）方法*是最简单的解决方案，同时*getOrElse（）*使我们能够在情况下返回任何类型的值，我们无法检索内部值*未来*。
+&nbsp;
 
-建议使用*getOrElse（），*这样我们就可以处理尝试从*Future*检索值时发生的任何错误。**为了简单起见，在接下来的几个示例中，我们将仅使用\*get（）\*。**
+另一种方法是调用不阻塞任务的 `getValue()` 方法，该方法返回 `Option<Try<T>>`，**只要计算处于 Pending 状态**，该方法仅返回 empty。
 
-请注意，如果有必要等待结果，*get（）*方法将阻止当前线程。
-
-另一种方法是调用nonblocking *getValue（）*方法，该方法返回*Option <Try <T >>*，**只要计算未决**，该*选项***将为空。**
-
-然后，我们可以提取*Try*对象内部的计算结果：
+然后，我们可以提取 *Try* 对象内部的计算结果：
 
 ```java
 Option<Try<String>> futureOption = resultFuture.getValue();
@@ -113,11 +85,9 @@ Try<String> futureTry = futureOption.get();
 String result = futureTry.get();
 ```
 
-Sometimes we need to check if the *Future* contains a value before retrieving values from it.
+&nbsp;
 
-We can simply do that by using:
-
-有时我们需要在从*Future*检索值之前检查*Future是否*包含一个值。
+有时我们需要在从 *Future* 检索值之前检查 *Future* 是否包含一个值。
 
 我们可以简单地使用以下方法做到这一点：
 
@@ -125,21 +95,15 @@ We can simply do that by using:
 resultFuture.isEmpty();
 ```
 
-It's important to note that the method *isEmpty()* is blocking – it will block the thread until its operation is finished.
-
-重要的是要注意，方法*isEmpty（）*正在阻塞–它将阻塞线程，直到其操作完成为止。
+重要的是要注意，方法 isEmpty() 如正在阻塞 – 它将阻塞线程，直到其操作完成为止。
 
 &nbsp;
 
 ### 4.3. 更改默认的 ExecutorService
 
-*Futures* use an *ExecutorService* to run their computations asynchronously. The default *ExecutorService* is *Executors.newCachedThreadPool()*.
+*Future* 使用 *ExecutorService* 异步运行其计算。默认的 *ExecutorService* 是 *Executors.newCachedThreadPool()*。
 
-We can use another *ExecutorService* by passing an implementation of our choice:
-
-*期货*使用*ExecutorService*异步运行其计算。默认的*ExecutorService*是*Executors.newCachedThreadPool（）*。
-
-我们可以通过传递我们选择的实现来使用另一个*ExecutorService*：
+我们可以通过传递我们选择的实现来使用另一个 *ExecutorService*：
 
 ```java
 @Test
@@ -152,17 +116,13 @@ public void whenChangeExecutorService_thenCorrect() {
 }
 ```
 
-## **5. Performing Actions Upon Completion**
+&nbsp;
 
-The API provides the *onSuccess()* method which performs an action as soon as the *Future* completes successfully.
+## 5. 完成后采取行动
 
-Similarly, the method *onFailure()* is executed upon the failure of the *Future*.
+API提供了*onSuccess()* 方法，该方法会在 *Future* 成功完成后立即执行操作。
 
-Let's see a quick example:
-
-API提供了*onSuccess（）*方法，该方法会在*Future*成功完成后立即执行操作。
-
-同样，*onFailure（）*方法在*Future*失败时执行。
+同样，*onFailure()* 方法在 *Future* 失败时执行。
 
 让我们看一个简单的例子：
 
@@ -172,9 +132,7 @@ Future<String> resultFuture = Future.of(() -> appendData(initialValue))
   .onFailure(v -> System.out.println("Failed - Result: " + v));
 ```
 
-The method *onComplete()* accepts an action to be run as soon as the *Future* has completed its execution, whether or not the *Future* was successful. The method *andThen()* is similar to *onComplete()* – it just guarantees the callbacks are executed in a specific order:
-
-无论*Future*是否成功，*onComplete（）*方法都会接受一个将在*Future*完成执行后立即运行的操作。方法*andThen（）*与*onComplete（）*类似–它仅保证回调按特定顺序执行：
+无论 *Future* 是否成功，*onComplete()* 方法都会接受一个将在 *Future* 完成执行后立即运行的操作。方法 *andThen()* 与 *onComplete()* 类似 – 它仅保证回调按特定顺序执行：
 
 ```java
 Future<String> resultFuture = Future.of(() -> appendData(initialValue))
@@ -182,21 +140,18 @@ Future<String> resultFuture = Future.of(() -> appendData(initialValue))
   .andThen(finalResult -> System.out.println("Completed - 2: " + finalResult));
 ```
 
-## **6. Useful Operations on \*Futures\***
+&nbsp;
 
-### **6.1. **阻塞当前线程**
+## 6.  Future 有效操作
 
-The method *await()* has two cases:
+### **6.1. **阻塞当前线程
 
-- if the *Future* is pending, it blocks the current thread until the Future has completed
-- if the *Future* is completed, it finishes immediately
+方法 *await()* 有两种情况：
 
-Using this method is straightforward:
+- 如果 *Future* 处于 Pending 状态，它将阻塞当前线程，直到 Future 完成
+- 如果 *Future* 完成，则立即完成。
 
-方法*await（）*有两种情况：
-
-- 如果*Future*未决，它将阻塞当前线程，直到Future完成
-- 如果*未来*完成，则立即完成
+&nbsp;
 
 使用此方法很简单：
 
@@ -204,9 +159,9 @@ Using this method is straightforward:
 resultFuture.await();
 ```
 
-### **6.2. Canceling a Computation**
+&nbsp;
 
-We can always cancel the computation:
+### 6.2. 取消运算
 
 我们总是可以取消计算：
 
@@ -216,15 +171,9 @@ resultFuture.cancel();
 
 &nbsp;
 
-### **6.3. **检索基础\*执行器服务\***
+### 6.3. 检索基础 ExecutorService
 
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_2" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_2" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="f" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-To obtain the *ExecutorService* that is used by a *Future*, we can simply call *executorService()*:
-
-为了获得*Future*使用的*ExecutorService*，我们可以简单地调用*executorService（）*：
+为了获得 *Future* 使用的 *ExecutorService* ，我们可以简单地调用 *executorService()*：
 
 ```java
 resultFuture.executorService();
@@ -232,15 +181,11 @@ resultFuture.executorService();
 
 &nbsp;
 
-### 6.4. **从失败的\*未来中\*获得可\*投掷的东西\***
+### 6.4. 从失败的 Future 获得信息
 
-We can do that using the *getCause()* method which returns the *Throwable* wrapped in an *io.vavr.control.Option* object.
+我们可以使用 *getCause()* 方法做到这一点，该方法返回包裹在 *io.vavr.control.Option* 对象中的 *Throwable* 。
 
-We can later extract the *Throwable* from the *Option* object:
-
-我们可以使用*getCause（）*方法做到这一点，该方法返回包裹在*io.vavr.control.Option*对象中的*Throwable*。
-
-稍后我们可以从*Option*对象中提取*Throwable*：
+稍后我们可以从 *Option* 对象中提取 *Throwable* 信息：
 
 ```java
 @Test
@@ -253,13 +198,9 @@ public void whenDivideByZero_thenGetThrowable2() {
 }
 ```
 
-Additionally, we can convert our instance to a *Future* holding a *Throwable* instance using the *failed()* method:
+&nbsp;
 
-另外，我们可以使用*failed（）*方法将实例转换为拥有*Throwable*实例的*Future*：
-
-```
-
-```
+另外，我们可以使用 *failed()* 方法将实例转换为拥有 *Throwable* 实例的*Future*：
 
 ```java
 @Test
@@ -271,13 +212,11 @@ public void whenDivideByZero_thenGetThrowable1() {
 }
 ```
 
-### **6.5. \*isCompleted(), isSuccess(),\* and \*isFailure()\***
+&nbsp;
 
-These methods are pretty much self-explanatory. They check if a *Future* completed, whether it completed successfully or with a failure. All of them return *boolean* values, of course.
+### 6.5. isCompleted(), isSuccess(), 和 isFailure()
 
-We're going to use these methods with the previous example:
-
-这些方法几乎是不言自明的。他们检查*Future*是否完成，是否成功完成或失败。当然，它们都返回*布尔*值。
+这些方法几乎是不言自明的。他们检查 *Future* 是否完成，是否成功完成或失败。当然，它们都返回 boolean 值。
 
 我们将在前面的示例中使用这些方法：
 
@@ -293,13 +232,11 @@ public void whenDivideByZero_thenCorrect() {
 }
 ```
 
-### **6.6. Applying Computations on Top of a Future**
+&nbsp;
 
-### **在未来应用计算**
+### 6.6. 在 Future 上运用计算
 
-The *map()* method allows us to apply a computation on top of a pending *Future:*
-
-该*图（）*方法可以让我们在挂起之上应用计算*的未来：*
+该 map() 方法可以让我们在 pending 状态的 Future 上，应用计算：
 
 ```java
 @Test
@@ -313,9 +250,9 @@ public void whenCallMap_thenCorrect() {
 }
 ```
 
-If we pass a function that returns a *Future* to the *map()* method, we can end up with a nested *Future* structure. To avoid this, we can leverage the *flatMap()* method:
+&nbsp;
 
-如果我们传递一个将*Future*返还给*map（）*方法的函数，那么我们最终会得到一个嵌套的*Future*结构。为了避免这种情况，我们可以利用*flatMap（）*方法：
+如果我们传递一个将 *Future* 返还给 *map()* 方法的函数，那么我们最终会得到一个嵌套的 *Future* 结构。为了避免这种情况，我们可以利用 *flatMap()* 方法：
 
 ```java
 @Test
@@ -327,11 +264,11 @@ public void whenCallFlatMap_thenCorrect() {
 }
 ```
 
-### **6.7. Transforming \*Futures\***
+&nbsp;
 
-The method *transformValue()* can be used to apply a computation on top of a *Future* and change the value inside it to another value of the same type or a different type:
+### 6.7. Future 转换
 
-方法*transformValue（）*可用于在*Future*之上应用计算，并将其内部的值更改为相同类型或不同类型的另一个值：
+方法 *transformValue()* 可用于在 *Future* 之上应用计算，并将其内部的值更改为相同类型或不同类型的另一个值：
 
 ```java
 @Test
@@ -343,15 +280,11 @@ public void whenTransform_thenCorrect() {
 }
 ```
 
-### **6.8. Zipping \*Futures\***
+&nbsp;
 
-<iframe frameborder="0" src="https://839848466f63d68113810f4a93120cc6.safeframe.googlesyndication.com/safeframe/1-0-38/html/container.html" id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_3" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="728" height="90" data-is-safeframe="true" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" data-google-container-id="g" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
+### 6.8. Future 压缩
 
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-The API provides the *zip()* method which zips *Futures* together into tuples – a tuple is a collection of several elements that may or may not be related to each other. They can also be of different types. Let's see a quick example:
-
-该API提供了*zip（）*方法，该方法将*Futures*一起*压缩*到元组中-元组是可能彼此相关或不相关的多个元素的集合。它们也可以是不同的类型。让我们看一个简单的例子：
+该 API 提供了 *zip()* 方法，该方法将多个 *Future* 一起压缩到元组中 - tuple 是可能彼此相关或不相关的多个元素的集合。它们也可以是不同的类型。让我们看一个简单的例子：
 
 ```java
 @Test
@@ -364,17 +297,13 @@ public void whenCallZip_thenCorrect() {
 }
 ```
 
-The point to note here is that the resulting *Future* will be pending as long as at least one of the base *Futures* is still pending.
+这里要注意的一点是，只要至少一个基础 Future 仍未完成，则生成的 Future 将处于待处理状态。
 
-这里要注意的一点是，只要至少一个基础*期货*仍未完成，则生成的*期货*将处于待处理状态。
+&nbsp;
 
-### **6.9. Conversion Between \*Futures\* and \*CompletableFutures\***
+### 6.9. Future 和 CompletableFuture 相互转换
 
-The API supports integration with *java.util.CompletableFuture*. So, we can easily convert a *Future* to a *CompletableFuture* if we want to perform operations that only the core Java API supports.
-
-Let's see how we can do that:
-
-该API支持与*java.util.CompletableFuture*集成。因此，我们可以很容易地一个转换*未来*的*CompletableFuture*如果我们要执行的操作，只有核心Java API支持。
+该 API 支持与 *java.util.CompletableFuture* 集成。因此，如果我们要执行的操作，只有核心 Java API 支持，我们可以很容易地一个转换 Future 到 CompletableFuture 。
 
 让我们看看如何做到这一点：
 
@@ -391,19 +320,15 @@ public void whenConvertToCompletableFuture_thenCorrect()
 }
 ```
 
-We can also convert a *CompletableFuture* to a *Future* using the *fromCompletableFuture()* method.
+我们也可以使用 fromCompletableFuture 将转换 *CompletableFuture* 到 Future 。
 
-我们也可以将转换*CompletableFuture*到*未来*使用*fromCompletableFuture（）*方法。
+&nbsp;
 
-### **6.10. Exception Handling**
+### 6.10. 异常处理
 
-Upon the failure of a *Future*, we can handle the error in a few ways.
+在 *Future* 失败时，我们可以通过几种方式处理错误。
 
-For example, we can make use of the method *recover()* to return another result, such as an error message:
-
-在*Future*失败时，我们可以通过几种方式处理错误。
-
-例如，我们可以利用方法*restore（）*返回另一个结果，例如错误消息：
+例如，我们可以利用方法 *recover* 覆盖失败信息以返回另一个结果，例如错误消息：
 
 ```java
 @Test
@@ -416,9 +341,9 @@ public void whenFutureFails_thenGetErrorMessage() {
 }
 ```
 
-Or, we can return the result of another *Future* computation using *recoverWith()*:
+&nbsp;
 
-或者，我们可以使用*restoreWith（）*返回另一个*Future*计算的结果：
+或者，我们可以使用 *recoverWith()* 返回另一个 *Future* 计算的结果：
 
 ```java
 @Test
@@ -431,17 +356,9 @@ public void whenFutureFails_thenGetAnotherFuture() {
 }
 ```
 
-The method *fallbackTo()* is another way to handle errors. It's called on a *Future* and accepts another *Future* as a parameter.
+fallbackTo() 是另一种方式来处理错误。它被称为 *Future* 并接受另一个 *Future* 作为参数。
 
-该方法*fallbackTo（）*是另一种方式来处理错误。它被称为*Future*并接受另一个*Future*作为参数。
-
-<iframe id="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_4" title="3rd party ad content" name="google_ads_iframe_/15184186/baeldung_incontent_dynamic_desktop_4" width="336" height="280" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="conversion-measurement ‘src’" srcdoc="" data-google-container-id="h" data-load-complete="true" style="box-sizing: border-box; border: 0px; vertical-align: bottom;"></iframe>
-
-[![freestar](https://a.pub.network/core/imgs/fslogo-green.svg)](https://freestar.com/?utm_medium=ad_container&utm_source=branding&utm_name=baeldung_incontent_dynamic_desktop)
-
-If the first *Future* is successful, then it returns its result. Otherwise, if the second *Future* is successful, then it returns its result. If both *Futures* fail, then the *failed()* method returns a *Future* of a *Throwable*, which holds the error of the first *Future*:
-
-如果第一个*Future*成功，则返回其结果。否则，如果第二个*Future*成功，则返回其结果。如果两个*Future都*失败，则*failed（）*方法将返回*Future*的*Throwable*，其中包含第一个*Future*的错误：
+如果第一个 *Future* 成功，则返回其结果。否则，如果第二个 *Future* 成功，则返回其结果。如果两个 *Future* 都失败，则 *failed()* 方法将返回 *Future* 的 *Throwable*，其中包含第一个 *Future* 的错误：
 
 ```java
 @Test
@@ -462,10 +379,4 @@ public void whenBothFuturesFail_thenGetErrorMessage() {
 
 ## 7. 结论
 
-In this article, we've seen what a *Future* is and learned some of its important concepts. We've also walked through some of the features of the API using a few practical examples.
-
-The full version of the code is available [over on GitHub](https://github.com/eugenp/tutorials/tree/master/vavr).
-
-在本文中，我们了解了什么是*未来*，并了解了其中的一些重要概念。我们还通过一些实际示例介绍了API的一些功能。
-
-完整版本的代码可[在GitHub上获得](https://github.com/eugenp/tutorials/tree/master/vavr)。
+在本文中，我们了解了什么是 Future，并了解了其中的一些重要概念。我们还通过一些实际示例介绍了 API 的一些功能。

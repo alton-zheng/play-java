@@ -149,7 +149,7 @@ assertEquals(0, executor.getQueue().size());
 
 &nbsp;
 
-*Executors.newSingleThreadExecutor()* API创建了另一种典型的包含单个线程的 *ThreadPoolExecutor*。**单线程执行器是创建事件循环的理想选择。**参数 *corePoolSize* 和 *maximumPoolSize* 等于1，*keepAliveTime* 为 $0$。
+*Executors.newSingleThreadExecutor()* API创建了另一种典型的包含单个线程的 *ThreadPoolExecutor*。**单线程执行器是创建事件循环的理想选择。**参数 *corePoolSize* 和 *maximumPoolSize* 等于 $1$，*keepAliveTime* 为 $0$。
 
 下面例子中的任务将按顺序执行，所以任务完成后，flag 值为 2：
 
@@ -375,3 +375,23 @@ assertEquals("Hello World", greeting);
 ## 5. 总结
 
 在本文中，我们讨论了 Thread Pool 模式及其在标准 Java 库和谷歌的 Guava 库中的实现。
+
+>  线程数估算： 
+>
+> $N_t$ = $N_c$ * $U_c$ * (1 + W/C)
+>
+> - $N_c$ -> Core nuber
+> - $U_c$ -> 期望的 CPU  利用率
+> - W/C 是 wait 和 computor 时间的比率
+
+&nbsp;
+
+>调度器
+>
+>- quartz
+>
+>- crontab
+
+&nbsp;
+
+>假如提供一个闹钟服务，订阅这个服务的人特别多，10亿人， 怎么优化？

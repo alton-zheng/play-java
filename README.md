@@ -8,6 +8,12 @@
 
 &nbsp;
 
+### Core
+
+- [x] [JMH](java/docs/core/java-microbenchmark-harness.md)
+
+&nbsp;
+
 ### [高并发](java/docs/java-concurrency)
 
 - [多线程面试题](java/docs/java-concurrency/interview.md)
@@ -19,7 +25,7 @@
 - [Semaphore](java/docs/java-concurrency/semaphore.md)
 - [Exchange](java/docs/java-concurrency/java-exchange.md)
 - [Java 线程生命周期](java/docs/java-concurrency/java-thread-lifecycle.md)
-- [面试](java/docs/java-concurrency/thread-interview.md)
+- [thread jvm 面试题](java/docs/java-concurrency/thread-jvm-interview.md)[面试](java/docs/java-concurrency/thread-interview.md)
 
 - [解析自旋锁 CAS 操作与 volatile ]() 
 ### **Java Concurrency Basics**
@@ -41,13 +47,11 @@
  - [ ] [>> Introduction to Exchanger in Java](java/docs/java-concurrency/java-exchanger.md)
  - [x] [Java Thread 生命周期](java/docs/java-concurrency/java-thread-lifecycle.md)
  - [ ] [How to Kill a Java Thread](https://www.baeldung.com/java-thread-stop)
- - [ ] [Introduction to Thread Pools in Java](https://www.baeldung.com/thread-pool-java-and-guava)
  - [ ] [wait and notify() Methods in Java](https://www.baeldung.com/java-wait-notify)
- - [ ] [Runnable vs. Callable in Java](https://www.baeldung.com/java-runnable-callable)
  - [ ] [Difference Between Wait and Sleep in Java](https://www.baeldung.com/java-wait-and-sleep)
  - [ ] [The Thread.join() Method in Java](https://www.baeldung.com/java-thread-join)
  - [ ] [Using a Mutex Object in Java](https://www.baeldung.com/java-mutex)
- - [ ] [ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](https://www.baeldung.com/java-threadpooltaskexecutor-core-vs-max-poolsize)
+ - [ ] [>> The Thread.join() Method in Java](https://www.baeldung.com/java-thread-join)
 
 &nbsp;
 
@@ -55,35 +59,41 @@
 
 - [x] [Java 容器](java/docs/java-concurrency/java-container.md)
   - [x] [>> ConcurrentMap 指导](java/docs/java-concurrency/java-concurrent-map.md)
-  - [ ] [>>  java.util.concurrent.BlockingQueue 指导](java/docs/java-concurrency/java-blocking-queue.md)
-  - [ ] [>> Collections.synchronizedMap vs. ConcurrentHashMap](java/docs/java-concurrency/java-synchronizedmap-vs-concurrenthashmap.md)
-  - [ ] [>> LinkedBlockingQueue vs ConcurrentLinkedQueue](java/docs/java-concurrency/java-queue-linkedblocking-concurrentlinked)
-  - [ ] [>> Guide to the ConcurrentSkipListMap](java/docs/java-concurrency/java-concurrent-skip-list-map.md)
-  - [ ] [>> An Introduction to Synchronized Java Collections](java/docs/java-concurrency/java-synchronized-collections.md)
-- [ ] [>> Introduction to Thread Pools in Java](https://www.baeldung.com/thread-pool-java-and-guava)
-- [ ] [Guide to java.util.concurrent.Future](https://www.baeldung.com/java-future)
-- [ ] [>> Introduction to Future in Vavr](https://www.baeldung.com/vavr-future)
-- [ ] [>> Guide To CompletableFuture](https://www.baeldung.com/java-completablefuture)
-- [ ] [Guide to the Fork/Join Framework in Java](https://www.baeldung.com/java-fork-join)
-- [ ] [>> A Guide to the Java ExecutorService](https://www.baeldung.com/java-executor-service-tutorial)
-- [ ] [>> ExecutorService – Waiting for Threads to Finish](https://www.baeldung.com/java-executor-wait-for-threads)
-- [ ] [Custom Thread Pools In Java 8 Parallel Streams](https://www.baeldung.com/java-8-parallel-streams-custom-threadpool)
+  - [x] [>>  Java 同步集合介绍](java/docs/java-concurrency/java-synchronized-collections.md)
+  - [x] [>> Collections.synchronizedMap vs. ConcurrentHashMap](java/docs/java-concurrency/java-synchronizedmap-vs-concurrenthashmap.md)
+  - [x] [>>  java.util.concurrent.BlockingQueue 指导](java/docs/java-concurrency/java-blocking-queue.md)
+  - [x] [>> LinkedBlockingQueue vs ConcurrentLinkedQueue](java/docs/java-concurrency/java-queue-linkedblocking-concurrentlinked)
+  - [x] [>> ConcurrentSkipListMap 介绍](java/docs/java-concurrency/java-concurrent-skip-list-map.md)
+
+&nbsp;
+
+- [x] [>> Java Thread Pool 介绍](java/docs/java-concurrency/thread-pool-java-and-guava.md)
+  - [x] [>> Java  Thread 和 虚拟 Thread 区别](java/docs/java-concurrency/java-virtual-thread-vs-thread.md)
+  - [x] [>> java.util.concurrent.Future 介绍](java/docs/java-concurrency/java-future.md)
+  - [x] [>> CompletableFuture 介绍](java/docs/java-concurrency/java-completablefuture.md)
+  - [x] [>> Java Fork/Join 框架介绍](java/docs/java-concurrency/java-fork-join.md)
+  - [x] [>> Java ExecutorService 框架介绍](java/docs/java-concurrency/java-executor-service-tutorial.md)
+  - [x] [>> ExecutorService – 等待线程结束](java/docs/java-concurrency/java-executor-wait-for-threads.md)
+  - [x] [>> Vavr Future 介绍](java/docs/java-concurrency/vavr-future.md)
+  - [x] [>> 用 Java 8 Parallel Streams 自定义线程池](java/docs/java-concurrency/java-8-parallel-streams-custom-threadpool.md)
+  - [x] [>> Executors newCachedThreadPool() vs newFixedThreadPool()](java/docs/java-concurrency/java-executors-cached-fixed-threadpool.md)
+  - [x] [>> Spring ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](java/docs/java-concurrency/java-threadpooltaskexecutor-core-vs-max-poolsize.md)
+  - [x] [>> Java Web 服务 Thread Pool 配置](java/docs/java-concurrency/java-web-thread-pool-config.md)
+
+&nbsp;
+
  - [ ] [Daemon Threads in Java](https://www.baeldung.com/java-daemon-thread)
- - [ ] [ExecutorService – Waiting for Threads to Finish](https://www.baeldung.com/java-executor-wait-for-threads)
  - [ ] [Guide to ThreadLocalRandom in Java](https://www.baeldung.com/java-thread-local-random)
  - [ ] [What is Thread-Safety and How to Achieve it?](https://www.baeldung.com/java-thread-safety)
  - [ ] [How to Delay Code Execution in Java](https://www.baeldung.com/java-delay-code-execution)
  - [ ] [An Introduction to ThreadLocal in Java](https://www.baeldung.com/java-threadlocal)
- - [ ] [>> Concurrency with LMAX Disruptor – An Introduction](https://www.baeldung.com/lmax-disruptor-concurrency)
+ - [x] [>> Concurrency with LMAX Disruptor – 介绍](java/docs/java-concurrency/lmax-disruptor-concurrency.md)
  - [ ] [>> Java Concurrency Interview Questions (+ Answers)](https://www.baeldung.com/java-concurrency-interview-questions)
  - [ ] [>> Priority-based Job Scheduling in Java](https://www.baeldung.com/java-priority-job-schedule)
  - [ ] [>> wait and notify() Methods in Java](https://www.baeldung.com/java-wait-notify)
  - [ ] [>> Guide to ThreadLocalRandom in Java](https://www.baeldung.com/java-thread-local-random)
  - [ ] [>> Difference Between Wait and Sleep in Java](https://www.baeldung.com/java-wait-and-sleep)
- - [ ] [>> ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](https://www.baeldung.com/java-threadpooltaskexecutor-core-vs-max-poolsize)
  - [ ] [>> Design Principles and Patterns for Highly Concurrent Applications](https://www.baeldung.com/concurrency-principles-patterns)
- - [ ] [>> Executors newCachedThreadPool() vs newFixedThreadPool()](https://www.baeldung.com/java-executors-cached-fixed-threadpool)
- - [ ] [>> Configuring Thread Pools for Java Web Servers](https://www.baeldung.com/java-web-thread-pool-config)
  - [ ] [>> Guide to Work Stealing in Java](https://www.baeldung.com/java-work-stealing)
  - [ ] [>> Asynchronous Programming in Java](https://www.baeldung.com/java-asynchronous-programming)
  - [ ] [>> Guide to RejectedExecutionHandler](https://www.baeldung.com/java-rejectedexecutionhandler)
@@ -95,7 +105,6 @@
  - [ ] [>> Passing Parameters to Java Threads](https://www.baeldung.com/java-thread-parameters)
  - [ ] [>> Print Even and Odd Numbers Using 2 Threads](https://www.baeldung.com/java-even-odd-numbers-with-2-threads)
  - [ ] [>> Thread Safe LIFO Data Structure Implementations](https://www.baeldung.com/java-lifo-thread-safe)
- - [ ] [>> The Thread.join() Method in Java](https://www.baeldung.com/java-thread-join)
  - [ ] [>> Bad Practices With Synchronization](https://www.baeldung.com/java-synchronization-bad-practices)
  - [ ] [>> How to Analyze Java Thread Dumps](https://www.baeldung.com/java-analyze-thread-dumps)
  - [ ] [>> How to Stop Execution After a Certain Time in Java](https://www.baeldung.com/java-stop-execution-after-certain-time)
@@ -110,7 +119,6 @@
  - [ ] [>> Testing Multi-Threaded Code in Java](https://www.baeldung.com/java-testing-multithreaded)
  - [ ] [>> Guide to AtomicMarkableReference](https://www.baeldung.com/java-atomicmarkablereference)
  - [ ] [>> Introduction to Lock Striping](https://www.baeldung.com/java-lock-stripping)
- - [ ] [>> Difference Between Thread and Virtual Thread in Java](https://www.baeldung.com/java-virtual-thread-vs-thread)
  - [ ] [>> Capturing a Java Thread Dump](https://www.baeldung.com/java-thread-dump)
 
   &nbsp;
@@ -123,8 +131,6 @@
 &nbsp;
 
 ### JVM
- - [ ] [jvm 面试题](java/docs/jvm/jvm-interview.md)
-
 &nbsp;
 
 ## 数据结构和算法
