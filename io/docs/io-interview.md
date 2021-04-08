@@ -117,10 +117,6 @@ TCP支持的应用协议主要有：Telnet、FTP、SMTP等;
 
 &nbsp;
 
-## TCP连接状态
-
-&nbsp;
-
 ## Listen 状态的服务器， listen socket 的接受， 发送队列放什么？
 
 > accept 队列  

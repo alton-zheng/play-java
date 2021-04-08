@@ -423,3 +423,267 @@ $ echo $$ | cat
 
 &nbsp;
 
+### Pipeline
+
+- window-one  
+  - | 前后被执行， 输出右边字符后，被 read 指令堵塞
+
+```bash
+$ echo $$
+722
+
+$ {echo $BASHPID; read x; } | {cat; read y; }
+child2
+```
+
+- window-two
+
+```bash
+# 显示自身和两个子进程信息
+$ ps -ef | grep 722
+
+# 显示管道信息
+$ ll /proc/child-pid/fd/
+
+# 用父进程信息来展示子进程信息,里面就包含了 pipeline 信息
+$ lsof -op 722
+```
+
+&nbsp;
+
+## PageCache
+
+- 缓存种类
+  - application -> buffer
+  - Kernel -> PageCache
+  - disk -> buffer
+
+&nbsp;
+
+### System call
+
+Application -> Kernel
+
+- `int 0x80`
+  - 中断
+  - `int` :  `cpu` 指令
+  - $0x80$: $128$
+    - $100000000$
+    - 值
+      - 中断描述符表
+        - 0 
+        - ...
+        - `128` -> call back 方法
+        - ...
+        - 255
+
+> cpu 执行 application 和 kernel 的指令
+>
+> 中断描述符表
+>
+> - 在 Kernel
+
+&nbsp;
+
+### 早期
+
+>  disk buffer -> cpu(寄存器) -> Kernel PageCache -> Application buffer
+
+&nbsp;
+
+### 后期
+
+> 协处理器 DMA
+>
+> - disk buffer -> DMA(实际不参与) -> Kernel pagecache -> application buffer
+
+&nbsp;
+
+> 电脑突然关掉电源的突发情况下， java 正在写到 Kernel 的 pagecache 中的数据会消失，不会 flush 进磁盘。
+>
+> 正常关机，会将 JAVA 正在写进 Kernel 的 pagecache 中的数据 flush 进磁盘
+
+&nbsp;
+
+![Screen Shot 2021-04-07 at 9.36.23 PM](images/system-io-pagecache.png)
+
+<img src="/Users/alton/Documents/profile/notebook/Java/play-java/io/docs/images/process-scheduler-alive.png" alt="Screen Shot 2021-04-07 at 9.39.51 PM" style="zoom:50%;" />
+
+&nbsp;
+
+- 查看程序 Cache 了多少 Pages
+
+```bash
+$ pcstat /bin/bash
+```
+
+> 可以查看具体数量和比例
+
+&nbsp;
+
+- pcstat 安装
+
+```bash
+cp pcstart /bin
+```
+
+
+
+> Kernel 中的 pc 是可以共享的（如果开启的是相同程序，不同进程）
+>
+> - 作用： 内存优化
+> - 劣势： 
+>   - 异常发生时，会造成数据丢失（缓存优化不到位）
+>   - 数据不一致，没有及时同步
+
+&nbsp;
+
+### 系统控制
+
+```bash
+$ sysctl -a | grep dirty
+vm.dirty_background_ratio = 0 
+vm.dirty_background_bytes = 1048576
+vm.dirty_ratio = 0
+vm.dirty_bytes = 1048576
+vm.dirty_writeback_centisecs = 5000
+vm.dirty_expire_centisecs = 30000
+```
+
+&nbsp;
+
+上面参数可以通过修改系统文件进行修改: 
+
+```bash
+$ vim /etc/sysctl.conf
+```
+
+- `vm.dirty_background_ratio`  : 
+  - 脏页占内存比，达到此比例值才会 flush 进 disk
+  - 根据业务场景来调优，太大会造成很多数据丢失
+- `vm.dirty_background_bytes`
+  - 
+- `vm.dirty_ratio`
+  - application 通过 Kernel 写数据 pc, 写到 百分比时，直接 flush 进磁盘，如果还继续写数据，会触发 Lru。
+- vm.dirty_bytes 
+- `vm.dirty_writeback_centisecs`
+  -  单位 1/100 秒
+  - writeback 的时间
+- `vm.dirty_expire_centisecs`
+  -  单位 1/100 秒
+
+&nbsp;
+
+```bash
+$ strace -ff -o out /usr/java/jdk1.8*/bin/java OSFileIO $1
+$ vim pid.out
+:set nu
+/123456789
+# 就可以看到每种 IO 怎么和 Kernel 进行交互
+# e.g. 普通 10个字节 123456789\n 一勺一勺写
+# bufferedIO  8192 byte 写
+```
+
+&nbsp;
+
+![system-io-pagecached](images/system-io-pagecached.png)
+
+&nbsp;
+
+![system-io-dirty](images/system-io-dirty.png)
+
+&nbsp;
+
+&nbsp;
+
+## System IO 和 Java IO 交互
+
+&nbsp;
+
+![system-io-java-io](images/system-io-java-io.png)
+
+> 图片中不能控制的点是错的，后续对它理解更深的时候再更新
+
+&nbsp;
+
+### Java 相关
+
+- `jvm` 的 `heap` 在 `java` 程序的 `heap` 中
+
+- `on heap`：JVM heap
+
+- `off heap`：除 JVM heap 以外的 Java 程序 heap
+- `mapped` 映射：是 `mmap` 调用的一个进程和 Kernel 共享的内存区域
+  - 内存区域是 pagecache -> file 
+
+&nbsp;
+
+- 性能比对
+  - `on heap` < `off heap` < `mapped (file)`
+
+&nbsp;
+
+- `netty (on heap , off heap)`
+
+- `kafka log : mmap`
+
+&nbsp;
+
+### OS 相关
+
+- 数据非一致性： OS 数据可靠性不是绝对的
+- 为什么设计 `pagecache `，减少 硬件 `IO` 调用，提速，优先使用内存
+- 主从复制，主备 `HA`
+- `kafka`/`ES` 副本(`socket io`) （同步/异步)
+
+&nbsp;
+
+### FileChannel Mapped map
+
+```java
+FileChannel rafchannel = raf.getChannel();
+//mmap  堆外  和文件映射的   byte  not  objtect
+MappedByteBuffer map = rafchannel.map(FileChannel.MapMode.READ_WRITE, 0, 4096);
+map.put("ddd".getBytes());
+```
+
+&nbsp;
+
+#### mmap put 方法
+
+- 非系统调用
+- 数据到达 Kernel pageCache，后续刷 disk 工作，交给 Kernel 规则
+  - 也可以通过 force() 方法强制刷新
+
+```bash
+# 可以通过命令来查看映射的文件在内存的状态信息
+$ lsof -p pid
+```
+
+&nbsp;
+
+#### Java 普通 IO 类  read(), write() 
+
+- 会发生系统调用
+- 程序数据进入 Kernel 的 pageCache
+- 用户态和内核态不断的切换
+
+
+
+#### 相同点：
+
+- 达到 Kernel 的 pageCache 后，依然受到 Kernel 的 pageCache 体系约束
+
+- 涉及到 cache 都会存在数据非一致性
+
+&nbsp;
+
+#### Kernel 的 Direct IO
+
+- 忽略 OS  的 pageCache
+- 由程序控制 pageCache 的细节，比上述的方法仅仅能控制更多的细节。
+  - 能控制的细节越多，并不意味着能比 OS 做的更好。
+  - 需要对它深入了解，才能根据自身业务特性定制 pageCache 的行为
+    - 行为： 维护一致性， dirty 等一系列问题
+
+&nbsp;
