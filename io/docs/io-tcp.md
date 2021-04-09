@@ -1,6 +1,6 @@
 # Socket
 
-![面试突击班-网络和IO面试题](/Users/alton/Documents/profile/notebook/Java/play-java/io/docs/images/网络和IO模型.png)
+![s](images/soket-tcp-3-connect.png)
 
 &nbsp;
 
