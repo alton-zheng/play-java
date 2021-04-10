@@ -1,21 +1,25 @@
-## NIO
+# NIO
 
 &nbsp;
 
 ## 概念
 
-- jdk  
-  - new io
-- os 
-  - nonblocking
+- `jdk-nio` 类库
+  - `new io`
+- `os` - 操作系统
+  - `non-blocking`
 
 &nbsp;
 
-## JAVA NIO
+## 概览
 
-![server socket channel](images/ServerSocketChannel.png)
+![nio](images/nio.png)
 
 &nbsp;
+
+### 
+
+
 
 - 单线程
 
