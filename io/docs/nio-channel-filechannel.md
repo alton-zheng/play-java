@@ -2,23 +2,53 @@
 
 &nbsp;
 
-### FileLock
+## 总体说明
+
+FileChannel 类签名：
+
+```java
+public abstract class FileChannel
+    extends AbstractInterruptibleChannel
+    implements SeekableByteChannel, GatheringByteChannel, ScatteringByteChannel
+```
 
 &nbsp;
 
+![nio-channel-filechannel](images/nio-channel-filechannel.png)
 
+&nbsp;
 
-表示文件某个区域上的锁的标记。
-文件锁定对象最初是有效的。它一直有效，直到通过调用release方法释放锁、关闭用于获取锁的通道或终止Java虚拟机(无论哪个先发生)来释放锁。可以通过调用锁的isValid方法来测试锁的有效性。
-文件锁可以是独占的，也可以是共享的。共享锁防止其他并发运行的程序获得重叠排他锁，但允许它们获得重叠共享锁。排他锁防止其他程序获得任何一种类型的重叠锁。锁一旦被释放，就不会对其他程序可能获得的锁产生进一步的影响。
-一个锁是排他的还是共享的，可以通过调用它的isShared方法来确定。有些平台不支持共享锁，在这种情况下，对共享锁的请求会自动转换为对排他锁的请求。
-单个Java虚拟机对特定文件持有的锁不会重叠。overlaps方法可用于测试候选锁范围是否与现有锁重叠。
-文件锁定对象记录被锁定的文件所在的文件通道，锁定的类型和有效性，锁定区域的位置和大小。只有锁的有效性会随着时间的推移而改变;锁状态的所有其他方面都是不可变的。
-文件锁代表整个Java虚拟机。它们不适用于控制同一虚拟机中的多个线程对文件的访问。
-文件锁对象对于多个并发线程来说是安全的。
-平台的依赖
-这个文件锁定API旨在直接映射到底层操作系统的本地锁定功能。因此，文件上的锁应该对所有访问该文件的程序都是可见的，而不管这些程序是用什么语言编写的。
-一个锁是否实际上阻止了另一个程序访问锁定区域的内容取决于系统，因此是不确定的。一些系统的本地文件锁定功能仅仅是建议性的，这意味着程序必须合作地遵守一个已知的锁定协议，以保证数据完整性。在其他系统上，本机文件锁是强制性的，这意味着如果一个程序锁定了文件的一个区域，那么其他程序实际上被阻止以违反锁的方式访问该区域。在其他系统上，本地文件锁是建议性的还是强制性的，都可以在每个文件的基础上进行配置。为了确保跨平台的一致和正确行为，强烈建议将此API提供的锁当作咨询锁来使用。
-在某些系统上，对文件的某个区域获取强制锁会防止该区域被映射到内存中，反之亦然。结合了锁定和映射的程序应该为这种结合失败做好准备。
-在某些系统上，关闭一个通道将释放Java虚拟机在底层文件上持有的所有锁，而不管这些锁是通过该通道获得的，还是通过打开同一文件的另一个通道获得的。强烈建议在程序中使用一个唯一的通道来获取任何给定文件上的所有锁。
-一些网络文件系统只允许对内存映射文件使用文件锁定，当锁定的区域是页面对齐的，并且是底层硬件页面大小的整数倍时。一些网络文件系统不会对超过某个特定位置的区域(通常是230或231)实施文件锁定。通常，在锁定驻留在网络文件系统中的文件时，应该非常小心。
+## FileChannel 方法
+
+![nio-channel-filechannel-method](images/nio-channel-filechannel-method.png)
+
+&nbsp;
+
+## FileLock
+
+![nio-channel-filelock](images/nio-channel-filelock.png)
+
+&nbsp;
+
+## MappedByteBuffer
+
+![mapped bytebuffer](/Users/alton/Documents/profile/notebook/Java/play-java/io/docs/images/nio-channel-mapped-bytebuffer.png)
+
+使用方法 e.g. :
+
+```java
+FileChannel rafchannel = raf.getChannel();
+//mmap  堆外  和文件映射的   byte  not  objtect
+MappedByteBuffer map = rafchannel.map(FileChannel.MapMode.READ_WRITE, 0, 4096);
+map.put("ddd".getBytes());
+```
+
+&nbsp;
+
+- 可以通过命令来查看映射的文件在内存的状态信息
+
+```bash
+$ lsof -p pid
+```
+
+&nbsp;

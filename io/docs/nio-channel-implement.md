@@ -4,7 +4,7 @@
 
 ## 概览
 
-![channel-implement](images/nio-channel-implement.png)
+<img src="images/nio-channel-implement.png" alt="channel-implement" style="zoom:50%;" />
 
 &nbsp;
 
@@ -33,10 +33,17 @@ end 方法的 completed 参数告诉 `I/O` 操作是否实际完成，也就是�
 
 &nbsp;
 
-### FileChannel & FileLock 
+## FileChannel & FileLock & MappedByteBuffer
 
-> 篇幅大
+> 他们三之间都有联系，篇幅大，单独进行讨论
 
 [FileChannel](nio-channel-filechannel.md)
 
 &nbsp;
+
+## SelectableChannel
+
+> 这块内容多，单独篇幅进行讨论
+>
+> [SelectableChannel](nio-channel-selectable-channel.md)
+

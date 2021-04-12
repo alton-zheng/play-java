@@ -77,13 +77,13 @@ clean.invoke(returnValue);
 
 &nbsp;
 
-## getType & putType
+### getType & putType
 
 ![gettype & puttype](images/nio-buffer-bytebuffer-get-put-type.png)
 
 &nbsp;
 
-## 创建 view
+### 创建 view
 
 ![nio-buffer-bytebuffer-view](images/nio-buffer-bytebuffer-view.png)
 
@@ -98,7 +98,7 @@ CharBuffer charBuffer = Charset.forName(“utf-8”).decode(byteBuffer);
 
 &nbsp;
 
-## order
+### order
 
 > 获取和修改字节排序的顺序，并不是将  byte 重新排序
 >
@@ -110,7 +110,7 @@ CharBuffer charBuffer = Charset.forName(“utf-8”).decode(byteBuffer);
 
 &nbsp;
 
-## 其它方法
+### 其它方法
 
 ![other method](images/nio-buffer-bytebuffer-other-method.png)
 
