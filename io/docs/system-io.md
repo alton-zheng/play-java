@@ -419,9 +419,9 @@ $ echo $$ | cat
 17731
 ```
 
-> `$$` 优先级高于 `|` ，`echo $$` 会在 `|` 后面命令执行前执行，因此 cat 还是原进程号。
+> \$\$ 优先级高于 |，echo \$\$ 会在 | 后面命令执行前执行，因此 cat 还是原进程号
 
-&nbsp;
+ &nbsp;
 
 ### Pipeline
 
@@ -687,3 +687,21 @@ $ lsof -p pid
     - 行为： 维护一致性， dirty 等一系列问题
 
 &nbsp;
+
+## IO模型
+
+>0：IO 是程序对内核的 $socket-queue$ 的包装
+>
+>BIO：读取，一直等queue里有才返回，阻塞模型，每连接对应一个线程
+>
+>NIO：读取，立刻返回：两种结果，读到，没读到，程序逻辑要自己维护，nio noblock
+>
+>多路复用器：内核增加select，poll，epoll新增的和数据接收，连接接受实质无关的调用，得到是对应socket的事件(listen socket ，socket)，可以有效地去再次accept，R/W
+>
+>AIO： 异步 IO
+
+&nbsp;
+
+## 同步阻塞，同步非阻塞
+
+>  BIO,NIO,多路复用器，在IO模型上都是同步的，都是程序自己accpet，R/W

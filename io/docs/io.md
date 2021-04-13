@@ -10,6 +10,8 @@
 
 &nbsp;
 
+- 下面代码即可证明上图各种类型，中英文占用 byte 数
+
 ```java
 package io;
 
@@ -74,8 +76,6 @@ public class Encode {
 ## File
 
 - `java.io.File` 表示 `directory` 或 `file`, 访问他们的元信息（名称，大小，类型等），不能读文件
-
-&nbsp;
 
 ```java
 package io;
