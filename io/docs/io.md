@@ -212,11 +212,12 @@ public class RandomAccessFileDemo {
 
         int i = 124;
 
-        // 用 write 方法只能一次写一个字节，如果要把i 写进去就得写 4 次
+        // 用 write 方法只能一次写一个字节，如果要把 i 写进去就得写 4 次
         /*raf.write((i >>> 24) & 0xff);
         raf.write((i >>> 16) & 0xff);
         raf.write((i >>> 8) & 0xff);
         raf.write((i >>> 0) & 0xff);*/
+      
         // 或者直接写 int
         raf.writeInt(i);
         System.out.println(raf.getFilePointer());
@@ -258,7 +259,7 @@ public class RandomAccessFileDemo {
 - 方法
   - read
     - `read()`
-      - 从 stream 中读取一个 byte
+      - 从 `stream` 中读取一个 byte
     - `read(byte[] buf)`
       - 从 stream 中读取数据写入到 buf 中
     - `read(byte[] buf, int start, int size)`
@@ -328,7 +329,7 @@ public class FileUtils {
 
         while ((b = fis.read()) != -1) {
 
-            // 字节 b的 16 进值的第一位为0时，只会展示第二位，因此，当遇到这种字节时，前面补 "0"
+            // 字节 b 的 16 进值的第一位为0时，只会展示第二位，因此，当遇到这种字节时，前面补 "0"
             if (b < 0xf) {
                 System.out.print("0");
             }
@@ -502,7 +503,7 @@ public class DataStreamDemo {
 为 `InputStream` 和 `OutputStream` 提供了缓冲功能
 
 - 相当于将数据拿出来，放进一个桶中，一桶一桶地对数据进行处理或放到目的地
-- 小于 8 kb ，仅仅在 JVM 里，不和内核打交道, 默认 8kb 一桶一桶的写内存（Kernel）
+- 小于 `8` kb ，仅仅在 JVM 里，不和内核打交道, 默认 `8` kb 一桶一桶的写内存（Kernel）
 - 减少了和内核打交道的次数和 CPU 执行指令的切换次数
 
 ```java
@@ -745,7 +746,7 @@ public static void copyFileByBrAndBw(File src, File dest) throws IOException {
       - 没有实现 `Serializable` 接口的父类，构造方法会被显示调用
       - 实现了 `Serializable` 接口的父类，父类不会被显示调用，可以直接在子类序列化的字节中直接读到
 
-
+&nbsp;
 
 ```java
 package io;

@@ -28,11 +28,12 @@
 
 &nbsp;
 
-其它方法 byteBuffer 化
+## 其它方法 byteBuffer 化
 
 list.toArray(T[]) 步骤：
 
-- 利用 List 中 toArray(T[]) 方法，将存在 List 中的 buffer 数组化
-- ByteBuffer[] byteBufferArray = ...
-- list.toArray(byteBufferArray);
+- 利用 `List` 中 `toArray(T[])` 方法，将存在 `List` 中的 `buffer` 数组化
+- `ByteBuffer[] byteBufferArray = ...`
+- `list.toArray(byteBufferArray);`
 
+&nbsp;

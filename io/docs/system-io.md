@@ -60,6 +60,10 @@ Kernel 明白点说，就是一个 OS 里的一个控制程序，里面包含了
 
 ## 计算机组成
 
+![kernel app](images/io-system-io.jpg)
+
+> cpu 在不同的应用程序之间不断发生时钟切换，哒哒哒，为所有应用程序进行服务
+
 &nbsp;
 
 ### 概念
@@ -87,6 +91,15 @@ Kernel 明白点说，就是一个 OS 里的一个控制程序，里面包含了
 - `l`: 链接  
   - 软链接
   - 硬链接
+
+- `c`: 字符设备- CHAR
+- `s`: socket
+- `p`: pipeline
+- [eventpoll]: 
+- 等等
+
+&nbsp;
+
 ```bash
 $ vim test.txt
 ## 硬链接，本质上，磁盘就一个文件，只是路径有 2 个而已
@@ -98,12 +111,6 @@ $ ln -s test.txt /root/s.txt
 # 可看到文件元信息， 硬链接对应的文件信息一致，软链接对应的文件信息不同
 $ stat test.txt 
 ```
-&nbsp;
-- `c`: 字符设备- CHAR
-- `s`: socket
-- `p`: pipeline
-- [eventpoll]: 
-- 等等
 
 &nbsp; &nbsp;
 
@@ -114,6 +121,9 @@ $ umount /boot # 卸载目录，卸载 df 命令就看不到之前可看到的 /
 $ mount /dev/sda1 /boot # 挂载分区到对应的目录，之前卸载的文件，又会被还原。
 ```
 &nbsp;
+
+- 自己创建磁盘内容
+
 ```bash
 # 生成文件
 $ dd if=/dev/zero of=mydisk.img bs=1048576 count=100
@@ -414,7 +424,6 @@ $ echo $a
 $ echo $$
 17731
 
-alton at alton-mac in ~
 $ echo $$ | cat
 17731
 ```
@@ -466,9 +475,9 @@ Application -> Kernel
 
 - `int 0x80`
   - 中断
-  - `int` :  `cpu` 指令
-  - $0x80$: $128$
-    - $100000000$
+  - `int` :  `cpu` 指令 (interrupt 简写)
+  - `0x80​` :  `128`
+    - `100000000​` （二进制）
     - 值
       - 中断描述符表
         - 0 
@@ -487,7 +496,7 @@ Application -> Kernel
 
 ### 早期
 
->  disk buffer -> cpu(寄存器) -> Kernel PageCache -> Application buffer
+>  disk buffer -> cpu(寄存器) -> Kernel pagecache -> app buffer
 
 &nbsp;
 
@@ -495,13 +504,13 @@ Application -> Kernel
 
 > 协处理器 DMA
 >
-> - disk buffer -> DMA(实际不参与) -> Kernel pagecache -> application buffer
+> - disk buffer -> DMA(实际不参与) -> Kernel pagecache -> app buffer
 
 &nbsp;
 
 > 电脑突然关掉电源的突发情况下， java 正在写到 Kernel 的 pagecache 中的数据会消失，不会 flush 进磁盘。
 >
-> 正常关机，会将 JAVA 正在写进 Kernel 的 pagecache 中的数据 flush 进磁盘
+> 正常关机，会将 Java 正在写进 Kernel 的 pagecache 中的数据 flush 进磁盘
 
 &nbsp;
 
@@ -511,7 +520,7 @@ Application -> Kernel
 
 &nbsp;
 
-- 查看程序 Cache 了多少 Pages
+- 查看程序 cache 了多少 Pages
 
 ```bash
 $ pcstat /bin/bash
@@ -562,7 +571,7 @@ $ vim /etc/sysctl.conf
   - 脏页占内存比，达到此比例值才会 flush 进 disk
   - 根据业务场景来调优，太大会造成很多数据丢失
 - `vm.dirty_background_bytes`
-  - 
+  - 脏页达到多少 bytes ,开始 flush 进 disk
 - `vm.dirty_ratio`
   - application 通过 Kernel 写数据 pc, 写到 百分比时，直接 flush 进磁盘，如果还继续写数据，会触发 Lru。
 - vm.dirty_bytes 
@@ -684,24 +693,44 @@ $ lsof -p pid
 - 由程序控制 pageCache 的细节，比上述的方法仅仅能控制更多的细节。
   - 能控制的细节越多，并不意味着能比 OS 做的更好。
   - 需要对它深入了解，才能根据自身业务特性定制 pageCache 的行为
-    - 行为： 维护一致性， dirty 等一系列问题
+    - 维护一致性， dirty 等一系列问题
 
 &nbsp;
 
 ## IO模型
 
->0：IO 是程序对内核的 $socket-queue$ 的包装
+>0：IO 是程序对内核的 `socket-queue​` 的包装
 >
->BIO：读取，一直等queue里有才返回，阻塞模型，每连接对应一个线程
+>BIO：读取，一直等 `queue` 里有才返回，阻塞模型，每个连接对应一个线程，同步 blocking
 >
->NIO：读取，立刻返回：两种结果，读到，没读到，程序逻辑要自己维护，nio noblock
+>NIO：读取，立刻返回：两种结果，读到，没读到，程序逻辑要自己维护，nio noblock ，同步 non-blocking
 >
->多路复用器：内核增加select，poll，epoll新增的和数据接收，连接接受实质无关的调用，得到是对应socket的事件(listen socket ，socket)，可以有效地去再次accept，R/W
+>多路复用器：内核增加 select，poll，epoll 新增的和数据接收，连接接受实质无关的调用，得到是对应socket 的事件  ( listen socket ，connect socket)，可以有效地去再次 accept，R/W  同步 non-blocking
 >
 >AIO： 异步 IO
 
 &nbsp;
 
-## 同步阻塞，同步非阻塞
+## 同步, 异步，阻塞，非阻塞
 
->  BIO,NIO,多路复用器，在IO模型上都是同步的，都是程序自己accpet，R/W
+以下描述中的同步，异步，只关注和 I/O 相关的内容， 不关注 IO 完之后的行为
+
+>  由程序自身完成和 Kernel 的读写交互行为， 都属于同步 IO 模型
+>
+>  - BIO(blocking)，NIO（non-blocking）， 多路复用器（selector, poll,epoll  [non-blocking]）
+>  - linux, unix, win 都支持
+>
+>  异步： AIO
+>
+>  - Kernel 完成 ： R/W 
+>  - 没有访问 IO， 可以简单理解为由 Kernel 来写应用程序的 buffer
+>  - 目前只有 win : iocp 支持
+>  - 不需过多了解， Kernel 级别的异步，linux 不支持。有兴趣可以自己去深入了解。
+>
+>  &nbsp;
+
+&nbsp;
+
+
+
+&nbsp;

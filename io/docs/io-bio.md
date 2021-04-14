@@ -263,3 +263,11 @@ Socket 参数解析：
   - 通俗点说
     - false 时，可以将 client 发送的数据，在 server 端通过延迟的手动，合并接收。而不会像上面代码以字节的发送。
     - true ： 开启 `TCP_NODELAY`, 无延迟模式，让 server 端接收数据时，将 client 发送的 一行数据（readLine） 分开接收（为了不延迟）
+
+&nbsp;
+
+## IO 模型
+
+> BIO 模型
+>
+> - 同步阻塞模型

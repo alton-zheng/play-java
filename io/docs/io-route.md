@@ -10,7 +10,7 @@
 > -  linux  与 windows 的 vm 网卡 (vmware)  建立了 vm-net，windows 的2个 ip(原IP 和 虚拟 Ip),都能正常发送数据包给 linux
 >
 > - 反过来， linux 发送数据给 windows vm ip 时，也是通过 vm-net 来发送的。中间是不需要通过 ip 转换的。
-> - 但 linux 发送数据包给 windows 时， 不能通过 net 方式，只能通过 vmware 的网关进行转换才能。转换后
+> - 但 linux 发送数据包给 windows 原 ip 时， 不能通过 net 方式，只能通过 vmware 的网关进行转换才能。转换后
 >   - linux 的 ip 和 port 发生了变化， windows client 收到的数据包中的发送方跟它预期的不一致（数据包被丢弃）
 >
 > 通过下面方法来解决这个问题
@@ -36,3 +36,7 @@ $ route add -host 192.168.110.100 gw 192.168.150.1
 
 - `-host` : windows 原 ip
 - `gw`:  linux 网关地址
+
+&nbsp;
+
+> 添加好路由信息后，上面问题，迎刃而解！
