@@ -4,6 +4,22 @@
 
 ## Selector
 
+&nbsp;
+
+### Java Selector 底层延伸
+
+>Java Selector 是 OS 底层 I/O Multiplex 的向上抽象。
+>
+>Selector 支持 OS 底层哪一种 I/O Multiplex ，一般指定 OS  支持的一个子集。
+>
+>可以用下列 java 参数来指定默认值或者在代码中指定
+
+```bash
+-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider
+```
+
+
+
 ![nio channel selector](images/nio-channel-selector.png)
 
 &nbsp;

@@ -34,6 +34,8 @@
 
 &nbsp;
 
+- [Synchronous I/O Multiplexing](docs/nio-multiplexing.md)
+
 - [Channel](docs/nio-channel.md)
   - [Channel 实现](docs/nio-channel-implement.md)
   - [FileChannel](docs/nio-channel-filechannel.md)
@@ -42,7 +44,11 @@
 
 &nbsp;
 
-- [Synchronous I/O Multiplexing](docs/nio-multiplexing.md)
+### 实操
+
+- [I/O Multiplexing](docs/nio-multiplexing-single-code.md)
+
+
 
 &nbsp;
 

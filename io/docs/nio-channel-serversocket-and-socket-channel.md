@@ -8,6 +8,15 @@ ServerSocketChannel 和 SocketChannel ，其实，它们没啥神秘的，一起
 
 ## ServerSocketChannel
 
+> open -> 对应底层知识
+>
+> -  epoll -> epoll_create -> Kernel 开辟 listen epoll fd空间
+>
+> register 时，在底层就是 listen 状态的 fd，在向 I/O Multiplex 在注册。
+>
+> - select, poll -> jvm 里开辟了空间，存放 fd
+> - epoll -> Kernel 中， epoll_ctl
+
 ![nio-channel-serversocket](images/nio-channel-serversocket.png)
 
 &nbsp;

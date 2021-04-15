@@ -1,5 +1,7 @@
 ## NIO 多路复用器（IO Multiplexing）
 
+底层 OS 维度
+
 &nbsp;
 
 ## Module
@@ -28,6 +30,8 @@
 &nbsp;
 
 ## select 和 poll
+
+> linux, unix ，windows 都有 select 和 poll
 
 - synchronous I/O multiplexing
 
@@ -133,7 +137,7 @@ poll 调用时，仅仅是将所有的 fd 全部传入到 poll, 没有 fd 限制
 
 ## epoll
 
-> epoll ： Linux , unix, windows
+> epoll ： Linux , unix
 >
 > 以下描述中 fd 后面的数字都是虚构的，为了更好的理解原理，跟着理解即可。
 
@@ -141,11 +145,22 @@ poll 调用时，仅仅是将所有的 fd 全部传入到 poll, 没有 fd 限制
 
 ![epoll](images/io-multiplux-epoll.jpg)
 
+Kernel 中， Server 或  Client 在 fd6 空间红黑树中放入 fds 信息， 那么伴随着中断处理完 fd 的 buffer , 将他们 copy 到 epoll_wait 对应的 等待链表中。
+
+Server  调用 epoll_wait （用户态 -> 内核态）, epoll_wait 去等待链表中获取有状态变化的 fd。
+
+拿到具体的 fd， 然后 Server 发起真正的读取数据的请求（用户态 -> 内核态）， Kernel 中的对应 fd buffer中的数据。
+
 &nbsp;
 
-### epoll 系统调用：
+### epoll 系统调用
 
 epoll_create
+
+- epoll fd 空间
+- 底层： 红黑树
+  - 数量限制： /proc/sys/fs/epoll/max_user_watches
+    - `796712`
 
 epoll_ctl
 
@@ -175,3 +190,4 @@ epoll_wait
   - epoll_wait(wait 链表来解决, 里边仅仅有状态变化的 fd 信息)
 
 &nbsp;
+
