@@ -8,16 +8,13 @@
 
 下面直接将代码贴出 ， 在 io-code 里也有：
 
-
-
 ```java
-package com.bjmashibing.system.io;
+package com.alton.system.io;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -60,7 +57,7 @@ public class SocketMultiplexingSingleThreadv1 {
             while (true) {  //死循环
 
                 Set<SelectionKey> keys = selector.keys();
-                System.out.println(keys.size()+"   size");
+                System.out.println(keys.size() + "   size");
 
 
                 //1,调用多路复用器(select,poll  or  epoll  (epoll_wait))
@@ -228,5 +225,379 @@ javac code.java && strace -ff -o poll java -Djava.nio.channels.spi.SelectorProvi
 
 &nbsp;
 
+## 单线程读写分离
 
+```java
+package com.alton.system.io;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.Set;
+
+public class SocketMultiplexingSingleThreadv1_1 {
+
+    private ServerSocketChannel server = null;
+    private Selector selector = null;   //linux 多路复用器（select poll epoll） nginx  event{}
+    int port = 9090;
+
+    public void initServer() {
+        try {
+            server = ServerSocketChannel.open();
+            server.configureBlocking(false);
+            server.bind(new InetSocketAddress(port));
+            selector = Selector.open();  //  select  poll  *epoll
+            server.register(selector, SelectionKey.OP_ACCEPT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void start() {
+        initServer();
+        System.out.println("服务器启动了。。。。。");
+        try {
+            while (true) {
+//                Set<SelectionKey> keys = selector.keys();
+//                System.out.println(keys.size()+"   size");
+                while (selector.select() > 0) {
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iter = selectionKeys.iterator();
+                    while (iter.hasNext()) {
+                        SelectionKey key = iter.next();
+                        iter.remove();
+                        if (key.isAcceptable()) {
+                            acceptHandler(key);
+                        } else if (key.isReadable()) {
+//                            key.cancel();
+                            readHandler(key);  //只处理了  read  并注册 关心这个key的write事件
+
+                        } else if (key.isWritable()) {  //我之前没讲过写的事件！！！！！
+                            //写事件<--  send-queue  只要是空的，就一定会给你返回可以写的事件，就会回调我们的写方法
+                            //你真的要明白：你想什么时候写？不是依赖send-queue是不是有空间（多路复用器能不能写是参考send-queue有没有空间）
+                            //1，你准备好要写什么了，这是第一步
+                            //2，第二步你才关心send-queue是否有空间
+                            //3，so，读 read 一开始就要注册，但是write依赖以上关系，什么时候用什么时候注册
+                            //4，如果一开始就注册了write的事件，进入死循环，一直调起！！！
+//                            key.cancel();
+                            writeHandler(key);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeHandler(SelectionKey key) {
+
+        System.out.println("write handler...");
+        SocketChannel client = (SocketChannel) key.channel();
+        ByteBuffer buffer = (ByteBuffer) key.attachment();
+        buffer.flip();
+        while (buffer.hasRemaining()) {
+            try {
+
+                client.write(buffer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        buffer.clear();
+        key.cancel();
+        try {
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void acceptHandler(SelectionKey key) {
+        try {
+            ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+            SocketChannel client = ssc.accept();
+            client.configureBlocking(false);
+            ByteBuffer buffer = ByteBuffer.allocate(8192);
+            client.register(selector, SelectionKey.OP_READ, buffer);
+            System.out.println("-------------------------------------------");
+            System.out.println("新客户端：" + client.getRemoteAddress());
+            System.out.println("-------------------------------------------");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readHandler(SelectionKey key) {
+
+        System.out.println("read handler.....");
+        SocketChannel client = (SocketChannel) key.channel();
+        ByteBuffer buffer = (ByteBuffer) key.attachment();
+        buffer.clear();
+        int read = 0;
+        try {
+            while (true) {
+                read = client.read(buffer);
+                if (read > 0) {
+                    client.register(key.selector(), SelectionKey.OP_WRITE, buffer);
+                    //关心  OP_WRITE 其实就是关系send-queue是不是有空间
+                } else if (read == 0) {
+                    break;
+                } else {
+                    client.close();
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static void main(String[] args) {
+        SocketMultiplexingSingleThreadv1_1 service = new SocketMultiplexingSingleThreadv1_1();
+        service.start();
+    }
+}
+```
+
+
+
+> send-queue
+
+```bash
+$ netstat -natp
+```
+
+&nbsp;
+
+写事件 <--  send queue 只要是空的，就一定会给你返回可以写的事件，就会回调我们的写方法
+
+需要明白的一点： 什么时候写？ 不是依赖 send-queue 是不是有空间
+
+- 第一步: 你准备好了要写什么内容
+
+- 第二步: 你才需要关心 send-queue 是否有空
+  - OP_WRITE
+
+- read 一开始就要注册， 但是 write 依赖以上关系，需要用时进行注册
+- 如果一开始就注册了 write 事件，会进入死循环，一直调起！！
+
+&nbsp;
+
+> 仔细看代码，可以看出，处理写事件需要待读事件循环处理完后，写事件才会被处理。
+>
+> 按顺序执行读写事件的方法
+>
+> - 执行效率慢
+> - 所有读事件在先
+> - 所有写事件在后
+
+&nbsp;
+
+## 多线程读写分离
+
+```java
+package com.alton.system.io;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.util.Iterator;
+import java.util.Set;
+
+public class SocketMultiplexingSingleThreadv2 {
+
+    private ServerSocketChannel server = null;
+    private Selector selector = null;   //linux 多路复用器（select poll epoll） nginx  event{}
+    int port = 9090;
+
+    public void initServer() {
+        try {
+            server = ServerSocketChannel.open();
+            server.configureBlocking(false);
+            server.bind(new InetSocketAddress(port));
+            selector = Selector.open();  //  select  poll  *epoll
+            server.register(selector, SelectionKey.OP_ACCEPT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void start() {
+        initServer();
+        System.out.println("服务器启动了。。。。。");
+        try {
+            while (true) {
+//                Set<SelectionKey> keys = selector.keys();
+//                System.out.println(keys.size()+"   size");
+                while (selector.select(50) > 0) {
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iter = selectionKeys.iterator();
+                    while (iter.hasNext()) {
+                        SelectionKey key = iter.next();
+                        iter.remove();
+                        if (key.isAcceptable()) {
+                            acceptHandler(key);
+                        } else if (key.isReadable()) {
+//                            key.cancel();  //现在多路复用器里把key  cancel了
+                            System.out.println("in.....");
+                            key.interestOps(key.interestOps() | ~SelectionKey.OP_READ);
+
+                            readHandler(key);//还是阻塞的嘛？ 即便以抛出了线程去读取，但是在时差里，这个key的read事件会被重复触发
+
+                        } else if (key.isWritable()) {  //我之前没讲过写的事件！！！！！
+                            //写事件<--  send-queue  只要是空的，就一定会给你返回可以写的事件，就会回调我们的写方法
+                            //你真的要明白：什么时候写？不是依赖send-queue是不是有空间
+                            //1，你准备好要写什么了，这是第一步
+                            //2，第二步你才关心send-queue是否有空间
+                            //3，so，读 read 一开始就要注册，但是write依赖以上关系，什么时候用什么时候注册
+                            //4，如果一开始就注册了write的事件，进入死循环，一直调起！！！
+//                            key.cancel();
+                            key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
+
+
+                            writeHandler(key);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeHandler(SelectionKey key) {
+        new Thread(() -> {
+            System.out.println("write handler...");
+            SocketChannel client = (SocketChannel) key.channel();
+            ByteBuffer buffer = (ByteBuffer) key.attachment();
+            buffer.flip();
+            while (buffer.hasRemaining()) {
+                try {
+
+                    client.write(buffer);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            buffer.clear();
+//            key.cancel();
+
+//            try {
+////                client.shutdownOutput();
+//
+////                client.close();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        }).start();
+
+    }
+
+    public void acceptHandler(SelectionKey key) {
+        try {
+            ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+            SocketChannel client = ssc.accept();
+            client.configureBlocking(false);
+            ByteBuffer buffer = ByteBuffer.allocate(8192);
+            client.register(selector, SelectionKey.OP_READ, buffer);
+            System.out.println("-------------------------------------------");
+            System.out.println("新客户端：" + client.getRemoteAddress());
+            System.out.println("-------------------------------------------");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readHandler(SelectionKey key) {
+        new Thread(() -> {
+            System.out.println("read handler.....");
+            SocketChannel client = (SocketChannel) key.channel();
+            ByteBuffer buffer = (ByteBuffer) key.attachment();
+            buffer.clear();
+            int read = 0;
+            try {
+                while (true) {
+                    read = client.read(buffer);
+                    System.out.println(Thread.currentThread().getName() + " " + read);
+                    if (read > 0) {
+                        key.interestOps(SelectionKey.OP_READ);
+
+                        client.register(key.selector(), SelectionKey.OP_WRITE, buffer);
+                    } else if (read == 0) {
+
+                        break;
+                    } else {
+                        client.close();
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+    }
+
+    public static void main(String[] args) {
+        SocketMultiplexingSingleThreadv2 service = new SocketMultiplexingSingleThreadv2();
+        service.start();
+    }
+}
+```
+
+&nbsp;
+
+![nio multiplex java selector threads](images/nio-multiplex-java-selector-threads.png)
+
+&nbsp;
+
+**我们为啥提出这个模型？**
+
+- 考虑资源利用，充分利用cpu核数
+
+- 考虑有一个fd执行耗时，在一个线性里会阻塞后续FD的处理
+
+- 当有N个 `fd` 有 `R/W` 处理的时候：
+
+- 将N个 `FD` 分组，每一组一个 `selector`，将一个 `selector` 压到一个线程上
+
+- 最好的线程数量是：`cpu` `cpu*2`
+
+- 其实单看一个线程：里面有一个 selector，有一部分 `FD`，且他们是线性的
+
+- 多个线程，他们在各自的 `cpu` 上执行，代表会有多个 `selector` 在并行，且线程内是线性的，最终是并行的`fd` 被处理
+
+- 但是，你得明白，还是一个 `selector` 中的 `fd` 要放到不同的线程并行，从而造成 `cancel` 调用嘛？ 不需要了
+
+- 上边的逻辑其实就是分治，我的程序如果有 `100W` 个连接，如果有 `4` 个线程（ `selector`），每个线程处理   `250000`
+
+- 那么，可不可以拿出一个线程的selector就只关注accpet ，然后把接受的客户端的FD，分配给其他线程的 `selector`
+
+<img src="images/nio-selector-threads.png" alt="nio-selector-threads" style="zoom:50%;" />
+
+&nbsp;
 

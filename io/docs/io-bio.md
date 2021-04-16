@@ -23,13 +23,14 @@
 ## Server
 
 ```java
-package com.bjmashibing.system.io;
+package com.alton.system.io;
 
 /**
  * @Author: alton
  * @Date: Created in 2021/4/8 2:32 PM
  * @Description:
  */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,7 +102,7 @@ public class SocketIOServerProperties {
                 client.setSoLinger(CLI_LINGER, CLI_LINGER_N);
                 client.setSoTimeout(CLI_TIMEOUT);
                 client.setTcpNoDelay(CLI_NO_DELAY);
-                
+
                 new Thread(
                         () -> {
                             try {
@@ -187,10 +188,11 @@ $ lsof -p port 可以看到进程的 FD 信息
 ## Cient
 
 ```java
-package com.bjmashibing.system.io;
+package com.alton.system.io;
 
 import java.io.*;
 import java.net.Socket;
+
 /**
  * @Author: alton
  * @Date: Created in 2021/4/8 2:32 PM
@@ -201,7 +203,7 @@ public class SocketClient {
     public static void main(String[] args) {
 
         try {
-            Socket client = new Socket("127.0.0.1",9090);
+            Socket client = new Socket("127.0.0.1", 9090);
             client.setSendBufferSize(20);
             client.setTcpNoDelay(false);
             OutputStream out = client.getOutputStream();
@@ -209,11 +211,11 @@ public class SocketClient {
             InputStream in = System.in;
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            while(true){
+            while (true) {
                 String line = reader.readLine();
-                if(line != null ){
+                if (line != null) {
                     byte[] bb = line.getBytes();
-                    System.out.println("发送内容长度： " +  bb.length);
+                    System.out.println("发送内容长度： " + bb.length);
                     out.write(bb);
                 }
             }

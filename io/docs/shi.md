@@ -5,10 +5,9 @@
 - 单线程
 
 ```java
-package com.bjmashibing.system.io;
+package com.alton.system.io;
 
 import java.net.InetSocketAddress;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -34,8 +33,6 @@ public class SocketNIO {
 //        StandardSocketOptions.SO_REUSEADDR
 
 
-
-
         while (true) {
             //接受客户端的连接
             Thread.sleep(1000);
@@ -45,7 +42,7 @@ public class SocketNIO {
             NONBLOCKING 意味着代码能往下执行*/
 
             if (client == null) {
-             //   System.out.println("null.....");
+                //   System.out.println("null.....");
             } else {
                 client.configureBlocking(false); //重点  socket（服务端的listen socket<连接请求三次握手后，往我这里扔，我去通过accept 得到  连接的socket>，连接socket<连接后的数据读写使用的> ）
                 int port = client.socket().getPort();
@@ -102,7 +99,7 @@ $ nc localhost 9090
 > www.kegal.com/c10k.html
 
 ```java
-package com.bjmashibing.system.io;
+package com.alton.system.io;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -143,7 +140,7 @@ public class C10Kclient {
 
 
         }
-        System.out.println("clients "+ clients.size());
+        System.out.println("clients " + clients.size());
 
         try {
             System.in.read();
