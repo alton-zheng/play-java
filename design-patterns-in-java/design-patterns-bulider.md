@@ -1,319 +1,822 @@
-# Builder Design Pattern
+# 生成器模式
 
-&nbsp;
+亦称：建造者模式、Builder
 
-在软件开发过程中有时需要创建一个复杂的对象，这个复杂对象通常由多个子部件按一定的步骤组合而成。例如，计算机是由 CPU、主板、内存、硬盘、显卡、机箱、显示器、键盘、鼠标等部件组装而成的，采购员不可能自己去组装计算机，而是将计算机的配置要求告诉计算机销售公司，计算机销售公司安排技术人员去组装计算机，然后再交给要买计算机的采购员。
+##  意图
 
-生活中这样的例子很多，如游戏中的不同角色，其性别、个性、能力、脸型、体型、服装、发型等特性都有所差异；还有汽车中的方向盘、发动机、车架、轮胎等部件也多种多样；每封电子邮件的发件人、收件人、主题、内容、附件等内容也各不相同。
+**生成器模式**是一种创建型设计模式， 使你能够分步骤创建复杂对象。 该模式允许你使用相同的创建代码生成不同类型和形式的对象。
 
-以上所有这些产品都是由多个部件构成的，各个部件可以灵活选择，但其创建步骤都大同小异。这类产品的创建无法用前面介绍的工厂模式描述，只有建造者模式可以很好地描述该类产品的创建。
+![生成器设计模式](https://refactoringguru.cn/images/patterns/content/builder/builder-zh.png?id=6889a9ff5dbc070a084e)
 
-## 模式的定义与特点
+##  问题
 
-建造者（Builder）模式的定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示，这样的[设计模式](http://c.biancheng.net/design_pattern/)被称为建造者模式。它是将一个复杂的对象分解为多个简单的对象，然后一步一步构建而成。它将变与不变相分离，即产品的组成部分是不变的，但每一部分是可以灵活选择的。
+假设有这样一个复杂对象， 在对其进行构造时需要对诸多成员变量和嵌套对象进行繁复的初始化工作。 这些初始化代码通常深藏于一个包含众多参数且让人基本看不懂的构造函数中； 甚至还有更糟糕的情况， 那就是这些代码散落在客户端代码的多个位置。
 
-该模式的主要优点如下：
+![大量子类会带来新的问题](https://refactoringguru.cn/images/patterns/diagrams/builder/problem1.png?id=11e715c5c97811f848c4)
 
-1. 封装性好，构建和表示分离。
-2. 扩展性好，各个具体的建造者相互独立，有利于系统的解耦。
-3. 客户端不必知道产品内部组成的细节，建造者可以对创建过程逐步细化，而不对其它模块产生任何影响，便于控制细节风险。
+如果为每种可能的对象都创建一个子类， 这可能会导致程序变得过于复杂。
 
+例如， 我们来思考如何创建一个 `房屋`House对象。 建造一栋简单的房屋， 首先你需要建造四面墙和地板， 安装房门和一套窗户， 然后再建造一个屋顶。 但是如果你想要一栋更宽敞更明亮的房屋， 还要有院子和其他设施 （例如暖气、 排水和供电设备）， 那又该怎么办呢？
 
-其缺点如下：
+最简单的方法是扩展 `房屋`基类， 然后创建一系列涵盖所有参数组合的子类。 但最终你将面对相当数量的子类。 任何新增的参数 （例如门廊类型） 都会让这个层次结构更加复杂。
 
-1. 产品的组成部分必须相同，这限制了其使用范围。
-2. 如果产品的内部变化复杂，如果产品内部发生变化，则建造者也要同步修改，后期维护成本较大。
+另一种方法则无需生成子类。 你可以在 `房屋`基类中创建一个包括所有可能参数的超级构造函数， 并用它来控制房屋对象。 这种方法确实可以避免生成子类， 但它却会造成另外一个问题。
 
+![可伸缩的构造函数](https://refactoringguru.cn/images/patterns/diagrams/builder/problem2.png?id=2e91039b6c7d2d2df6ee)
 
-建造者（Builder）模式和工厂模式的关注点不同：建造者模式注重零部件的组装过程，而[工厂方法模式](http://c.biancheng.net/view/1348.html)更注重零部件的创建过程，但两者可以结合使用。
+拥有大量输入参数的构造函数也有缺陷： 这些参数也不是每次都要全部用上的。
 
-## 模式的结构与实现
+通常情况下， 绝大部分的参数都没有使用， 这使得[对于构造函数的调用十分不简洁](https://refactoringguru.cn/smells/long-parameter-list)。 例如， 只有很少的房子有游泳池， 因此与游泳池相关的参数十之八九是毫无用处的。
 
-建造者（Builder）模式由产品、抽象建造者、具体建造者、指挥者等 4 个要素构成，现在我们来分析其基本结构和实现方法。
+##  解决方案
 
-#### 1. 模式的结构
+生成器模式建议将对象构造代码从产品类中抽取出来， 并将其放在一个名为*生成器*的独立对象中。
 
-建造者（Builder）模式的主要角色如下。
+![应用生成器模式](https://refactoringguru.cn/images/patterns/diagrams/builder/solution1.png?id=8ce82137f8935998de80)
 
-1. 产品角色（Product）：它是包含多个组成部件的复杂对象，由具体建造者来创建其各个零部件。
-2. 抽象建造者（Builder）：它是一个包含创建产品各个子部件的抽象方法的接口，通常还包含一个返回复杂产品的方法 getResult()。
-3. 具体建造者(Concrete Builder）：实现 Builder 接口，完成复杂产品的各个部件的具体创建方法。
-4. 指挥者（Director）：它调用建造者对象中的部件构造与装配方法完成复杂对象的创建，在指挥者中不涉及具体产品的信息。
+生成器模式让你能够分步骤创建复杂对象。 生成器不允许其他对象访问正在创建中的产品。
 
+该模式会将对象构造过程划分为一组步骤， 比如 `build­Walls`创建墙壁和 `build­Door`创建房门创建房门等。 每次创建对象时， 你都需要通过生成器对象执行一系列步骤。 重点在于你无需调用所有步骤， 而只需调用创建特定对象配置所需的那些步骤即可。
 
-其结构图如图 1 所示。
+当你需要创建不同形式的产品时， 其中的一些构造步骤可能需要不同的实现。 例如， 木屋的房门可能需要使用木头制造， 而城堡的房门则必须使用石头制造。
 
+在这种情况下， 你可以创建多个不同的生成器， 用不同方式实现一组相同的创建步骤。 然后你就可以在创建过程中使用这些生成器 （例如按顺序调用多个构造步骤） 来生成不同类型的对象。
 
+![img](https://refactoringguru.cn/images/patterns/content/builder/builder-comic-1-zh.png?id=c39eaef88b3718af5b6d)
 
-![建造者模式的结构图](images/bulider-1.png)
-图1 建造者模式的结构图
+不同生成器以不同方式执行相同的任务。
 
-#### 2. 模式的实现
+例如， 假设第一个建造者使用木头和玻璃制造房屋， 第二个建造者使用石头和钢铁， 而第三个建造者使用黄金和钻石。 在调用同一组步骤后， 第一个建造者会给你一栋普通房屋， 第二个会给你一座小城堡， 而第三个则会给你一座宫殿。 但是， 只有在调用构造步骤的客户端代码可以通过通用接口与建造者进行交互时， 这样的调用才能返回需要的房屋。
 
-图 1 给出了建造者（Builder）模式的主要结构，其相关类的代码如下。
+#### 主管
 
-(1) 产品角色：包含多个组成部件的复杂对象。
+你可以进一步将用于创建产品的一系列生成器步骤调用抽取成为单独的*主管*类。 主管类可定义创建步骤的执行顺序， 而生成器则提供这些步骤的实现。
+
+![img](https://refactoringguru.cn/images/patterns/content/builder/builder-comic-2-zh.png?id=3658d16be763a2d63409)
+
+主管知道需要哪些创建步骤才能获得可正常使用的产品。
+
+严格来说， 你的程序中并不一定需要主管类。 客户端代码可直接以特定顺序调用创建步骤。 不过， 主管类中非常适合放入各种例行构造流程， 以便在程序中反复使用。
+
+此外， 对于客户端代码来说， 主管类完全隐藏了产品构造细节。 客户端只需要将一个生成器与主管类关联， 然后使用主管类来构造产品， 就能从生成器处获得构造结果了。
+
+##  生成器模式结构
+
+![生成器设计模式结构](https://refactoringguru.cn/images/patterns/diagrams/builder/structure.png?id=fe9e23559923ea0657aa)
+
+1. **生成器** （Builder） 接口声明在所有类型生成器中通用的产品构造步骤。
+2. **具体生成器** （Concrete Builders） 提供构造过程的不同实现。 具体生成器也可以构造不遵循通用接口的产品。
+3. **产品** （Products） 是最终生成的对象。 由不同生成器构造的产品无需属于同一类层次结构或接口。
+4. **主管** （Director） 类定义调用构造步骤的顺序， 这样你就可以创建和复用特定的产品配置。
+5. **客户端** （Client） 必须将某个生成器对象与主管类关联。 一般情况下， 你只需通过主管类构造函数的参数进行一次性关联即可。 此后主管类就能使用生成器对象完成后续所有的构造任务。 但在客户端将生成器对象传递给主管类制造方法时还有另一种方式。 在这种情况下， 你在使用主管类生产产品时每次都可以使用不同的生成器。
+
+##  伪代码
+
+下面关于**生成器**模式的例子演示了你可以如何复用相同的对象构造代码来生成不同类型的产品——例如汽车 （Car）——及其相应的使用手册 （Manual）。
+
+![生成器模式结构示例](https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png?id=e3d142b1988117313b96)
+
+分步骤制造汽车并制作对应型号用户使用手册的示例
+
+汽车是一个复杂对象， 有数百种不同的制造方法。 我们没有在 `汽车`类中塞入一个巨型构造函数， 而是将汽车组装代码抽取到单独的汽车生成器类中。 该类中有一组方法可用来配置汽车的各种部件。
+
+如果客户端代码需要组装一辆与众不同、 精心调教的汽车， 它可以直接调用生成器。 或者， 客户端可以将组装工作委托给主管类， 因为主管类知道如何使用生成器制造最受欢迎的几种型号汽车。
+
+你或许会感到吃惊， 但确实每辆汽车都需要一本使用手册 （说真的， 谁会去读它们呢？）。 使用手册会介绍汽车的每一项功能， 因此不同型号的汽车， 其使用手册内容也不一样。 因此， 你可以复用现有流程来制造实际的汽车及其对应的手册。 当然， 编写手册和制造汽车不是一回事， 所以我们需要另外一个生成器对象来专门编写使用手册。 该类与其制造汽车的兄弟类都实现了相同的制造方法， 但是其功能不是制造汽车部件， 而是描述每个部件。 将这些生成器传递给相同的主管对象， 我们就能够生成一辆汽车或是一本使用手册了。
+
+最后一个部分是获取结果对象。 尽管金属汽车和纸质手册存在关联， 但它们却是完全不同的东西。 我们无法在主管类和具体产品类不发生耦合的情况下， 在主管类中提供获取结果对象的方法。 因此， 我们只能通过负责制造过程的生成器来获取结果对象。
 
 ```
-class Product {
-    private String partA;
-    private String partB;
-    private String partC;
-    public void setPartA(String partA) {
-        this.partA = partA;
+// 只有当产品较为复杂且需要详细配置时，使用生成器模式才有意义。下面的两个
+// 产品尽管没有同样的接口，但却相互关联。
+class Car is
+    // 一辆汽车可能配备有 GPS 设备、行车电脑和几个座位。不同型号的汽车（
+    // 运动型轿车、SUV 和敞篷车）可能会安装或启用不同的功能。
+
+class Manual is
+    // 用户使用手册应该根据汽车配置进行编制，并介绍汽车的所有功能。
+
+
+// 生成器接口声明了创建产品对象不同部件的方法。
+interface Builder is
+    method reset()
+    method setSeats(...)
+    method setEngine(...)
+    method setTripComputer(...)
+    method setGPS(...)
+
+// 具体生成器类将遵循生成器接口并提供生成步骤的具体实现。你的程序中可能会
+// 有多个以不同方式实现的生成器变体。
+class CarBuilder implements Builder is
+    private field car:Car
+
+    // 一个新的生成器实例必须包含一个在后续组装过程中使用的空产品对象。
+    constructor CarBuilder() is
+        this.reset()
+
+    // reset（重置）方法可清除正在生成的对象。
+    method reset() is
+        this.car = new Car()
+
+    // 所有生成步骤都会与同一个产品实例进行交互。
+    method setSeats(...) is
+        // 设置汽车座位的数量。
+
+    method setEngine(...) is
+        // 安装指定的引擎。
+
+    method setTripComputer(...) is
+        // 安装行车电脑。
+
+    method setGPS(...) is
+        // 安装全球定位系统。
+
+    // 具体生成器需要自行提供获取结果的方法。这是因为不同类型的生成器可能
+    // 会创建不遵循相同接口的、完全不同的产品。所以也就无法在生成器接口中
+    // 声明这些方法（至少在静态类型的编程语言中是这样的）。
+    //
+    // 通常在生成器实例将结果返回给客户端后，它们应该做好生成另一个产品的
+    // 准备。因此生成器实例通常会在 `getProduct（获取产品）`方法主体末尾
+    // 调用重置方法。但是该行为并不是必需的，你也可让生成器等待客户端明确
+    // 调用重置方法后再去处理之前的结果。
+    method getProduct():Car is
+        product = this.car
+        this.reset()
+        return product
+
+// 生成器与其他创建型模式的不同之处在于：它让你能创建不遵循相同接口的产品。
+class CarManualBuilder implements Builder is
+    private field manual:Manual
+
+    constructor CarManualBuilder() is
+        this.reset()
+
+    method reset() is
+        this.manual = new Manual()
+
+    method setSeats(...) is
+        // 添加关于汽车座椅功能的文档。
+
+    method setEngine(...) is
+        // 添加关于引擎的介绍。
+
+    method setTripComputer(...) is
+        // 添加关于行车电脑的介绍。
+
+    method setGPS(...) is
+        // 添加关于 GPS 的介绍。
+
+    method getProduct():Manual is
+        // 返回使用手册并重置生成器。
+
+
+// 主管只负责按照特定顺序执行生成步骤。其在根据特定步骤或配置来生成产品时
+// 会很有帮助。由于客户端可以直接控制生成器，所以严格意义上来说，主管类并
+// 不是必需的。
+class Director is
+    private field builder:Builder
+
+    // 主管可同由客户端代码传递给自身的任何生成器实例进行交互。客户端可通
+    // 过这种方式改变最新组装完毕的产品的最终类型。
+    method setBuilder(builder:Builder)
+        this.builder = builder
+
+    // 主管可使用同样的生成步骤创建多个产品变体。
+    method constructSportsCar(builder: Builder) is
+        builder.reset()
+        builder.setSeats(2)
+        builder.setEngine(new SportEngine())
+        builder.setTripComputer(true)
+        builder.setGPS(true)
+
+    method constructSUV(builder: Builder) is
+        // ...
+
+
+// 客户端代码会创建生成器对象并将其传递给主管，然后执行构造过程。最终结果
+// 将需要从生成器对象中获取。
+class Application is
+
+    method makeCar() is
+        director = new Director()
+
+        CarBuilder builder = new CarBuilder()
+        director.constructSportsCar(builder)
+        Car car = builder.getProduct()
+
+        CarManualBuilder builder = new CarManualBuilder()
+        director.constructSportsCar(builder)
+
+        // 最终产品通常需要从生成器对象中获取，因为主管不知晓具体生成器和
+        // 产品的存在，也不会对其产生依赖。
+        Manual manual = builder.getProduct()
+```
+
+##  生成器模式适合应用场景
+
+ 使用生成器模式可避免 “重叠构造函数 （telescopic constructor）” 的出现。
+
+ 假设你的构造函数中有十个可选参数， 那么调用该函数会非常不方便； 因此， 你需要重载这个构造函数， 新建几个只有较少参数的简化版。 但这些构造函数仍需调用主构造函数， 传递一些默认数值来替代省略掉的参数。
+
+```
+class Pizza {
+    Pizza(int size) { ... }
+    Pizza(int size, boolean cheese) { ... }
+    Pizza(int size, boolean cheese, boolean pepperoni) { ... }
+    // ...
+```
+
+只有在 C# 或 Java 等支持方法重载的编程语言中才能写出如此复杂的构造函数。
+
+生成器模式让你可以分步骤生成对象， 而且允许你仅使用必须的步骤。 应用该模式后， 你再也不需要将几十个参数塞进构造函数里了。
+
+ 当你希望使用代码创建不同形式的产品 （例如石头或木头房屋） 时， 可使用生成器模式。
+
+ 如果你需要创建的各种形式的产品， 它们的制造过程相似且仅有细节上的差异， 此时可使用生成器模式。
+
+基本生成器接口中定义了所有可能的制造步骤， 具体生成器将实现这些步骤来制造特定形式的产品。 同时， 主管类将负责管理制造步骤的顺序。
+
+ 使用生成器构造[组合](https://refactoringguru.cn/design-patterns/composite)树或其他复杂对象。
+
+ 生成器模式让你能分步骤构造产品。 你可以延迟执行某些步骤而不会影响最终产品。 你甚至可以递归调用这些步骤， 这在创建对象树时非常方便。
+
+生成器在执行制造步骤时， 不能对外发布未完成的产品。 这可以避免客户端代码获取到不完整结果对象的情况。
+
+## 实现方法
+
+1. 清晰地定义通用步骤， 确保它们可以制造所有形式的产品。 否则你将无法进一步实施该模式。
+
+2. 在基本生成器接口中声明这些步骤。
+
+3. 为每个形式的产品创建具体生成器类， 并实现其构造步骤。
+
+   不要忘记实现获取构造结果对象的方法。 你不能在生成器接口中声明该方法， 因为不同生成器构造的产品可能没有公共接口， 因此你就不知道该方法返回的对象类型。 但是， 如果所有产品都位于单一类层次中， 你就可以安全地在基本接口中添加获取生成对象的方法。
+
+4. 考虑创建主管类。 它可以使用同一生成器对象来封装多种构造产品的方式。
+
+5. 客户端代码会同时创建生成器和主管对象。 构造开始前， 客户端必须将生成器对象传递给主管对象。 通常情况下， 客户端只需调用主管类构造函数一次即可。 主管类使用生成器对象完成后续所有制造任务。 还有另一种方式， 那就是客户端可以将生成器对象直接传递给主管类的制造方法。
+
+6. 只有在所有产品都遵循相同接口的情况下， 构造结果可以直接通过主管类获取。 否则， 客户端应当通过生成器获取构造结果。
+
+##  生成器模式优缺点
+
+-  你可以分步创建对象， 暂缓创建步骤或递归运行创建步骤。
+-  生成不同形式的产品时， 你可以复用相同的制造代码。
+-  *单一职责原则*。 你可以将复杂构造代码从产品的业务逻辑中分离出来。
+
+-  由于该模式需要新增多个类， 因此代码整体复杂程度会有所增加。
+
+##  与其他模式的关系
+
+- 在许多设计工作的初期都会使用[工厂方法模式](https://refactoringguru.cn/design-patterns/factory-method) （较为简单， 而且可以更方便地通过子类进行定制）， 随后演化为使用[抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)、 [原型模式](https://refactoringguru.cn/design-patterns/prototype)或[生成器模式](https://refactoringguru.cn/design-patterns/builder) （更灵活但更加复杂）。
+- [生成器](https://refactoringguru.cn/design-patterns/builder)重点关注如何分步生成复杂对象。 [抽象工厂](https://refactoringguru.cn/design-patterns/abstract-factory)专门用于生产一系列相关对象。 *抽象工厂*会马上返回产品， *生成器*则允许你在获取产品前执行一些额外构造步骤。
+- 你可以在创建复杂[组合模式](https://refactoringguru.cn/design-patterns/composite)树时使用[生成器](https://refactoringguru.cn/design-patterns/builder)， 因为这可使其构造步骤以递归的方式运行。
+- 你可以结合使用[生成器](https://refactoringguru.cn/design-patterns/builder)和[桥接模式](https://refactoringguru.cn/design-patterns/bridge)： *主管*类负责抽象工作， 各种不同的*生成器*负责*实现*工作。
+- [抽象工厂](https://refactoringguru.cn/design-patterns/abstract-factory)、 [生成器](https://refactoringguru.cn/design-patterns/builder)和[原型](https://refactoringguru.cn/design-patterns/prototype)都可以用[单例模式](https://refactoringguru.cn/design-patterns/singleton)来实现。
+
+# **Builder** in Java
+
+**Builder** is a creational design pattern, which allows constructing complex objects step by step.
+
+Unlike other creational patterns, Builder doesn’t require products to have a common interface. That makes it possible to produce different products using the same construction process.
+
+[ Learn more about Builder ](https://refactoring.guru/design-patterns/builder)
+
+## Usage of the pattern in Java
+
+**Complexity:** 
+
+**Popularity:** 
+
+**Usage examples:** The Builder pattern is a well-known pattern in Java world. It’s especially useful when you need to create an object with lots of possible configuration options.
+
+Builder is widely used in Java core libraries:
+
+- [`java.lang.StringBuilder#append()`](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#append-boolean-) (`unsynchronized`)
+- [`java.lang.StringBuffer#append()`](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuffer.html#append-boolean-) (`synchronized`)
+- [`java.nio.ByteBuffer#put()`](https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html#put-byte-) (also in [`CharBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/CharBuffer.html#put-char-), [`ShortBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/ShortBuffer.html#put-short-), [`IntBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/IntBuffer.html#put-int-), [`LongBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/LongBuffer.html#put-long-), [`FloatBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/FloatBuffer.html#put-float-) and [`DoubleBuffer`](https://docs.oracle.com/javase/8/docs/api/java/nio/DoubleBuffer.html#put-double-))
+- [`javax.swing.GroupLayout.Group#addComponent()`](https://docs.oracle.com/javase/8/docs/api/javax/swing/GroupLayout.Group.html#addComponent-java.awt.Component-)
+- All implementations [`java.lang.Appendable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html)
+
+**Identification:** The Builder pattern can be recognized in a class, which has a single creation method and several methods to configure the resulting object. Builder methods often support chaining (for example, `someBuilder->setValueA(1)->setValueB(2)->create()`).
+
+
+
+## Step-by-step car production
+
+In this example, the Builder pattern allows step by step construction of different car models.
+
+The example also shows how Builder produces products of different kinds (car manual) using the same building steps.
+
+The Director controls the order of the construction. It knows which building steps to call to produce this or that car model. It works with builders only via their common interface. This allows passing different types of builders to the director.
+
+The end result is retrieved from the builder object because the director can’t know the type of resulting product. Only the Builder object knows what does it build exactly.
+
+##  **builders**
+
+####  **builders/Builder.java:** Common builder interface
+
+```
+package refactoring_guru.builder.example.builders;
+
+import refactoring_guru.builder.example.cars.CarType;
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Builder interface defines all possible ways to configure a product.
+ */
+public interface Builder {
+    void setCarType(CarType type);
+    void setSeats(int seats);
+    void setEngine(Engine engine);
+    void setTransmission(Transmission transmission);
+    void setTripComputer(TripComputer tripComputer);
+    void setGPSNavigator(GPSNavigator gpsNavigator);
+}
+```
+
+####  **builders/CarBuilder.java:** Builder of car
+
+```
+package refactoring_guru.builder.example.builders;
+
+import refactoring_guru.builder.example.cars.Car;
+import refactoring_guru.builder.example.cars.CarType;
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Concrete builders implement steps defined in the common interface.
+ */
+public class CarBuilder implements Builder {
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
+
+    public void setCarType(CarType type) {
+        this.type = type;
     }
-    public void setPartB(String partB) {
-        this.partB = partB;
+
+    @Override
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
-    public void setPartC(String partC) {
-        this.partC = partC;
+
+    @Override
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
-    public void show() {
-        //显示产品的特性
+
+    @Override
+    public void setTransmission(Transmission transmission) {
+        this.transmission = transmission;
+    }
+
+    @Override
+    public void setTripComputer(TripComputer tripComputer) {
+        this.tripComputer = tripComputer;
+    }
+
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) {
+        this.gpsNavigator = gpsNavigator;
+    }
+
+    public Car getResult() {
+        return new Car(type, seats, engine, transmission, tripComputer, gpsNavigator);
     }
 }
 ```
 
-
-(2) 抽象建造者：包含创建产品各个子部件的抽象方法。
+####  **builders/CarManualBuilder.java:** Builder of a car manual
 
 ```
-abstract class Builder {
-    //创建产品对象
-    protected Product product = new Product();
-    public abstract void buildPartA();
-    public abstract void buildPartB();
-    public abstract void buildPartC();
-    //返回产品对象
-    public Product getResult() {
-        return product;
+package refactoring_guru.builder.example.builders;
+
+import refactoring_guru.builder.example.cars.Manual;
+import refactoring_guru.builder.example.cars.CarType;
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Unlike other creational patterns, Builder can construct unrelated products,
+ * which don't have the common interface.
+ *
+ * In this case we build a user manual for a car, using the same steps as we
+ * built a car. This allows to produce manuals for specific car models,
+ * configured with different features.
+ */
+public class CarManualBuilder implements Builder{
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
+
+    @Override
+    public void setCarType(CarType type) {
+        this.type = type;
+    }
+
+    @Override
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    @Override
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    @Override
+    public void setTransmission(Transmission transmission) {
+        this.transmission = transmission;
+    }
+
+    @Override
+    public void setTripComputer(TripComputer tripComputer) {
+        this.tripComputer = tripComputer;
+    }
+
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) {
+        this.gpsNavigator = gpsNavigator;
+    }
+
+    public Manual getResult() {
+        return new Manual(type, seats, engine, transmission, tripComputer, gpsNavigator);
     }
 }
 ```
 
+##  **cars**
 
-(3) 具体建造者：实现了抽象建造者接口。
+####  **cars/Car.java:** Car product
 
-```java
-public class ConcreteBuilder extends Builder {
-    public void buildPartA() {
-        product.setPartA("建造 PartA");
+```
+package refactoring_guru.builder.example.cars;
+
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Car is a product class.
+ */
+public class Car {
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
+    private double fuel = 0;
+
+    public Car(CarType carType, int seats, Engine engine, Transmission transmission,
+               TripComputer tripComputer, GPSNavigator gpsNavigator) {
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        if (this.tripComputer != null) {
+            this.tripComputer.setCar(this);
+        }
+        this.gpsNavigator = gpsNavigator;
     }
-    public void buildPartB() {
-        product.setPartB("建造 PartB");
+
+    public CarType getCarType() {
+        return carType;
     }
-    public void buildPartC() {
-        product.setPartC("建造 PartC");
+
+    public double getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public Transmission getTransmission() {
+        return transmission;
+    }
+
+    public TripComputer getTripComputer() {
+        return tripComputer;
+    }
+
+    public GPSNavigator getGpsNavigator() {
+        return gpsNavigator;
     }
 }
 ```
 
+####  **cars/Manual.java:** Manual product
 
-(4) 指挥者：调用建造者中的方法完成复杂对象的创建。
+```
+package refactoring_guru.builder.example.cars;
 
-```java
-class Director {
-    private Builder builder;
-    public Director(Builder builder) {
-        this.builder = builder;
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Car manual is another product. Note that it does not have the same ancestor
+ * as a Car. They are not related.
+ */
+public class Manual {
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
+
+    public Manual(CarType carType, int seats, Engine engine, Transmission transmission,
+                  TripComputer tripComputer, GPSNavigator gpsNavigator) {
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        this.gpsNavigator = gpsNavigator;
     }
-    //产品构建与组装方法
-    public Product construct() {
-        builder.buildPartA();
-        builder.buildPartB();
-        builder.buildPartC();
-        return builder.getResult();
+
+    public String print() {
+        String info = "";
+        info += "Type of car: " + carType + "\n";
+        info += "Count of seats: " + seats + "\n";
+        info += "Engine: volume - " + engine.getVolume() + "; mileage - " + engine.getMileage() + "\n";
+        info += "Transmission: " + transmission + "\n";
+        if (this.tripComputer != null) {
+            info += "Trip Computer: Functional" + "\n";
+        } else {
+            info += "Trip Computer: N/A" + "\n";
+        }
+        if (this.gpsNavigator != null) {
+            info += "GPS Navigator: Functional" + "\n";
+        } else {
+            info += "GPS Navigator: N/A" + "\n";
+        }
+        return info;
     }
 }
 ```
 
-
-(5) 客户类。
+####  **cars/CarType.java**
 
 ```
-public class Client {
-    public static void main(String[] args) {
-        Builder builder = new ConcreteBuilder();
-        Director director = new Director(builder);
-        Product product = director.construct();
-        product.show();
+package refactoring_guru.builder.example.cars;
+
+public enum CarType {
+    CITY_CAR, SPORTS_CAR, SUV
+}
+```
+
+##  **components**
+
+####  **components/Engine.java:** Product feature 1
+
+```
+package refactoring_guru.builder.example.components;
+
+/**
+ * Just another feature of a car.
+ */
+public class Engine {
+    private final double volume;
+    private double mileage;
+    private boolean started;
+
+    public Engine(double volume, double mileage) {
+        this.volume = volume;
+        this.mileage = mileage;
+    }
+
+    public void on() {
+        started = true;
+    }
+
+    public void off() {
+        started = false;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void go(double mileage) {
+        if (started) {
+            this.mileage += mileage;
+        } else {
+            System.err.println("Cannot go(), you must start engine first!");
+        }
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public double getMileage() {
+        return mileage;
     }
 }
 ```
 
-## 模式的应用实例
+####  **components/GPSNavigator.java:** Product feature 2
 
-【例1】用建造者（Builder）模式描述客厅装修。
+```
+package refactoring_guru.builder.example.components;
 
-分析：客厅装修是一个复杂的过程，它包含墙体的装修、电视机的选择、沙发的购买与布局等。客户把装修要求告诉项目经理，项目经理指挥装修工人一步步装修，最后完成整个客厅的装修与布局，所以本实例用建造者模式实现比较适合。
+/**
+ * Just another feature of a car.
+ */
+public class GPSNavigator {
+    private String route;
 
-这里客厅是产品，包括墙、电视和沙发等组成部分。具体装修工人是具体建造者，他们负责装修与墙、电视和沙发的布局。项目经理是指挥者，他负责指挥装修工人进行装修。
+    public GPSNavigator() {
+        this.route = "221b, Baker Street, London  to Scotland Yard, 8-10 Broadway, London";
+    }
 
-另外，客厅类中提供了 show() 方法，可以将装修效果图显示出来（点此下载装修效果图的图片）。客户端程序通过对象生成器类 ReadXML 读取 XML 配置文件中的装修方案数据（点此下载 XML 文件），调用项目经理进行装修。其类图如图 2 所示。
+    public GPSNavigator(String manualRoute) {
+        this.route = manualRoute;
+    }
 
+    public String getRoute() {
+        return route;
+    }
+}
+```
 
+####  **components/Transmission.java:** Product feature 3
 
-![客厅装修的结构图](images/bulider-2.png)
-图2 客厅装修的结构图
+```
+package refactoring_guru.builder.example.components;
 
+/**
+ * Just another feature of a car.
+ */
+public enum Transmission {
+    SINGLE_SPEED, MANUAL, AUTOMATIC, SEMI_AUTOMATIC
+}
+```
 
-程序代码如下：
+####  **components/TripComputer.java:** Product feature 4
 
-```java
-package Builder;
-import java.awt.*;
-import javax.swing.*;
-public class ParlourDecorator {
-    public static void main(String[] args) {
-        try {
-            Decorator d;
-            d = (Decorator) ReadXML.getObject();
-            ProjectManager m = new ProjectManager(d);
-            Parlour p = m.decorate();
-            p.show();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+```
+package refactoring_guru.builder.example.components;
+
+import refactoring_guru.builder.example.cars.Car;
+
+/**
+ * Just another feature of a car.
+ */
+public class TripComputer {
+
+    private Car car;
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
+    public void showFuelLevel() {
+        System.out.println("Fuel level: " + car.getFuel());
+    }
+
+    public void showStatus() {
+        if (this.car.getEngine().isStarted()) {
+            System.out.println("Car is started");
+        } else {
+            System.out.println("Car isn't started");
         }
     }
 }
-//产品：客厅
-class Parlour {
-    private String wall;    //墙
-    private String TV;    //电视
-    private String sofa;    //沙发 
-    public void setWall(String wall) {
-        this.wall = wall;
+```
+
+##  **director**
+
+####  **director/Director.java:** Director controls builders
+
+```
+package refactoring_guru.builder.example.director;
+
+import refactoring_guru.builder.example.builders.Builder;
+import refactoring_guru.builder.example.cars.CarType;
+import refactoring_guru.builder.example.components.Engine;
+import refactoring_guru.builder.example.components.GPSNavigator;
+import refactoring_guru.builder.example.components.Transmission;
+import refactoring_guru.builder.example.components.TripComputer;
+
+/**
+ * Director defines the order of building steps. It works with a builder object
+ * through common Builder interface. Therefore it may not know what product is
+ * being built.
+ */
+public class Director {
+
+    public void constructSportsCar(Builder builder) {
+        builder.setCarType(CarType.SPORTS_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(3.0, 0));
+        builder.setTransmission(Transmission.SEMI_AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
     }
-    public void setTV(String TV) {
-        this.TV = TV;
+
+    public void constructCityCar(Builder builder) {
+        builder.setCarType(CarType.CITY_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(1.2, 0));
+        builder.setTransmission(Transmission.AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
     }
-    public void setSofa(String sofa) {
-        this.sofa = sofa;
-    }
-    public void show() {
-        JFrame jf = new JFrame("建造者模式测试");
-        Container contentPane = jf.getContentPane();
-        JPanel p = new JPanel();
-        JScrollPane sp = new JScrollPane(p);
-        String parlour = wall + TV + sofa;
-        JLabel l = new JLabel(new ImageIcon("src/" + parlour + ".jpg"));
-        p.setLayout(new GridLayout(1, 1));
-        p.setBorder(BorderFactory.createTitledBorder("客厅"));
-        p.add(l);
-        contentPane.add(sp, BorderLayout.CENTER);
-        jf.pack();
-        jf.setVisible(true);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-}
-//抽象建造者：装修工人
-abstract class Decorator {
-    //创建产品对象
-    protected Parlour product = new Parlour();
-    public abstract void buildWall();
-    public abstract void buildTV();
-    public abstract void buildSofa();
-    //返回产品对象
-    public Parlour getResult() {
-        return product;
-    }
-}
-//具体建造者：具体装修工人1
-class ConcreteDecorator1 extends Decorator {
-    public void buildWall() {
-        product.setWall("w1");
-    }
-    public void buildTV() {
-        product.setTV("TV1");
-    }
-    public void buildSofa() {
-        product.setSofa("sf1");
-    }
-}
-//具体建造者：具体装修工人2
-class ConcreteDecorator2 extends Decorator {
-    public void buildWall() {
-        product.setWall("w2");
-    }
-    public void buildTV() {
-        product.setTV("TV2");
-    }
-    public void buildSofa() {
-        product.setSofa("sf2");
-    }
-}
-//指挥者：项目经理
-class ProjectManager {
-    private Decorator builder;
-    public ProjectManager(Decorator builder) {
-        this.builder = builder;
-    }
-    //产品构建与组装方法
-    public Parlour decorate() {
-        builder.buildWall();
-        builder.buildTV();
-        builder.buildSofa();
-        return builder.getResult();
-    }
-}
-package Builder;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-class ReadXML {
-    public static Object getObject() {
-        try {
-            DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = dFactory.newDocumentBuilder();
-            Document doc;
-            doc = builder.parse(new File("src/Builder/config.xml"));
-            NodeList nl = doc.getElementsByTagName("className");
-            Node classNode = nl.item(0).getFirstChild();
-            String cName = "Builder." + classNode.getNodeValue();
-            System.out.println("新类名：" + cName);
-            Class<?> c = Class.forName(cName);
-            Object obj = c.newInstance();
-            return obj;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+
+    public void constructSUV(Builder builder) {
+        builder.setCarType(CarType.SUV);
+        builder.setSeats(4);
+        builder.setEngine(new Engine(2.5, 0));
+        builder.setTransmission(Transmission.MANUAL);
+        builder.setGPSNavigator(new GPSNavigator());
     }
 }
 ```
 
-程序运行结果如图 3 所示。
+####  **Demo.java:** Client code
+
+```
+package refactoring_guru.builder.example;
+
+import refactoring_guru.builder.example.builders.CarBuilder;
+import refactoring_guru.builder.example.builders.CarManualBuilder;
+import refactoring_guru.builder.example.cars.Car;
+import refactoring_guru.builder.example.cars.Manual;
+import refactoring_guru.builder.example.director.Director;
+
+/**
+ * Demo class. Everything comes together here.
+ */
+public class Demo {
+
+    public static void main(String[] args) {
+        Director director = new Director();
+
+        // Director gets the concrete builder object from the client
+        // (application code). That's because application knows better which
+        // builder to use to get a specific product.
+        CarBuilder builder = new CarBuilder();
+        director.constructSportsCar(builder);
+
+        // The final product is often retrieved from a builder object, since
+        // Director is not aware and not dependent on concrete builders and
+        // products.
+        Car car = builder.getResult();
+        System.out.println("Car built:\n" + car.getCarType());
 
 
+        CarManualBuilder manualBuilder = new CarManualBuilder();
 
-![客厅装修的运行结果](images/bulider-3.png)
-图3 客厅装修的运行结果
+        // Director may know several building recipes.
+        director.constructSportsCar(manualBuilder);
+        Manual carManual = manualBuilder.getResult();
+        System.out.println("\nCar manual built:\n" + carManual.print());
+    }
 
-## 模式的应用场景
+}
+```
 
-建造者模式唯一区别于工厂模式的是针对复杂对象的创建。也就是说，如果创建简单对象，通常都是使用工厂模式进行创建，而如果创建复杂对象，就可以考虑使用建造者模式。
+####  **OutputDemo.txt:** Execution result
 
-当需要创建的产品具备复杂创建过程时，可以抽取出共性创建过程，然后交由具体实现类自定义创建流程，使得同样的创建行为可以生产出不同的产品，分离了创建与表示，使创建产品的灵活性大大增加。
+```
+Car built:
+SPORTS_CAR
 
-建造者模式主要适用于以下应用场景：
-
-- 相同的方法，不同的执行顺序，产生不同的结果。
-- 多个部件或零件，都可以装配到一个对象中，但是产生的结果又不相同。
-- 产品类非常复杂，或者产品类中不同的调用顺序产生不同的作用。
-- 初始化一个对象特别复杂，参数多，而且很多参数都具有默认值。
-
-## 建造者模式和工厂模式的区别
-
-通过前面的学习，我们已经了解了建造者模式，那么它和工厂模式有什么区别呢？
-
-- 建造者模式更加注重方法的调用顺序，工厂模式注重创建对象。
-- 创建对象的力度不同，建造者模式创建复杂的对象，由各种复杂的部件组成，工厂模式创建出来的对象都一样
-- 关注重点不一样，工厂模式只需要把对象创建出来就可以了，而建造者模式不仅要创建出对象，还要知道对象由哪些部件组成。
-- 建造者模式根据建造过程中的顺序不一样，最终对象部件组成也不一样。
-
-## 模式的扩展
-
-建造者（Builder）模式在应用过程中可以根据需要改变，如果创建的产品种类只有一种，只需要一个具体建造者，这时可以省略掉抽象建造者，甚至可以省略掉指挥者角色。
+Car manual built:
+Type of car: SPORTS_CAR
+Count of seats: 2
+Engine: volume - 3.0; mileage - 0.0
+Transmission: SEMI_AUTOMATIC
+Trip Computer: Functional
+GPS Navigator: Functional
+```

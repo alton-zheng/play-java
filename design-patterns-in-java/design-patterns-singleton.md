@@ -1,232 +1,225 @@
-# Singleton design pattern
+# 单例模式
 
-在有些系统中，为了节省内存资源、保证数据内容的一致性，对某些类要求只能创建一个实例，这就是所谓的单例模式。
+亦称：单件模式、Singleton
 
-## 单例模式的定义与特点
+##  意图
 
-单例（Singleton）模式的定义：指一个类只有一个实例，且该类能自行创建这个实例的一种模式。例如，Windows 中只能打开一个任务管理器，这样可以避免因打开多个任务管理器窗口而造成内存资源的浪费，或出现各个窗口显示内容的不一致等错误。
+**单例模式**是一种创建型设计模式， 让你能够保证一个类只有一个实例， 并提供一个访问该实例的全局节点。
 
-在计算机系统中，还有 Windows 的回收站、操作系统中的文件系统、多线程中的线程池、显卡的驱动程序对象、打印机的后台处理服务、应用程序的日志对象、数据库的连接池、网站的计数器、Web 应用的配置对象、应用程序中的对话框、系统中的缓存等常常被设计成单例。
+![单例模式](https://refactoringguru.cn/images/patterns/content/singleton/singleton.png?id=108a0b9b5ea5c4426e0a)
 
-单例模式在现实生活中的应用也非常广泛，例如公司 CEO、部门经理等都属于单例模型。J2EE 标准中的 [Servlet](http://c.biancheng.net/servlet/)Context 和 ServletContextConfig、[Spring](http://c.biancheng.net/spring/) 框架应用中的 ApplicationContext、数据库中的连接池等也都是单例模式。
+##  问题
 
-单例模式有 3 个特点：
+单例模式同时解决了两个问题， 所以违反了_单一职责原则_：
 
-1. 单例类只有一个实例对象；
-2. 该单例对象必须由单例类自行创建；
-3. 单例类对外提供一个访问该单例的全局访问点。
+1. **保证一个类只有一个实例**。 为什么会有人想要控制一个类所拥有的实例数量？ 最常见的原因是控制某些共享资源 （例如数据库或文件） 的访问权限。
 
-## 单例模式的优点和缺点
+   它的运作方式是这样的： 如果你创建了一个对象， 同时过一会儿后你决定再创建一个新对象， 此时你会获得之前已创建的对象， 而不是一个新对象。
 
-单例模式的优点：
+   注意， 普通构造函数无法实现上述行为， 因为构造函数的设计决定了它**必须**总是返回一个新对象。
 
-- 单例模式可以保证内存里只有一个实例，减少了内存的开销。
-- 可以避免对资源的多重占用。
-- 单例模式设置全局访问点，可以优化和共享资源的访问。
+![一个对象的全局访问节点](https://refactoringguru.cn/images/patterns/content/singleton/singleton-comic-1-zh.png?id=70da542e5e19f0df3dfc)
 
+客户端甚至可能没有意识到它们一直都在使用同一个对象。
 
-单例模式的缺点：
+1. **为该实例提供一个全局访问节点**。 还记得你 （好吧， 其实是我自己） 用过的那些存储重要对象的全局变量吗？ 它们在使用上十分方便， 但同时也非常不安全， 因为任何代码都有可能覆盖掉那些变量的内容， 从而引发程序崩溃。
 
-- 单例模式一般没有接口，扩展困难。如果要扩展，则除了修改原来的代码，没有第二种途径，违背开闭原则。
-- 在并发测试中，单例模式不利于代码调试。在调试过程中，如果单例中的代码没有执行完，也不能模拟生成一个新的对象。
-- 单例模式的功能代码通常写在一个类中，如果功能设计不合理，则很容易违背单一职责原则。
+   和全局变量一样， 单例模式也允许在程序的任何地方访问特定对象。 但是它可以保护该实例不被其他代码覆盖。
 
-> 单例模式看起来非常简单，实现起来也非常简单。单例模式在面试中是一个高频面试题。希望大家能够认真学习，掌握单例模式，提升核心竞争力，给面试加分，顺利拿到 Offer。
+   还有一点： 你不会希望解决同一个问题的代码分散在程序各处的。 因此更好的方式是将其放在同一个类中， 特别是当其他代码已经依赖这个类时更应该如此。
 
-## 单例模式的应用场景
+如今， 单例模式已经变得非常流行， 以至于人们会将只解决上文描述中任意一个问题的东西称为*单例*。
 
-对于 [Java](http://c.biancheng.net/java/) 来说，单例模式可以保证在一个 JVM 中只存在单一实例。单例模式的应用场景主要有以下几个方面。
+##  解决方案
 
-- 需要频繁创建的一些类，使用单例可以降低系统的内存压力，减少 GC。
-- 某类只要求生成一个对象的时候，如一个班中的班长、每个人的身份证号等。
-- 某些类创建实例时占用资源较多，或实例化耗时较长，且经常使用。
-- 某类需要频繁实例化，而创建的对象又频繁被销毁的时候，如多线程的线程池、网络连接池等。
-- 频繁访问数据库或文件的对象。
-- 对于一些控制硬件级别的操作，或者从系统上来讲应当是单一控制逻辑的操作，如果有多个实例，则系统会完全乱套。
-- 当对象需要被共享的场合。由于单例模式只允许创建一个对象，共享该对象可以节省内存，并加快对象访问速度。如 Web 中的配置对象、数据库的连接池等。
+所有单例的实现都包含以下两个相同的步骤：
 
-## 单例模式的结构与实现
+- 将默认构造函数设为私有， 防止其他对象使用单例类的 `new`运算符。
+- 新建一个静态构建方法作为构造函数。 该函数会 “偷偷” 调用私有构造函数来创建对象， 并将其保存在一个静态成员变量中。 此后所有对于该函数的调用都将返回这一缓存对象。
 
-单例模式是[设计模式](http://c.biancheng.net/design_pattern/)中最简单的模式之一。通常，普通类的构造函数是公有的，外部类可以通过“new 构造函数()”来生成多个实例。但是，如果将类的构造函数设为私有的，外部类就无法调用该构造函数，也就无法生成多个实例。这时该类自身必须定义一个静态私有实例，并向外提供一个静态的公有函数用于创建或获取该静态私有实例。
+如果你的代码能够访问单例类， 那它就能调用单例类的静态方法。 无论何时调用该方法， 它总是会返回相同的对象。
 
-下面来分析其基本结构和实现方法。
+##  真实世界类比
 
-### 1. 单例模式的结构
+政府是单例模式的一个很好的示例。 一个国家只有一个官方政府。 不管组成政府的每个人的身份是什么，  “某政府” 这一称谓总是鉴别那些掌权者的全局访问节点。
 
-单例模式的主要角色如下。
+##  单例模式结构
 
-- 单例类：包含一个实例且能自行创建这个实例的类。
-- 访问类：使用单例的类。
+![单例模式结构](https://refactoringguru.cn/images/patterns/diagrams/singleton/structure-zh.png?id=207b153c1abb131ee4eb)
 
+1. **单例** （Singleton） 类声明了一个名为 `get­Instance`获取实例的静态方法来返回其所属类的一个相同实例。
 
-其结构如图 1 所示。
+   单例的构造函数必须对客户端 （Client） 代码隐藏。 调用 `获取实例`方法必须是获取单例对象的唯一方式。
 
-![singleton](images/singleton-1.png)
-图1 单例模式的结构图
+##  伪代码
 
-### 2. 单例模式的实现
+在本例中， 数据库连接类即是一个**单例**。
 
-Singleton 模式通常有两种实现形式。
+该类不提供公有构造函数， 因此获取该对象的唯一方式是调用 `获取实例`方法。 该方法将缓存首次生成的对象， 并为所有后续调用返回该对象。
 
-#### 第 1 种：懒汉式单例
+```
+// 数据库类会对`getInstance（获取实例）`方法进行定义以让客户端在程序各处
+// 都能访问相同的数据库连接实例。
+class Database is
+    // 保存单例实例的成员变量必须被声明为静态类型。
+    private static field instance: Database
 
-该模式的特点是类加载时没有生成单例，只有当第一次调用 getlnstance 方法时才去创建这个单例。代码如下：
+    // 单例的构造函数必须永远是私有类型，以防止使用`new`运算符直接调用构
+    // 造方法。
+    private constructor Database() is
+        // 部分初始化代码（例如到数据库服务器的实际连接）。
+        // ...
 
-```java
-public class LazySingleton {
-    private static volatile LazySingleton instance = null;    //保证 instance 在所有线程中同步
-    private LazySingleton() {
-    }    //private 避免类在外部被实例化
-    public static synchronized LazySingleton getInstance() {
-        //getInstance 方法前加同步
+    // 用于控制对单例实例的访问权限的静态方法。
+    public static method getInstance() is
+        if (Database.instance == null) then
+            acquireThreadLock() and then
+                // 确保在该线程等待解锁时，其他线程没有初始化该实例。
+                if (Database.instance == null) then
+                    Database.instance = new Database()
+        return Database.instance
+
+    // 最后，任何单例都必须定义一些可在其实例上执行的业务逻辑。
+    public method query(sql) is
+        // 比如应用的所有数据库查询请求都需要通过该方法进行。因此，你可以
+        // 在这里添加限流或缓冲逻辑。
+        // ...
+
+class Application is
+    method main() is
+        Database foo = Database.getInstance()
+        foo.query("SELECT ...")
+        // ...
+        Database bar = Database.getInstance()
+        bar.query("SELECT ...")
+        // 变量 `bar` 和 `foo` 中将包含同一个对象。
+```
+
+##  单例模式适合应用场景
+
+ 如果程序中的某个类对于所有客户端只有一个可用的实例， 可以使用单例模式。
+
+ 单例模式禁止通过除特殊构建方法以外的任何方式来创建自身类的对象。 该方法可以创建一个新对象， 但如果该对象已经被创建， 则返回已有的对象。
+
+ 如果你需要更加严格地控制全局变量， 可以使用单例模式。
+
+ 单例模式与全局变量不同， 它保证类只存在一个实例。 除了单例类自己以外， 无法通过任何方式替换缓存的实例。
+
+请注意， 你可以随时调整限制并设定生成单例实例的数量， 只需修改 `获取实例`方法， 即 getInstance 中的代码即可实现。
+
+##  实现方式
+
+1. 在类中添加一个私有静态成员变量用于保存单例实例。
+2. 声明一个公有静态构建方法用于获取单例实例。
+3. 在静态方法中实现"延迟初始化"。 该方法会在首次被调用时创建一个新对象， 并将其存储在静态成员变量中。 此后该方法每次被调用时都返回该实例。
+4. 将类的构造函数设为私有。 类的静态方法仍能调用构造函数， 但是其他对象不能调用。
+5. 检查客户端代码， 将对单例的构造函数的调用替换为对其静态构建方法的调用。
+
+##  单例模式优缺点
+
+-  你可以保证一个类只有一个实例。
+-  你获得了一个指向该实例的全局访问节点。
+-  仅在首次请求单例对象时对其进行初始化。
+
+-  违反了_单一职责原则_。 该模式同时解决了两个问题。
+-  单例模式可能掩盖不良设计， 比如程序各组件之间相互了解过多等。
+-  该模式在多线程环境下需要进行特殊处理， 避免多个线程多次创建单例对象。
+-  单例的客户端代码单元测试可能会比较困难， 因为许多测试框架以基于继承的方式创建模拟对象。 由于单例类的构造函数是私有的， 而且绝大部分语言无法重写静态方法， 所以你需要想出仔细考虑模拟单例的方法。 要么干脆不编写测试代码， 或者不使用单例模式。
+
+##  与其他模式的关系
+
+- [外观模式](https://refactoringguru.cn/design-patterns/facade)类通常可以转换为[单例模式](https://refactoringguru.cn/design-patterns/singleton)类， 因为在大部分情况下一个外观对象就足够了。
+- 如果你能将对象的所有共享状态简化为一个享元对象， 那么[享元模式](https://refactoringguru.cn/design-patterns/flyweight)就和[单例](https://refactoringguru.cn/design-patterns/singleton)类似了。 但这两个模式有两个根本性的不同。
+  1. 只会有一个单例实体， 但是*享元*类可以有多个实体， 各实体的内在状态也可以不同。
+  2. *单例*对象可以是可变的。 享元对象是不可变的。
+- [抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)、 [生成器模式](https://refactoringguru.cn/design-patterns/builder)和[原型模式](https://refactoringguru.cn/design-patterns/prototype)都可以用[单例](https://refactoringguru.cn/design-patterns/singleton)来实现。
+
+# Java **单例**模式讲解和代码示例
+
+**单例**是一种创建型设计模式， 让你能够保证一个类只有一个实例， 并提供一个访问该实例的全局节点。
+
+单例拥有与全局变量相同的优缺点。 尽管它们非常有用， 但却会破坏代码的模块化特性。
+
+在某些其他上下文中， 你不能使用依赖于单例的类。 你也将必须使用单例类。 绝大多数情况下， 该限制会在创建单元测试时出现。
+
+[ 进一步了解单例模式 ](https://refactoringguru.cn/design-patterns/singleton)
+
+## 在 Java 中使用模式
+
+**复杂度：** 
+
+**流行度：** 
+
+**使用示例：** 许多开发者将单例模式视为一种反模式。 因此它在 Java 代码中的使用频率正在逐步减少。
+
+尽管如此， Java 核心程序库中仍有相当多的单例示例：
+
+- [`java.lang.Runtime#getRuntime()`](https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html#getRuntime--)
+- [`java.awt.Desktop#getDesktop()`](https://docs.oracle.com/javase/8/docs/api/java/awt/Desktop.html#getDesktop--)
+- [`java.lang.System#getSecurityManager()`](https://docs.oracle.com/javase/8/docs/api/java/lang/System.html#getSecurityManager--)
+
+**识别方法：** 单例可以通过返回相同缓存对象的静态构建方法来识别。
+
+[基础单例（单线程）](https://refactoringguru.cn/design-patterns/singleton/java/example#example-0)[基础单例（多线程）](https://refactoringguru.cn/design-patterns/singleton/java/example#example-1)[采用延迟加载的线程安全单例](https://refactoringguru.cn/design-patterns/singleton/java/example#example-2)[希望了解更多？](https://refactoringguru.cn/design-patterns/singleton/java/example#example-3)
+
+## 基础单例（单线程）
+
+实现一个粗糙的单例非常简单。 你仅需隐藏构造函数并实现一个静态的构建方法即可。
+
+####  **Singleton.java:** 单例
+
+```
+package refactoring_guru.singleton.example.non_thread_safe;
+
+public final class Singleton {
+    private static Singleton instance;
+    public String value;
+
+    private Singleton(String value) {
+        // The following code emulates slow initialization.
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        this.value = value;
+    }
+
+    public static Singleton getInstance(String value) {
         if (instance == null) {
-            instance = new LazySingleton();
+            instance = new Singleton(value);
         }
         return instance;
     }
 }
 ```
 
-注意：如果编写的是多线程程序，则不要删除上例代码中的关键字 volatile 和 synchronized，否则将存在线程非安全的问题。如果不删除这两个关键字就能保证线程安全，但是每次访问时都要同步，会影响性能，且消耗更多的资源，这是懒汉式单例的缺点。
+####  **DemoSingleThread.java:** 客户端代码
 
-#### 第 2 种：饿汉式单例
-
-该模式的特点是类一旦加载就创建一个单例，保证在调用 getInstance 方法之前单例已经存在了。
-
-```java
-public class HungrySingleton {
-    private static final HungrySingleton instance = new HungrySingleton();
-    private HungrySingleton() {
-    }
-    public static HungrySingleton getInstance() {
-        return instance;
-    }
-}
 ```
+package refactoring_guru.singleton.example.non_thread_safe;
 
-
-饿汉式单例在类创建的同时就已经创建好一个静态的对象供系统使用，以后不再改变，所以是线程安全的，可以直接用于多线程而不会出现问题。
-
-## 单例模式的应用实例
-
-【例1】用懒汉式单例模式模拟产生美国当今总统对象。
-
-分析：在每一届任期内，美国的总统只有一人，所以本实例适合用单例模式实现，图 2 所示是用懒汉式单例实现的结构图。
-
-
-
-![singleton](images/singleton-2.png)
-图2 美国总统生成器的结构图
-
-
-程序代码如下：
-
-```java
-public class SingletonLazy {
+public class DemoSingleThread {
     public static void main(String[] args) {
-        President zt1 = President.getInstance();
-        zt1.getName();    //输出总统的名字
-        President zt2 = President.getInstance();
-        zt2.getName();    //输出总统的名字
-        if (zt1 == zt2) {
-            System.out.println("他们是同一人！");
-        } else {
-            System.out.println("他们不是同一人！");
-        }
-    }
-}
-class President {
-    private static volatile President instance = null;    //保证instance在所有线程中同步
-    //private避免类在外部被实例化
-    private President() {
-        System.out.println("产生一个总统！");
-    }
-    public static synchronized President getInstance() {
-        //在getInstance方法上加同步
-        if (instance == null) {
-            instance = new President();
-        } else {
-            System.out.println("已经有一个总统，不能产生新总统！");
-        }
-        return instance;
-    }
-    public void getName() {
-        System.out.println("我是美国总统：特朗普。");
+        System.out.println("If you see the same value, then singleton was reused (yay!)" + "\n" +
+                "If you see different values, then 2 singletons were created (booo!!)" + "\n\n" +
+                "RESULT:" + "\n");
+        Singleton singleton = Singleton.getInstance("FOO");
+        Singleton anotherSingleton = Singleton.getInstance("BAR");
+        System.out.println(singleton.value);
+        System.out.println(anotherSingleton.value);
     }
 }
 ```
 
-
-程序运行结果如下：
-
-```
-产生一个总统！
-我是美国总统：特朗普。
-已经有一个总统，不能产生新总统！
-我是美国总统：特朗普。
-他们是同一人！
-```
-
-
-【例2】用饿汉式单例模式模拟产生猪八戒对象。
-
-分析：同上例类似，猪八戒也只有一个，所以本实例同样适合用单例模式实现。本实例由于要显示猪八戒的图像（[点此下载该程序所要显示的猪八戒图片](http://c.biancheng.net/uploads/soft/181113/3-1Q1131J636.zip)），所以用到了框架窗体 JFrame 组件，这里的猪八戒类是单例类，可以将其定义成面板 JPanel 的子类，里面包含了标签，用于保存猪八戒的图像，客户窗体可以获得猪八戒对象，并显示它。图 3 所示是用饿汉式单例实现的结构图。
-
-
-
-![singleton](images/singleton-3.png)
-图3 猪八戒生成器的结构图
-
-
-程序代码如下：
-
-```java
-import java.awt.*;
-import javax.swing.*;
-public class SingletonEager {
-    public static void main(String[] args) {
-        JFrame jf = new JFrame("饿汉单例模式测试");
-        jf.setLayout(new GridLayout(1, 2));
-        Container contentPane = jf.getContentPane();
-        Bajie obj1 = Bajie.getInstance();
-        contentPane.add(obj1);
-        Bajie obj2 = Bajie.getInstance();
-        contentPane.add(obj2);
-        if (obj1 == obj2) {
-            System.out.println("他们是同一人！");
-        } else {
-            System.out.println("他们不是同一人！");
-        }
-        jf.pack();
-        jf.setVisible(true);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-}
-class Bajie extends JPanel {
-    private static Bajie instance = new Bajie();
-    private Bajie() {
-        JLabel l1 = new JLabel(new ImageIcon("src/Bajie.jpg"));
-        this.add(l1);
-    }
-    public static Bajie getInstance() {
-        return instance;
-    }
-}
+####  **OutputDemoSingleThread.txt:** 执行结果
 
 ```
+If you see the same value, then singleton was reused (yay!)
+If you see different values, then 2 singletons were created (booo!!)
 
-程序运行结果如图 4 所示。
+RESULT:
 
-
-
-![singleton](images/singleton-4.png)
-图4 猪八戒生成器的运行结果
-
-## 单例模式的扩展
-
-单例模式可扩展为有限的多例（Multitcm）模式，这种模式可生成有限个实例并保存在 ArrayList 中，客户需要时可随机获取，其结构图如图 5 所示。
-
-
-
-![singleton](images/singleton-5.png)
-图5 有限的多例模式的结构图
+FOO
+FOO
+```

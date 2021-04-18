@@ -10,43 +10,42 @@
 
 ### 网络
 
-- [网络协议](io/docs/io-protocol.md)
-
-- [TCP](io/docs/io-tcp.md)
-- [HTTP & HTTPS](io/docs/io-http-https.md)
-- [Socket](io/docs/socket.md)
+- [x] [网络协议](io/docs/io-protocol.md)
+- [x] [TCP](io/docs/io-tcp.md)
+- [x] [HTTP & HTTPS](io/docs/io-http-https.md)
+- [x] [Socket](io/docs/socket.md)
 
 &nbsp;
 
 ### IO
 
-- [系统 IO 原理](io/docs/system-io.md)
-- [IO 路由](io/docs/io-route.md)
-- [Java File IO](io/docs/io.md)
+- [x] [系统 IO 原理](io/docs/system-io.md)
+- [x] [IO 路由](io/docs/io-route.md)
+- [x] [Java File IO](io/docs/io.md)
 
 &nbsp;
 
 ### BIO
 
-- [BIO 概览](io/docs/io-bio.md)
+- [x] [BIO 概览](io/docs/io-bio.md)
 
 &nbsp;
 
 ### NIO
 
-- [nio 概览](io/docs/io-nio.md)
-- [buffer](io/docs/nio-buffer.md)
-- [ByteBuffer](io/docs/nio-buffer-bytebuffer.md)
+- [x] [nio 概览](io/docs/io-nio.md)
+- [x] [buffer](io/docs/nio-buffer.md)
+- [x] [ByteBuffer](io/docs/nio-buffer-bytebuffer.md)
 
 &nbsp;
 
-- [Synchronous I/O Multiplexing](io/docs/nio-multiplexing.md)
+- [x] [Synchronous I/O Multiplexing](io/docs/nio-multiplexing.md)
 
-- [Channel](docs/nio-channel.md)
-  - [Channel 实现](io/docs/nio-channel-implement.md)
-  - [FileChannel](io/docs/nio-channel-filechannel.md)
-  - [SelectableChannel](io/docs/nio-channel-selectable-channel.md)
-    - [ServerSocketChannel 和 SocketChannel](io/docs/nio-channel-serversocket-and-socket-channel.md)
+- [x] [Channel](docs/nio-channel.md)
+  - [x] [Channel 实现](io/docs/nio-channel-implement.md)
+  - [x] [FileChannel](io/docs/nio-channel-filechannel.md)
+  - [x] [SelectableChannel](io/docs/nio-channel-selectable-channel.md)
+    - [x] [ServerSocketChannel 和 SocketChannel](io/docs/nio-channel-serversocket-and-socket-channel.md)
 
 &nbsp;
 
@@ -204,52 +203,69 @@
 
 ## 设计模式
 
-- [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
+- [x] [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
 
-- [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
+- [x] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
 
-- [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
+- [x] [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
 
-- [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
+- [x] [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
 
-- [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
+- [x] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
 
-- [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
+- [x] [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
 
-- [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
+- [x] [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
 
-- [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
+- [x] [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
 
 - 面向对象设计原则
-  - [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
-  - [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
-  - [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
-  - [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
-  - [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
-  - [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
-  - [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
-  - [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
+  - [x] [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
+  - [x] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
+  - [x] [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
+  - [x] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
+  - [x] [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
+  - [x] [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
+  - [x] [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
+  - [x] [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
 
 - Creational Patterns
 
-  - [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
-
-  - [Singleton 模式](design-patterns-in-java/design-patterns-singleton.md)
-  - [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
-  - [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
-  - [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
-  - [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory-pattern.md)
-  - [Bulider模式](design-patterns-in-java/design-patterns-bulider.md)
-  - [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
-  - [实验](design-patterns-in-java/design-patterns-create-experiment.md)
+  - [x] [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
+  - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
+  - [x] [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory.md)
+  - [x] [生成器模式](design-patterns-in-java/design-patterns-bulider.md)
+  - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
+  - [x] [单例模式](design-patterns-in-java/design-patterns-singleton.md)
+  - [x] [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [x] [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
+  - [x] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
+  - [x] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
 
 - Structural Patterns
-  - [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
-  - [Adapter-适配器]
-
+  - [x] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [x] [适配器模式](design-patterns-in-java/design-patterns-adapter.md)
+- [x] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
+  - [x] [组合模式](design-patterns-in-java/design-patterns-composite.md)
+  - [x] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
+  - [x] [外观模式](design-patterns-in-java/design-patterns-facade.md)
+  - [x] [享元模式](design-patterns-in-java/design-patterns-flyweight.md)
+  - [x] [代理模式](design-patterns-in-java/design-patterns-proxy.md)
+  
 - Behavioral Patterns
-  - [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
-  - 
+  - [x] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
+  - [x] [责任链模式](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
+  - [x] [命令模式](design-patterns-in-java/design-patterns-command.md)
+  - [x] [迭代器模式](design-patterns-in-java/design-patterns-iterator.md)
+  - [x] [中介者模式](design-patterns-in-java/design-patterns-mediator.md)
+  - [x] [备忘录模式](design-patterns-in-java/design-patterns-memento.md)
+
+  - [x] [观察者模式](design-patterns-in-java/design-patterns-observer.md)
+  - [x] [状态模式](design-patterns-in-java/design-patterns-state.md)
+  - [x] [策略模式](design-patterns-in-java/design-patterns-strategy.md)
+  - [x] [模板方法模式](design-patterns-in-java/design-patterns-template-method.md)
+  - [x] [访问者模式](design-patterns-in-java/design-patterns-visitor.md)
+  - [x] [访问者和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
 
 &nbsp;
 
