@@ -10,19 +10,19 @@
 
 ### 网络
 
-- [网络协议](docs/io-protocol.md)
+- [网络协议](io/docs/io-protocol.md)
 
-- [TCP](docs/io-tcp.md)
-- [HTTP & HTTPS](docs/io-http-https.md)
-- [Socket](docs/socket.md)
+- [TCP](io/docs/io-tcp.md)
+- [HTTP & HTTPS](io/docs/io-http-https.md)
+- [Socket](io/docs/socket.md)
 
 &nbsp;
 
 ### IO
 
-- [系统 IO 原理](docs/system-io.md)
-- [IO 路由](docs/io-route.md)
-- [Java File IO](docs/io.md)
+- [系统 IO 原理](io/docs/system-io.md)
+- [IO 路由](io/docs/io-route.md)
+- [Java File IO](io/docs/io.md)
 
 &nbsp;
 
@@ -64,10 +64,6 @@
 &nbsp;
 
 ## 操作系统
-
-&nbsp;
-
-## 网络原理
 
 &nbsp;
 
@@ -207,6 +203,53 @@
 &nbsp;
 
 ## 设计模式
+
+- [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
+
+- [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
+
+- [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
+
+- [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
+
+- [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
+
+- [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
+
+- [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
+
+- [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
+
+- 面向对象设计原则
+  - [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
+  - [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
+  - [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
+  - [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
+  - [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
+  - [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
+  - [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
+  - [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
+
+- Creational Patterns
+
+  - [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
+
+  - [Singleton 模式](design-patterns-in-java/design-patterns-singleton.md)
+  - [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
+  - [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
+  - [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory-pattern.md)
+  - [Bulider模式](design-patterns-in-java/design-patterns-bulider.md)
+  - [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
+  - [实验](design-patterns-in-java/design-patterns-create-experiment.md)
+
+- Structural Patterns
+  - [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [Adapter-适配器]
+
+- Behavioral Patterns
+  - [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
+  - 
 
 &nbsp;
 
