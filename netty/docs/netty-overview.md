@@ -10,6 +10,8 @@ Netty 是一个 NIO 客户端服务器框架，可以快速轻松的开发 netwo
 
 Netty 经过精心设计， 结合了许多协议 （例如 FTP， SMTP， HTTP 以及各种基于 `binary` 和 `text-based` 的老式协议）的实施经验。结果， Netty 成功地找到了一种无须拖鞋即可轻松实现开发，性能，稳定性和灵活性的方法。
 
+![img](images/components.png)
+
 &nbsp;
 
 ## Design
