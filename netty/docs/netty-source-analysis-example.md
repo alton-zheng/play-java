@@ -245,7 +245,7 @@ $
 
 以下图为原图，没有对清晰度进行模糊处理，自己可以根据上面代码比对下面图提前了解整个执行路径：
 
-![netty-source-analysis-run](/Users/alton/Desktop/netty-source-analysis-run.png)
+![netty-source-analysis-run](images/netty-source-analysis-run.png)
 
 > - 图头为每一步的原 class 和目标 class 
 >

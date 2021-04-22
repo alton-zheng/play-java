@@ -12,7 +12,7 @@ Netty 的 I/O 线程 NioEventLoop 由于整合了 Multiplux Selector，可以同
 
 常见的 Reactor 线程模型有三种，分别如下：
 
-- Reactor SingleThreaded Pattern 
+- Reactor single-threaded Pattern 
   - `Basic Reactor Design`
 
 - Reactor MultiThreaded Pattern 
@@ -27,13 +27,13 @@ Netty 是典型的 Reactor 模型结构，关于 Reactor 的详尽阐释，可�
 
 &nbsp;
 
-### Reactor Single Threaded Pattern
+### Reactor single-threaded Pattern
 
 ![netty basic reactor](images/netty-reactor-basic-reactor-design.png)
 
 
 
-Reactor 单线程模型，指的是所有的 I/O 操作都在同一个线程上面完成，在Netty 中， I/O non-blocking 。线程的职责如下：
+`Reactor single-threaded Pattern`，指的是所有的 I/O 操作都在同一个线程上面完成，在Netty 中， I/O non-blocking 。线程的职责如下：
 
 1. 作为 NIO Server，接收 Client 的 TCP 连接；
 2. 作为 NIO Client，向 Server 端发起 TCP 连接；
@@ -56,13 +56,13 @@ Reactor 线程是个多面手，负责多路分离 Socket，Accept 新连接，�
 
 &nbsp;
 
-### Reactor Multithread Pattern
+### Reactor multi-threaded Pattern
 
 ![netty multithread pattern](images/netty-multithread-pattern.png)
 
 &nbsp;
 
-`Reactor Multithread pattern` 与 `Reactor Single thread pattern` 最大区别就是有一组线程 (Thread Pool) 处理 I/O 操作，它的特点如下：
+`Reactor multi-threaded pattern` 与 `Reactor single-threaded pattern` 最大区别就是有一组线程 (Thread Pool) 处理 I/O 操作，它的特点如下：
 
 - 有一个专门的线程 - acceptor 用于 listen Server，接收 client 的 TCP 连接 Request；
 - 网络 I/O 操作 - read-write 等由一个 Thread Pool 负责，线程池可以采用标准的 JDK 线程池实现，它包含一个任务队列和 N 个可用的线程（具体实现需根据 Java 不同 Thread Pool来看），由这些线程负责消息的读取、解码、编码和发送；
@@ -70,14 +70,14 @@ Reactor 线程是个多面手，负责多路分离 Socket，Accept 新连接，�
 
 &nbsp;
 
-在绝大多数场景下，`Reactor Multithread Pattern` 都可以满足性能需求；
+在绝大多数场景下，`Reactor multi-threaded Pattern` 都可以满足性能需求；
 
 但是，在极特殊应用场景中，一个线程负责 listen 和处理所有的 Client 连接会存在性能问题。
 
 - 例如百万 Client 并发连接，
 - 或者 Server 需要对 Client 的握手信息进行安全认证，认证本身非常损耗性能。
 
-这类场景下，单独一个 acceptor 线程可能会存在性能不足问题，为了解决性能问题，产生了第三种 Reactor Thread Pattern - 主从Reactor 多线程模型。
+这类场景下，单独一个 acceptor 线程可能会存在性能不足问题，为了解决性能问题，产生了第三种 Reactor thread Pattern - 主从Reactor 多线程模型， 也称为 `Multi-Reactor Pattern`。
 
 &nbsp;
 
@@ -95,7 +95,7 @@ mainReactor 只用于 Client 的 login、handshake 和安全认证，一旦连�
 
 第三种模型比起第二种模型，是将 Reactor 分成两部分：
 
-- mainReactor 负责监听 Server socket，accept 新连接，并将建立的 socket 连接 dispatch 给 subReactor。
-- subReactor 负责多路分离已连接的 socket，读写网络数据，对业务处理功能，其扔给 worker 线程池完成。通常，subReactor个数可与 CPU个数等同，具体情况得看 event 是 I/O 密集型还是 CPU 密集型，这里不对此进行阐述了。
+- `mainReactor` 负责监听 Server socket，accept 新连接，并将建立的 socket 连接 dispatch 给 subReactor。
+- `subReactor` 负责多路分离已连接的 socket，读写网络数据，对业务处理功能，其扔给 worker 线程池完成。通常，subReactor个数可与 CPU个数等同，具体情况得看 event 是 I/O 密集型还是 CPU 密集型，这里不对此进行阐述了。
 
  

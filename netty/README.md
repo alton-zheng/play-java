@@ -10,8 +10,8 @@
 ### Netty 核心
 
 - [x] [ByteBuf](docs/netty-bytebuf.md)
-- [x] [Reactor 线程模型](docs/netty-reactor-thread-model.md)
-- [ ] [Reactor 应用](docs/netty-reactor-reference.md)
+- [x] [Reactor 线程模型](docs/netty-reactor-thread-pattern.md)
+- [x] [Reactor 应用](docs/netty-reactor-reference.md)
 
 &nbsp;
 
@@ -43,8 +43,8 @@
 - [x] [Netty 源码分析- Reactor](docs/netty-source-code-analysis-reactor.md)
 - [x] [Netty 源码深入剖析之旅 - 介绍](docs/netty-source-analysis-introduction.md)
 - [x] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
-- [ ] [Netty 源码深入剖析之旅- step1 NioEventLoopGroup](docs/netty-source-analysis-eventloop-group.md)
-- [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
-- [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
+- [ ] [Netty 源码深入剖析 - SelectorProvider (Multiplux)](docs/netty-source-analysis-selector-provider.md)
+- [ ] [Netty 源码深入剖析 - RejectedExecutionHandlers](docs/netty-source-analysis-rejected-execution-handlers.md)
+- [ ] [Netty 源码深入剖析 - MultithreadEventLoopGroup](docs/netty-source-analysis-multithread-eventloop-group.md)
 - [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
 - [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
