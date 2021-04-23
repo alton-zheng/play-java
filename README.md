@@ -1,8 +1,7 @@
 # Play Java
 
-- 语言知识总结 - 非项目
-
 &nbsp;
+
 
 ## 网络 & IO
 
@@ -76,38 +75,38 @@
 
 &nbsp;
 
-### [高并发](java/docs/java-concurrency)
+### [高并发](java-concurrency)
 
-- [多线程面试题](java/docs/java-concurrency/interview.md)
-- [概览](java/docs/java-concurrency/thread-overview.md)
-- [java-cas](java/docs/java-concurrency/java-cas.md)
-- [cycicBarrier](java/docs/java-concurrency/java-cyclicBarrier.md)
-- [java-read-write-lock](java/docs/java-concurrency/java-read-write-lock.md)
+- [多线程面试题](java-concurrency/interview.md)
+- [概览](java-concurrency/thread-overview.md)
+- [java-cas](java-concurrency/java-cas.md)
+- [cycicBarrier](java-concurrency/java-cyclicBarrier.md)
+- [java-read-write-lock](java-concurrency/java-read-write-lock.md)
 - [MarriagePhaser](java/docs/java-conccurrency/java-marriagePhaser.md)
-- [Semaphore](java/docs/java-concurrency/semaphore.md)
-- [Exchange](java/docs/java-concurrency/java-exchange.md)
-- [Java 线程生命周期](java/docs/java-concurrency/java-thread-lifecycle.md)
-- [thread jvm 面试题](java/docs/java-concurrency/thread-jvm-interview.md)[面试](java/docs/java-concurrency/thread-interview.md)
+- [Semaphore](java-concurrency/semaphore.md)
+- [Exchange](java-concurrency/java-exchange.md)
+- [Java 线程生命周期](java-concurrency/java-thread-lifecycle.md)
+- [thread jvm 面试题](java-concurrency/thread-jvm-interview.md)[面试](java-concurrency/thread-interview.md)
 
 - [解析自旋锁 CAS 操作与 volatile ]() 
 ### **Java Concurrency Basics**
- - [x] [>> java.util.concurrent 概览](java/docs/java-concurrency/java-util-concurrent.md)
- - [x] [>> Java 如何启动一个线程](java/docs/java-concurrency/java-start-thread.md)
- - [x] [>> Java Runnable vs. Callable](java/docs/java-concurrency/java-runnable-callable.md)
- - [x] [>> Implementing a Runnable vs Extending a Thread](java/docs/java-concurrency/java-runnable-vs-extending-thread.md)
- - [x] [>>  Java Synchronized 关键字](java/docs/java-concurrency/java-synchronized.md)
- - [x] [>> Java Volatile 关键字](java/docs/java-concurrency/java-volatile.md)
- - [ ] [>> Guide to java.util.concurrent.Locks](java/docs/java-concurrency/java-concurrent-locks.md)
- - [ ] [>> Java CyclicBarrier](java/docs/java-concurrency/java-cyclic-barrier.md)
- - [ ] [>> An Introduction to Atomic Variables in Java](java/docs/java-concurrency/java-atomic-variables.md)
- - [ ] [>> Semaphores in Java](java/docs/java-concurrency/java-semaphore.md)
- - [ ] [>> Binary Semaphore vs Reentrant Lock](java/docs/java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
- - [ ] [Guide to the Java Phaser](java/docs/java-concurrency/java-phaser.md)
- - [ ] [>> The Dining Philosophers Problem in Java](java/docs/java-concurrency/java-dining-philoshophers.md)
- - [ ] [Guide to CountDownLatch in Java](java/docs/java-concurrency/java-countdown-latch.md)
- - [ ] [Java CyclicBarrier vs CountDownLatch](java/docs/java-concurrency/java-cyclicbarrier-countdownlatch.md)
- - [ ] [>> Introduction to Exchanger in Java](java/docs/java-concurrency/java-exchanger.md)
- - [x] [Java Thread 生命周期](java/docs/java-concurrency/java-thread-lifecycle.md)
+ - [x] [>> java.util.concurrent 概览](java-concurrency/java-util-concurrent.md)
+ - [x] [>> Java 如何启动一个线程](java-concurrency/java-start-thread.md)
+ - [x] [>> Java Runnable vs. Callable](java-concurrency/java-runnable-callable.md)
+ - [x] [>> Implementing a Runnable vs Extending a Thread](java-concurrency/java-runnable-vs-extending-thread.md)
+ - [x] [>>  Java Synchronized 关键字](java-concurrency/java-synchronized.md)
+ - [x] [>> Java Volatile 关键字](java-concurrency/java-volatile.md)
+ - [ ] [>> Guide to java.util.concurrent.Locks](java-concurrency/java-concurrent-locks.md)
+ - [ ] [>> Java CyclicBarrier](java-concurrency/java-cyclic-barrier.md)
+ - [ ] [>> An Introduction to Atomic Variables in Java](java-concurrency/java-atomic-variables.md)
+ - [ ] [>> Semaphores in Java](java-concurrency/java-semaphore.md)
+ - [ ] [>> Binary Semaphore vs Reentrant Lock](java-concurrency/java-binary-semaphore-vs-reentrant-lock.md)
+ - [ ] [Guide to the Java Phaser](java-concurrency/java-phaser.md)
+ - [ ] [>> The Dining Philosophers Problem in Java](java-concurrency/java-dining-philoshophers.md)
+ - [ ] [Guide to CountDownLatch in Java](java-concurrency/java-countdown-latch.md)
+ - [ ] [Java CyclicBarrier vs CountDownLatch](java-concurrency/java-cyclicbarrier-countdownlatch.md)
+ - [ ] [>> Introduction to Exchanger in Java](java-concurrency/java-exchanger.md)
+ - [x] [Java Thread 生命周期](java-concurrency/java-thread-lifecycle.md)
  - [ ] [How to Kill a Java Thread](https://www.baeldung.com/java-thread-stop)
  - [ ] [wait and notify() Methods in Java](https://www.baeldung.com/java-wait-notify)
  - [ ] [Difference Between Wait and Sleep in Java](https://www.baeldung.com/java-wait-and-sleep)
@@ -119,28 +118,28 @@
 
 ### **Advanced Concurrency in Java**
 
-- [x] [Java 容器](java/docs/java-concurrency/java-container.md)
-  - [x] [>> ConcurrentMap 指导](java/docs/java-concurrency/java-concurrent-map.md)
-  - [x] [>>  Java 同步集合介绍](java/docs/java-concurrency/java-synchronized-collections.md)
-  - [x] [>> Collections.synchronizedMap vs. ConcurrentHashMap](java/docs/java-concurrency/java-synchronizedmap-vs-concurrenthashmap.md)
-  - [x] [>>  java.util.concurrent.BlockingQueue 指导](java/docs/java-concurrency/java-blocking-queue.md)
-  - [x] [>> LinkedBlockingQueue vs ConcurrentLinkedQueue](java/docs/java-concurrency/java-queue-linkedblocking-concurrentlinked)
-  - [x] [>> ConcurrentSkipListMap 介绍](java/docs/java-concurrency/java-concurrent-skip-list-map.md)
+- [x] [Java 容器](java-concurrency/java-container.md)
+  - [x] [>> ConcurrentMap 指导](java-concurrency/java-concurrent-map.md)
+  - [x] [>>  Java 同步集合介绍](java-concurrency/java-synchronized-collections.md)
+  - [x] [>> Collections.synchronizedMap vs. ConcurrentHashMap](java-concurrency/java-synchronizedmap-vs-concurrenthashmap.md)
+  - [x] [>>  java.util.concurrent.BlockingQueue 指导](java-concurrency/java-blocking-queue.md)
+  - [x] [>> LinkedBlockingQueue vs ConcurrentLinkedQueue](java-concurrency/java-queue-linkedblocking-concurrentlinked)
+  - [x] [>> ConcurrentSkipListMap 介绍](java-concurrency/java-concurrent-skip-list-map.md)
 
 &nbsp;
 
-- [x] [>> Java Thread Pool 介绍](java/docs/java-concurrency/thread-pool-java-and-guava.md)
-  - [x] [>> Java  Thread 和 虚拟 Thread 区别](java/docs/java-concurrency/java-virtual-thread-vs-thread.md)
-  - [x] [>> java.util.concurrent.Future 介绍](java/docs/java-concurrency/java-future.md)
-  - [x] [>> CompletableFuture 介绍](java/docs/java-concurrency/java-completablefuture.md)
-  - [x] [>> Java Fork/Join 框架介绍](java/docs/java-concurrency/java-fork-join.md)
-  - [x] [>> Java ExecutorService 框架介绍](java/docs/java-concurrency/java-executor-service-tutorial.md)
-  - [x] [>> ExecutorService – 等待线程结束](java/docs/java-concurrency/java-executor-wait-for-threads.md)
-  - [x] [>> Vavr Future 介绍](java/docs/java-concurrency/vavr-future.md)
-  - [x] [>> 用 Java 8 Parallel Streams 自定义线程池](java/docs/java-concurrency/java-8-parallel-streams-custom-threadpool.md)
-  - [x] [>> Executors newCachedThreadPool() vs newFixedThreadPool()](java/docs/java-concurrency/java-executors-cached-fixed-threadpool.md)
-  - [x] [>> Spring ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](java/docs/java-concurrency/java-threadpooltaskexecutor-core-vs-max-poolsize.md)
-  - [x] [>> Java Web 服务 Thread Pool 配置](java/docs/java-concurrency/java-web-thread-pool-config.md)
+- [x] [>> Java Thread Pool 介绍](java-concurrency/thread-pool-java-and-guava.md)
+  - [x] [>> Java  Thread 和 虚拟 Thread 区别](java-concurrency/java-virtual-thread-vs-thread.md)
+  - [x] [>> java.util.concurrent.Future 介绍](java-concurrency/java-future.md)
+  - [x] [>> CompletableFuture 介绍](java-concurrency/java-completablefuture.md)
+  - [x] [>> Java Fork/Join 框架介绍](java-concurrency/java-fork-join.md)
+  - [x] [>> Java ExecutorService 框架介绍](java-concurrency/java-executor-service-tutorial.md)
+  - [x] [>> ExecutorService – 等待线程结束](java-concurrency/java-executor-wait-for-threads.md)
+  - [x] [>> Vavr Future 介绍](java-concurrency/vavr-future.md)
+  - [x] [>> 用 Java 8 Parallel Streams 自定义线程池](java-concurrency/java-8-parallel-streams-custom-threadpool.md)
+  - [x] [>> Executors newCachedThreadPool() vs newFixedThreadPool()](java-concurrency/java-executors-cached-fixed-threadpool.md)
+  - [x] [>> Spring ThreadPoolTaskExecutor corePoolSize vs. maxPoolSize](java-concurrency/java-threadpooltaskexecutor-core-vs-max-poolsize.md)
+  - [x] [>> Java Web 服务 Thread Pool 配置](java-concurrency/java-web-thread-pool-config.md)
 
 &nbsp;
 
@@ -148,8 +147,8 @@
  - [ ] [Guide to ThreadLocalRandom in Java](https://www.baeldung.com/java-thread-local-random)
  - [ ] [What is Thread-Safety and How to Achieve it?](https://www.baeldung.com/java-thread-safety)
  - [ ] [How to Delay Code Execution in Java](https://www.baeldung.com/java-delay-code-execution)
- - [ ] [An Introduction to ThreadLocal in Java](https://www.baeldung.com/java-threadlocal)
- - [x] [>> Concurrency with LMAX Disruptor – 介绍](java/docs/java-concurrency/lmax-disruptor-concurrency.md)
+ - [ ] [An Introduction to ThreadLocal in Java](java-concurrensacy/java-concurrency-threadlocal.md)
+ - [x] [>> Concurrency with LMAX Disruptor – 介绍](java-concurrency/lmax-disruptor-concurrency.md)
  - [ ] [>> Java Concurrency Interview Questions (+ Answers)](https://www.baeldung.com/java-concurrency-interview-questions)
  - [ ] [>> Priority-based Job Scheduling in Java](https://www.baeldung.com/java-priority-job-schedule)
  - [ ] [>> wait and notify() Methods in Java](https://www.baeldung.com/java-wait-notify)

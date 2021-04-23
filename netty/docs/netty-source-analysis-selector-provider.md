@@ -67,6 +67,8 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     // 1.1.1.1
+    // 当然了，用户也可以直接使用此构造器，传入 nThreads 和 Executor (Java 和 自定义的都可以)
+    // 如何使用最优 Executor 和甚至使用自定义的 Executor ，不在此进行讨论，它跟咱们的主题无关
     public NioEventLoopGroup(int nThreads, Executor executor) {
 
         // 使用 `SelectorProvider.provider()` 提供  `SelectorProvider`， 细节下文进行描述

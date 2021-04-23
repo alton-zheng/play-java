@@ -39,12 +39,13 @@
 - [netty源码分析之拆包器的奥秘](https://www.jianshu.com/p/dc26e944da95) "Source code analysis of ByteToMessageDecoder"
 - [netty源码分析之LengthFieldBasedFrameDecoder](https://www.jianshu.com/p/a0a51fd79f62) "Source code analysis of LengthFieldBasedFrameDecoder"
 - [netty 堆外内存泄露排查盛宴](https://www.jianshu.com/p/4e96beb37935) "A memory leak troubleshoot of using netty-socketio"
-
 - [x] [Netty 源码分析- Reactor](docs/netty-source-code-analysis-reactor.md)
 - [x] [Netty 源码深入剖析之旅 - 介绍](docs/netty-source-analysis-introduction.md)
 - [x] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
-- [ ] [Netty 源码深入剖析 - SelectorProvider (Multiplux)](docs/netty-source-analysis-selector-provider.md)
-- [ ] [Netty 源码深入剖析 - RejectedExecutionHandlers](docs/netty-source-analysis-rejected-execution-handlers.md)
-- [ ] [Netty 源码深入剖析 - MultithreadEventLoopGroup](docs/netty-source-analysis-multithread-eventloop-group.md)
-- [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
-- [ ] [Netty 源码深入剖析之旅- 示例](docs/netty-source-analysis-example.md)
+- [x] [Netty 源码深入剖析 - SelectorProvider (Multiplux)](docs/netty-source-analysis-selector-provider.md)
+- [x] [Netty 源码深入剖析 - RejectedExecutionHandlers](docs/netty-source-analysis-rejected-execution-handlers.md)
+- [x] [Netty 源码深入剖析 - MultithreadEventLoopGroup](docs/netty-source-analysis-multithread-eventloop-group.md)
+  - [x] [Netty 源码深入剖析 - ThreadFactory](docs/netty-source-analysis-thread-factory.md)
+  - [x] [Netty 源码深入剖析 - EventExecutor](docs/netty-source-analysis-event-executor.md)
+  - [x] [Netty 源码深入剖析 - EventExecutorChooser](docs/netty-source-analysis-event-executor-chooser.md)
+- [ ] 
