@@ -318,7 +318,6 @@
   - [x] [Netty 源码深入剖析 - ThreadFactory](netty/docs/netty-source-analysis-thread-factory.md)
   - [x] [Netty 源码深入剖析 - EventExecutor](netty/docs/netty-source-analysis-event-executor.md)
   - [x] [Netty 源码深入剖析 - EventExecutorChooser](netty/docs/netty-source-analysis-event-executor-chooser.md)
-- [ ] 
 
 &nbsp;
 
@@ -326,17 +325,64 @@
 
 &nbsp;
 
-## MQ
+## ActiveMQ
 
-### ActiveMQ
+此 MQ 用户人群不多，暂不将它进行收录，后续有机会再看。
 
-&nbsp;
-
-### RocketMQ
+先简单了解，它和 Kafka 很像，但开发语言从  Scala -> Java ， 功能没 Kafka 那么丰富。
 
 &nbsp;
 
-### Kafka
+## RocketMQ
+
+https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.47ca2b90B1HBUJ
+
+### 1. 概念和特性
+
+- [ ] [概念(Concept)](rocketmq/concept.md)：介绍RocketMQ的基本概念模型。
+- [ ] [特性(Features)](rocketmq/features.md)：介绍RocketMQ实现的功能特性。 
+
+&nbsp;
+
+
+### 2. 架构设计
+
+- [ ] [架构(Architecture)](rocketmq/architecture.md)：介绍RocketMQ部署架构和技术架构。
+- [ ] [设计(Design)](rocketmq/design.md)：介绍RocketMQ关键机制的设计原理，主要包括消息存储、通信机制、消息过滤、负载均衡、事务消息等。
+
+&nbsp;
+
+
+### 3. 样例
+
+- [ ] [样例(Example)](rocketmq/RocketMQ_Example.md) ：介绍RocketMQ的常见用法，包括基本样例、顺序消息样例、延时消息样例、批量消息样例、过滤消息样例、事务消息样例等。
+
+&nbsp;
+
+### 4. 最佳实践
+
+- [x] [Rocket MQ 安装](rocketmq/rocketmq-install.md)
+
+- [ ] [最佳实践（Best Practice）](rocketmq/best_practice.md)：介绍RocketMQ的最佳实践，包括生产者、消费者、Broker以及NameServer的最佳实践，客户端的配置方式以及JVM和linux的最佳参数配置。
+- [ ] [消息轨迹指南(Message Trace)](rocketmq/msg_trace/user_guide.md)：介绍RocketMQ消息轨迹的使用方法。[权限管理(Auth Management)](rocketmq/acl/user_guide.md)：介绍如何快速部署和使用支持权限控制特性的RocketMQ集群。
+- [ ] [Dledger快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍Dledger的快速搭建方法。
+- [ ] [集群部署(Cluster Deployment)](rocketmq/dledger/deploy_guide.md)：介绍Dledger的集群部署方式。
+
+&nbsp;
+
+### 5. 运维管理
+
+- [ ] [集群部署(Operation)](rocketmq/operation.md)：介绍单Master模式、多Master模式、多Master多slave模式等RocketMQ集群各种形式的部署方法以及运维工具mqadmin的使用方式。
+
+&nbsp;
+
+### 6. API Reference（待补充）
+
+- [ ] [DefaultMQProducer API Reference](rocketmq/client/java/API_Reference_DefaultMQProducer.md)
+
+&nbsp;
+
+## Kafka
 - [Kafka](http://github.com/alton-zheng/kafka.git)
 &nbsp;
 ## Redis

@@ -29,6 +29,8 @@ target/
 
 .idea/
 .DS_Store
+*DS_Store
 
 
-*..mindnode
+
+*.mindnode
