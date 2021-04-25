@@ -325,21 +325,15 @@
 
 &nbsp;
 
-## ActiveMQ
-
-此 MQ 用户人群不多，暂不将它进行收录，后续有机会再看。
-
-先简单了解，它和 Kafka 很像，但开发语言从  Scala -> Java ， 功能没 Kafka 那么丰富。
-
-&nbsp;
-
 ## RocketMQ
 
 https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.47ca2b90B1HBUJ
 
 ### 1. 概念和特性
 
-- [ ] [概念(Concept)](rocketmq/concept.md)：介绍RocketMQ的基本概念模型。
+- [x] [什么是 RocketMQ](rocketmq/rocketmq-introduction.md)
+
+- [x] [概念(Concept)](rocketmq/concept.md)：介绍RocketMQ的基本概念模型。
 - [ ] [特性(Features)](rocketmq/features.md)：介绍RocketMQ实现的功能特性。 
 
 &nbsp;
@@ -362,7 +356,6 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 ### 4. 最佳实践
 
 - [x] [Rocket MQ 安装](rocketmq/rocketmq-install.md)
-
 - [ ] [最佳实践（Best Practice）](rocketmq/best_practice.md)：介绍RocketMQ的最佳实践，包括生产者、消费者、Broker以及NameServer的最佳实践，客户端的配置方式以及JVM和linux的最佳参数配置。
 - [ ] [消息轨迹指南(Message Trace)](rocketmq/msg_trace/user_guide.md)：介绍RocketMQ消息轨迹的使用方法。[权限管理(Auth Management)](rocketmq/acl/user_guide.md)：介绍如何快速部署和使用支持权限控制特性的RocketMQ集群。
 - [ ] [Dledger快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍Dledger的快速搭建方法。
@@ -379,6 +372,15 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 ### 6. API Reference（待补充）
 
 - [ ] [DefaultMQProducer API Reference](rocketmq/client/java/API_Reference_DefaultMQProducer.md)
+
+&nbsp;
+
+### 7. 高级特性
+
+- [x] [消息重试](rocketmq/rocketmq-message-retry.md)
+- [x] [消息过滤](rocketmq/rocketmq-message-filtering.md)
+- [x] [Exactly-once 传输语义](rocketmq/rocketmq-exactly-once-delivery-semantics.md)
+- [x] [Cluster 消费和 Broadcast 消费](rocketmq/rocketmq-clustering-consumption-and-broadcasting-consumption.md)
 
 &nbsp;
 
