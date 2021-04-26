@@ -373,10 +373,13 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 
 &nbsp;
 
-### 7. 高级特性
+### 7. 消息类型
+
+- [x] [顺序消息](rocketmq/rocketmq-ordered-message.md)
+- [x] [事务消息](rocketmq/rocketmq-transactional-message.md)
+- [x]  [定时和延时消息](rocketmq/rocketmq-scheduled-messages-and-delayed-messages.md)
 
 - [x] [消息重试](rocketmq/rocketmq-message-retry.md)
-- [x] [消息顺序](rocketmq/rocketmq-ordered-message.md)
 - [x] [消息过滤](rocketmq/rocketmq-message-filtering.md)
 - [x] [Exactly-once 传输语义](rocketmq/rocketmq-exactly-once-delivery-semantics.md)
 - [x] [Cluster 消费和 Broadcast 消费](rocketmq/rocketmq-clustering-consumption-and-broadcasting-consumption.md)
