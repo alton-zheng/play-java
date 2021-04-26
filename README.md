@@ -198,8 +198,6 @@
 
 &nbsp;
 
-&nbsp;
-
 ## 设计模式
 
 - [x] [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
@@ -334,7 +332,7 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 - [x] [什么是 RocketMQ](rocketmq/rocketmq-introduction.md)
 
 - [x] [概念(Concept)](rocketmq/concept.md)：介绍RocketMQ的基本概念模型。
-- [ ] [特性(Features)](rocketmq/features.md)：介绍RocketMQ实现的功能特性。 
+- [x] [特性(Features)](rocketmq/features.md)：介绍RocketMQ实现的功能特性。 
 
 &nbsp;
 
@@ -378,6 +376,7 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 ### 7. 高级特性
 
 - [x] [消息重试](rocketmq/rocketmq-message-retry.md)
+- [x] [消息顺序](rocketmq/rocketmq-ordered-message.md)
 - [x] [消息过滤](rocketmq/rocketmq-message-filtering.md)
 - [x] [Exactly-once 传输语义](rocketmq/rocketmq-exactly-once-delivery-semantics.md)
 - [x] [Cluster 消费和 Broadcast 消费](rocketmq/rocketmq-clustering-consumption-and-broadcasting-consumption.md)
