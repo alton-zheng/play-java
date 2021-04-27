@@ -32,7 +32,9 @@
 
 ​    缺点：性能比异步复制模式略低，大约低 10%左右，发送单个消息的 RT会略高。目前主宕机后，备机不能自动切换为主机，后续会支持自动切换功能
 
-## ![img](image-rocketMQ/webp2)
+![img](images/webp2)
+
+&nbsp;
 
 ## 双主双从集群搭建
 
@@ -88,7 +90,7 @@
 
 ## 主备切换 故障转移模式
 
-![img](image-rocketMQ/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1bnFpaW5zaWdodA==,size_16,color_FFFFFF,t_70)
+![img](images/as.png)
 
 在 RocketMQ 4.5 版本之前，RocketMQ 只有 Master/Slave 一种部署方式，一组 broker 中有一个 Master ，有零到多个 
 Slave，Slave 通过同步复制或异步复制的方式去同步 Master 数据。Master/Slave 部署模式，提供了一定的高可用性。 

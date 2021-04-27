@@ -330,7 +330,7 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 ### 1. 概念和特性
 
 - [x] [什么是 RocketMQ](rocketmq/rocketmq-introduction.md)
-
+- [ ] [场景](rocketmq/rocketmq-scenarios.md)
 - [x] [概念(Concept)](rocketmq/concept.md)：介绍RocketMQ的基本概念模型。
 - [x] [特性(Features)](rocketmq/features.md)：介绍RocketMQ实现的功能特性。 
 
@@ -339,7 +339,8 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 
 ### 2. 架构设计
 
-- [ ] [架构(Architecture)](rocketmq/architecture.md)：介绍RocketMQ部署架构和技术架构。
+- [x] [架构(Architecture)](rocketmq/architecture.md)：介绍RocketMQ部署架构和技术架构。
+- [ ] [Name Server](rocketmq/rocketmq-nameserver.md)
 - [ ] [设计(Design)](rocketmq/design.md)：介绍RocketMQ关键机制的设计原理，主要包括消息存储、通信机制、消息过滤、负载均衡、事务消息等。
 
 &nbsp;
@@ -356,8 +357,8 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 - [x] [Rocket MQ 安装](rocketmq/rocketmq-install.md)
 - [ ] [最佳实践（Best Practice）](rocketmq/best_practice.md)：介绍RocketMQ的最佳实践，包括生产者、消费者、Broker以及NameServer的最佳实践，客户端的配置方式以及JVM和linux的最佳参数配置。
 - [ ] [消息轨迹指南(Message Trace)](rocketmq/msg_trace/user_guide.md)：介绍RocketMQ消息轨迹的使用方法。[权限管理(Auth Management)](rocketmq/acl/user_guide.md)：介绍如何快速部署和使用支持权限控制特性的RocketMQ集群。
-- [ ] [Dledger快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍Dledger的快速搭建方法。
-- [ ] [集群部署(Cluster Deployment)](rocketmq/dledger/deploy_guide.md)：介绍Dledger的集群部署方式。
+- [ ] [Dledger 快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍 Dledger 的快速搭建方法。
+- [x] [集群部署(Cluster Deployment)](rocketmq/dledger/deploy_guide.md)：介绍 Dledger 的集群部署方式。
 
 &nbsp;
 
@@ -379,9 +380,16 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 - [x] [事务消息](rocketmq/rocketmq-transactional-message.md)
 - [x]  [定时和延时消息](rocketmq/rocketmq-scheduled-messages-and-delayed-messages.md)
 
+&nbsp;
+
+### 8. 高级特性
+
 - [x] [消息重试](rocketmq/rocketmq-message-retry.md)
 - [x] [消息过滤](rocketmq/rocketmq-message-filtering.md)
+- [x] [topic 和 tag 应用](rocketmq/rocketmq-topic-and-tag.md)
+- [x] [消费幂等](rocketmq/rocketmq-consumption-idempotence.md)
 - [x] [Exactly-once 传输语义](rocketmq/rocketmq-exactly-once-delivery-semantics.md)
+- [x] [消息堆积和延迟问题](rocketmq/rocketmq-message-accumulation-and-latency.md)
 - [x] [Cluster 消费和 Broadcast 消费](rocketmq/rocketmq-clustering-consumption-and-broadcasting-consumption.md)
 
 &nbsp;

@@ -1,5 +1,7 @@
-
 # 运维管理
+
+&nbsp;
+
 ---
 
 ### 1   集群搭建
@@ -29,6 +31,8 @@ $ nohup sh bin/mqbroker -n localhost:9876 &
 $ tail -f ~/logs/rocketmqlogs/Broker.log 
 The broker[broker-a, 192.169.1.2:10911] boot success...
 ```
+
+&nbsp;
 
 #### 1.2 多Master模式
 
@@ -65,6 +69,8 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-noslave/broker
 
 如上启动命令是在单个NameServer情况下使用的。对于多个NameServer的集群，Broker启动命令中`-n`后面的地址列表用分号隔开即可，例如 `192.168.1.1:9876;192.161.2:9876`。
 
+&nbsp;
+
 #### 1.3 多Master多Slave模式-异步复制
 
 每个Master配置一个Slave，有多对Master-Slave，HA采用异步复制方式，主备有短暂消息延迟（毫秒级），这种模式的优缺点如下：
@@ -99,6 +105,8 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-async/broke
 ### 在机器D，启动第二个Slave，例如NameServer的IP为：192.168.1.1
 $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-async/broker-b-s.properties &
 ```
+
+&nbsp;
 
 #### 1.4 多Master多Slave模式-同步双写
 
@@ -136,6 +144,8 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
 ```
 
 以上Broker与Slave配对是通过指定相同的BrokerName参数来配对，Master的BrokerId必须是0，Slave的BrokerId必须是大于0的数。另外一个Master下面可以挂载多个Slave，同一Master下的多个Slave通过指定不同的BrokerId来区分。$ROCKETMQ_HOME指的RocketMQ安装目录，需要用户自己设置此环境变量。
+
+&nbsp;
 
 ### 2 mqadmin管理工具
 
