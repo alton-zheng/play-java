@@ -2,23 +2,19 @@
 
 ## 消息存储
 
-![image-20200228140910086](images/image-20200228140910086.png)
-
 ### 磁盘存储速度问题
 
 #### 省去DB层提高性能
 
 RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
 
-
-
-
+&nbsp;
 
 #### M.2 NVME协议磁盘存储
 
 **文件写入速度** 顺序读写：3G左右 随机读写2G
 
-
+&nbsp;
 
 #### 数据零拷贝技术
 
@@ -31,9 +27,11 @@ RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
 3. MappedByteBuffer在处理大文件时的确性能很高，但也存在一些问题，如内存占用、文件关闭不确定，被其打开的文件只有在垃圾回收的才会被关闭，而且这个时间点是不确定的。
    javadoc中也提到：**A mapped byte buffer and the file mapping that it represents remain\* valid until the buffer itself is garbage-collected.**
 
-
+&nbsp;
 
 所以为了使用零拷贝技术，RocketMQ的文件存储大小默认每个1G，超过1G会重新建立一个新文件
+
+&nbsp;
 
 ### 存储结构
 
@@ -51,11 +49,7 @@ RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
 
 - MappedFileQueue -> MappedFile
 
-  
-
-  
-
-  
+&nbsp;
 
  **MappedFile**
 
@@ -66,7 +60,7 @@ RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
     private int mappedFileSizeCommitLog = 1024 * 1024 * 1024;
 ```
 
-
+&nbsp;
 
 #### ConsumerQueue
 
@@ -78,12 +72,14 @@ RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
 
 以Topic作为文件名称，每个Topic下又以queue id作为文件夹分组
 
+&nbsp;
 
-
-默认大小
+- 默认大小
 
     // ConsumeQueue extend file size, 48M
     private int mappedFileSizeConsumeQueueExt = 48 * 1024 * 1024;
+&nbsp;
+
 #### indexFile
 
 消息的Key和时间戳索引
@@ -92,9 +88,7 @@ RocketMQ 使用文件系统持久化消息。性能要比使用DB产品要高。
 
 默认文件会存储在家目录下`/root/store/`
 
-![image-20200228150807152](../../../../images-02/image-20200228150807152.png)
-
-
+&nbsp;
 
 #### config
 
@@ -120,6 +114,8 @@ group的订阅数据
 
 Topic的配置信息
 
+&nbsp;
+
 ### 刷盘机制
 
 在CommitLog初始化时，判断配置文件 加载相应的service
@@ -132,7 +128,9 @@ Topic的配置信息
         }
 ```
 
-#### 写入时消息会不会分割到两个MapedFile中？
+&nbsp;
+
+- 写入时消息会不会分割到两个MapedFile中？
 
 ```
             // Determines whether there is sufficient free space
@@ -152,16 +150,16 @@ Topic的配置信息
             }
 ```
 
-
+&nbsp;
 
 #### 同步刷盘
 
 消息被Broker写入磁盘后再给producer响应
 
+&nbsp;
+
 #### 异步刷盘
 
-消息被Broker写入内存后立即给producer响应，当内存中消息堆积到一定程度的时候写入磁盘持久化。
+消息被 Broker 写入内存后立即给 Producer 响应，当内存中消息堆积到一定程度的时候写入磁盘持久化。
 
-#### 配置选项
-
-![image-20200228150746731](../../../../images-02/image-20200228150746731.png)
+&nbsp;

@@ -4,7 +4,7 @@
 
 ### pom.xml
 
-```
+```xml
 		<dependency>
 		    <groupId>org.apache.rocketmq</groupId>
 		    <artifactId>rocketmq-common</artifactId>

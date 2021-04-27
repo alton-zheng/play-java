@@ -1,11 +1,15 @@
-# Dledger集群搭建
----
+# Dledger 集群搭建
+&nbsp;
+
 ## 前言
+
 该文档主要介绍如何部署自动容灾切换的 RocketMQ-on-DLedger Group。
 
 RocketMQ-on-DLedger Group 是指一组**相同名称**的 Broker，至少需要 3 个节点，通过 Raft 自动选举出一个 Leader，其余节点 作为 Follower，并在 Leader 和 Follower 之间复制数据以保证高可用。  
 RocketMQ-on-DLedger Group 能自动容灾切换，并保证数据一致。  
 RocketMQ-on-DLedger Group 是可以水平扩展的，也即可以部署任意多个 RocketMQ-on-DLedger Group 同时对外提供服务。  
+
+&nbsp;
 
 ## 1. 新集群部署
 
@@ -39,6 +43,8 @@ dLegerSelfId=n0
 sendMessageThreadPoolNums=16
 ```
 
+&nbsp;
+
 ### 1.2 启动 Broker
 
 与老版本的启动方式一致。
@@ -46,6 +52,8 @@ sendMessageThreadPoolNums=16
 `nohup sh bin/mqbroker -c conf/dledger/xxx-n0.conf & `  
 `nohup sh bin/mqbroker -c conf/dledger/xxx-n1.conf & `  
 `nohup sh bin/mqbroker -c conf/dledger/xxx-n2.conf & `  
+
+&nbsp;
 
 
 ## 2. 旧集群升级
@@ -57,6 +65,8 @@ sendMessageThreadPoolNums=16
 
 可以通过 kill 命令来完成，也可以调用 `bin/mqshutdown broker`。
 
+&nbsp;
+
 ### 2.2 检查旧的 Commitlog
 
 RocketMQ-on-DLedger 组中的每个节点，可以兼容旧的 Commitlog ，但其 Raft 复制过程，只能针对新增加的消息。因此，为了避免出现异常，需要保证 旧的 Commitlog 是一致的。  
@@ -64,15 +74,21 @@ RocketMQ-on-DLedger 组中的每个节点，可以兼容旧的 Commitlog ，但�
 
 虽然 RocketMQ-on-DLedger Group 也可以以 2 节点方式部署，但其会丧失容灾切换能力（2n + 1 原则，至少需要3个节点才能容忍其中 1 个宕机）。  
 所以在对齐了 Master 和 Slave 的 Commitlog 之后，还需要准备第 3 台机器，并把旧的 Commitlog 从 Master 拷贝到 第 3 台机器（记得同时拷贝一下 config 文件夹）。  
-   
+
 在 3 台机器准备好了之后，旧 Commitlog 文件也保证一致之后，就可以开始走下一步修改配置了。
+
+&nbsp;
 
 ### 2.3 修改配置
 
 参考新集群部署。
 
+&nbsp;
+
 ### 2.4 重新启动 Broker 
 
 参考新集群部署。
+
+&nbsp;
 
 

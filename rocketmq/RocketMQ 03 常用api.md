@@ -17,7 +17,7 @@
 
 #### 集群消息
 
-![img](image-rocketMQ/160707_kSpS_1469576.png)
+![img](images/160707_kSpS_1469576.png)
 
 集群消息是指**集群化部署消费者**
 
@@ -31,7 +31,7 @@
 
 #### 广播消息
 
-![img](image-rocketMQ/160902_4AOI_1469576.png)
+![img](images/160902_4AOI_1469576.png)
 
 当使用广播消费模式时，MQ 会将每条消息推送给集群内所有注册过的客户端，保证消息至少被每台机器消费一次。
 
@@ -139,7 +139,7 @@ enablePropertyFilter=true
 
 随后在集群配置中可以看到
 
-![image-20200219174859476](image-rocketMQ/image-20200219174859476.png)
+![image-20200219174859476](images/image-20200219174859476.png)
 
 #### **实例**
 
