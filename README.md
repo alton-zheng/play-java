@@ -357,7 +357,7 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 - [x] [Rocket MQ 安装](rocketmq/rocketmq-install.md)
 - [ ] [最佳实践（Best Practice）](rocketmq/best_practice.md)：介绍RocketMQ的最佳实践，包括生产者、消费者、Broker以及NameServer的最佳实践，客户端的配置方式以及JVM和linux的最佳参数配置。
 - [ ] [消息轨迹指南(Message Trace)](rocketmq/msg_trace/user_guide.md)：介绍RocketMQ消息轨迹的使用方法。[权限管理(Auth Management)](rocketmq/acl/user_guide.md)：介绍如何快速部署和使用支持权限控制特性的RocketMQ集群。
-- [ ] [Dledger 快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍 Dledger 的快速搭建方法。
+- [x] [Dledger 快速搭建(Quick Start)](rocketmq/dledger/quick_start.md)：介绍 Dledger 的快速搭建方法。
 - [x] [集群部署(Cluster Deployment)](rocketmq/dledger/deploy_guide.md)：介绍 Dledger 的集群部署方式。
 
 &nbsp;
@@ -391,6 +391,12 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 - [x] [Exactly-once 传输语义](rocketmq/rocketmq-exactly-once-delivery-semantics.md)
 - [x] [消息堆积和延迟问题](rocketmq/rocketmq-message-accumulation-and-latency.md)
 - [x] [Cluster 消费和 Broadcast 消费](rocketmq/rocketmq-clustering-consumption-and-broadcasting-consumption.md)
+
+&nbsp;
+
+### 9 面试
+
+- [x] [RocketMQ - 面试](rocketmq/rocketmq-interview.md)
 
 &nbsp;
 

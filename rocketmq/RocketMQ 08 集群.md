@@ -119,9 +119,11 @@ sendMessageThreadPoolNums = 4
 
 ```
 
+&nbsp;
+
 ## Topic中的Queue分布
 
-### 手动创建topic
+### 手动创建 topic
 
 topic可以在producer发送消息时自动创建或使用console手动创建，但还有很多细节参数无法指定 ，在生成环境中，通常我们会使用MQAdmin工具指定具体参数，
 

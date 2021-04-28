@@ -6,7 +6,7 @@
 
 ### 1   集群搭建
 
-#### 1.1 单Master模式
+#### 1.1 单 Master 模式
 
 这种方式风险较大，一旦Broker重启或者宕机时，会导致整个服务不可用。不建议线上环境使用,可以用于本地测试。
 
@@ -34,7 +34,7 @@ The broker[broker-a, 192.169.1.2:10911] boot success...
 
 &nbsp;
 
-#### 1.2 多Master模式
+#### 1.2 多 Master 模式
 
 一个集群无Slave，全是Master，例如2个Master或者3个Master，这种模式的优缺点如下：
 
@@ -42,7 +42,7 @@ The broker[broker-a, 192.169.1.2:10911] boot success...
 
 - 缺点：单台机器宕机期间，这台机器上未被消费的消息在机器恢复之前不可订阅，消息实时性会受到影响。
 
-##### 1）启动NameServer
+##### 1）启动 NameServer
 
 NameServer需要先于Broker启动，且如果在生产环境使用，为了保证高可用，建议一般规模的集群启动3个NameServer，各节点的启动命令相同，如下：
 
@@ -55,7 +55,7 @@ $ tail -f ~/logs/rocketmqlogs/namesrv.log
 The Name Server boot success...
 ```
 
-##### 2）启动Broker集群
+##### 2）启动 Broker 集群
 
 ```bash
 ### 在机器A，启动第一个Master，例如NameServer的IP为：192.168.1.1
@@ -71,7 +71,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-noslave/broker
 
 &nbsp;
 
-#### 1.3 多Master多Slave模式-异步复制
+#### 1.3 多 Master 多 Slave 模式-异步复制
 
 每个Master配置一个Slave，有多对Master-Slave，HA采用异步复制方式，主备有短暂消息延迟（毫秒级），这种模式的优缺点如下：
 
@@ -79,7 +79,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-noslave/broker
 
 - 缺点：Master宕机，磁盘损坏情况下会丢失少量消息。
 
-##### 1）启动NameServer
+##### 1）启动 NameServer
 
 ```bash
 ### 首先启动Name Server
@@ -90,7 +90,7 @@ $ tail -f ~/logs/rocketmqlogs/namesrv.log
 The Name Server boot success...
 ```
 
-##### 2）启动Broker集群
+##### 2）启动 Broker 集群
 
 ```bash
 ### 在机器A，启动第一个Master，例如NameServer的IP为：192.168.1.1
@@ -108,7 +108,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-async/broke
 
 &nbsp;
 
-#### 1.4 多Master多Slave模式-同步双写
+#### 1.4 多 Master 多 Slave 模式-同步双写
 
 每个Master配置一个Slave，有多对Master-Slave，HA采用同步双写方式，即只有主备都写成功，才向应用返回成功，这种模式的优缺点如下：
 
@@ -116,7 +116,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-async/broke
 
 - 缺点：性能比异步复制模式略低（大约低10%左右），发送单个消息的RT会略高，且目前版本在主节点宕机后，备机不能自动切换为主机。
 
-##### 1）启动NameServer
+##### 1）启动 NameServer
 
 ```bash
 ### 首先启动Name Server
@@ -127,7 +127,7 @@ $ tail -f ~/logs/rocketmqlogs/namesrv.log
 The Name Server boot success...
 ```
 
-##### 2）启动Broker集群
+##### 2）启动 Broker 集群
 
 ```bash
 ### 在机器A，启动第一个Master，例如NameServer的IP为：192.168.1.1
@@ -147,7 +147,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
 
 &nbsp;
 
-### 2 mqadmin管理工具
+### 2 mqadmin 管理工具
 
 > 注意：
 >
@@ -158,7 +158,9 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
 > 5. 在tools下可以看到很多命令，但并不是所有命令都能使用，只有在MQAdminStartup中初始化的命令才能使用，你也可以修改这个类，增加或自定义命令
 > 6. 由于版本更新问题，少部分命令可能未及时更新，遇到错误请直接阅读相关命令源码
 
-#### 2.1 Topic相关
+&nbsp;
+
+#### 2.1 Topic 相关
 
 <table border=0 cellpadding=0 cellspacing=0 width=714>
  <col width=177>
@@ -392,7 +394,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl66 width=159 style='width:119pt'>指定topic</td>
  </tr>
 </table>
-
+&nbsp;
 
 
 #### 2.2 集群相关
@@ -468,7 +470,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl66 width=185 style='width:139pt'>NameServer 服务地址，格式 ip:port</td>
  </tr>
 </table>
-
+&nbsp;
 
 #### 2.3 Broker相关
 
@@ -650,7 +652,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl68 width=87 style='width:65pt'>发送次数</td>
  </tr>
 </table>
-
+&nbsp;
 
 #### 2.4 消息相关
 
@@ -983,7 +985,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl68 width=87 style='width:65pt'>是否重置c++客户端offset</td>
  </tr>
 </table>
-
+&nbsp;
 
 #### 2.5 消费者、消费组相关
 
@@ -1152,9 +1154,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl68 width=87 style='width:65pt'>暂未使用</td>
  </tr>
 </table>
-
-
-
+&nbsp;
 
 #### 2.6 连接相关
 
@@ -1206,9 +1206,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl68 width=87 style='width:65pt'>打印帮助</td>
  </tr>
 </table>
-
-
-
+&nbsp;
 
 #### 2.7 NameServer相关
 
@@ -1300,9 +1298,7 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl67 width=87 style='width:65pt'>value</td>
  </tr>
 </table>
-
-
-
+&nbsp;
 
 #### 2.8 其他
 
@@ -1330,21 +1326,23 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
   <td class=xl68 width=87 style='width:65pt'>打印帮助</td>
  </tr>
 </table>
-
+&nbsp;
 
 ### 3   运维常见问题
 
-#### 3.1 RocketMQ的mqadmin命令报错问题
+#### 3.1 RocketMQ 的 mqadmin 命令报错问题
 
->  问题描述：有时候在部署完RocketMQ集群后，尝试执行“mqadmin”一些运维命令，会出现下面的异常信息：
+>  问题描述：有时候在部署完 RocketMQ 集群后，尝试执行 “mqadmin” 一些运维命令，会出现下面的异常信息：
 >
 > ```java
 > org.apache.rocketmq.remoting.exception.RemotingConnectException: connect to <null> failed
 > ```
 
-解决方法：可以在部署RocketMQ集群的虚拟机上执行`export NAMESRV_ADDR=ip:9876`（ip指的是集群中部署NameServer组件的机器ip地址）命令之后再使用“mqadmin”的相关命令进行查询，即可得到结果。
+解决方法：可以在部署 RocketMQ 集群的虚拟机上执行 `export NAMESRV_ADDR=ip:9876` （ip指的是集群中部署 NameServer 组件的机器 ip 地址）命令之后再使用 “mqadmin” 的相关命令进行查询，即可得到结果。
 
-#### 3.2 RocketMQ生产端和消费端版本不一致导致不能正常消费的问题
+&nbsp;
+
+#### 3.2 RocketMQ 生产端和消费端版本不一致导致不能正常消费的问题
 
 > 问题描述：同一个生产端发出消息，A消费端可消费，B消费端却无法消费，rocketMQ Console中出现：
 >
@@ -1352,13 +1350,15 @@ $ nohup sh mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker
 > Not found the consumer group consume stats, because return offset table is empty, maybe the consumer not consume any message的异常消息。
 > ```
 
-  解决方案：RocketMQ 的jar包：rocketmq-client等包应该保持生产端，消费端使用相同的version。
+  解决方案：RocketMQ 的 jar 包：rocketmq-client 等包应该保持生产端，消费端使用相同的 version 。
 
-#### 3.3  新增一个topic的消费组时，无法消费历史消息的问题
+&nbsp;
 
-> 问题描述：当同一个topic的新增消费组启动时，消费的消息是当前的offset的消息，并未获取历史消息。    
+#### 3.3  新增一个 topic 的消费组时，无法消费历史消息的问题
 
-解决方案：rocketmq默认策略是从消息队列尾部，即跳过历史消息。如果想消费历史消息，则需要设置：`org.apache.rocketmq.client.consumer.DefaultMQPushConsumer#setConsumeFromWhere`。常用的有以下三种配置：
+> 问题描述：当同一个 topic 的新增消费组启动时，消费的消息是当前的 offset 的消息，并未获取历史消息。    
+
+解决方案：rocketmq 默认策略是从消息队列尾部，即跳过历史消息。如果想消费历史消息，则需要设置：`org.apache.rocketmq.client.consumer.DefaultMQPushConsumer#setConsumeFromWhere`。常用的有以下三种配置：
 
 - 默认配置,一个新的订阅组第一次启动从队列的最后位置开始消费，后续再启动接着上次消费的进度开始消费,即跳过历史消息；
 
@@ -1378,21 +1378,40 @@ consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_TIMESTAMP);
 ```
 
-#### 3.4 如何开启从Slave读数据功能
+&nbsp;
 
-在某些情况下，Consumer需要将消费位点重置到1-2天前，这时在内存有限的Master Broker上，CommitLog会承载比较重的IO压力，影响到该Broker的其它消息的读与写。可以开启`slaveReadEnable=true`，当Master Broker发现Consumer的消费位点与CommitLog的最新值的差值的容量超过该机器内存的百分比（`accessMessageInMemoryMaxRatio=40%`），会推荐Consumer从Slave Broker中去读取数据，降低Master Broker的IO。
+#### 3.4 如何开启从 Slave 读数据功能
+
+在某些情况下，Consumer 需要将消费位点重置到 1-2 天前，这时在内存有限的 Master Broker 上，CommitLog会承载比较重的 IO 压力，影响到该 Broker 的其它消息的读与写。可以开启 `slaveReadEnable=true` ，当Master Broker 发现 Consumer 的消费位点与 CommitLog 的最新值的差值的容量超过该机器内存的百分比（`accessMessageInMemoryMaxRatio=40%`），会推荐 Consumer 从 Slave Broker 中去读取数据，降低 Master Broker 的IO。
+
+&nbsp;
 
 #### 3.5 性能调优问题
 
-异步刷盘建议使用自旋锁，同步刷盘建议使用重入锁，调整Broker配置项`useReentrantLockWhenPutMessage`，默认为false；异步刷盘建议开启`TransientStorePoolEnable`；建议关闭transferMsgByHeap，提高拉消息效率；同步刷盘建议适当增大`sendMessageThreadPoolNums`，具体配置需要经过压测。
+异步刷盘建议使用自旋锁，同步刷盘建议使用重入锁，调整 Broker 配置项 `useReentrantLockWhenPutMessage`，默认为 false；异步刷盘建议开启 `TransientStorePoolEnable`；建议关闭 transferMsgByHeap，提高拉消息效率；同步刷盘建议适当增大 `sendMessageThreadPoolNums` ，具体配置需要经过压测。
 
-#### 3.6 在RocketMQ中msgId和offsetMsgId的含义与区别
+&nbsp;
 
-使用RocketMQ完成生产者客户端消息发送后，通常会看到如下日志打印信息：
+#### 3.6 在 RocketMQ 中 msgId 和 offsetMsgId 的含义与区别
+
+使用 RocketMQ 完成生产者客户端消息发送后，通常会看到如下日志打印信息：
 
 ```java
 SendResult [sendStatus=SEND_OK, msgId=0A42333A0DC818B4AAC246C290FD0000, offsetMsgId=0A42333A00002A9F000000000134F1F5, messageQueue=MessageQueue [topic=topicTest1, BrokerName=mac.local, queueId=3], queueOffset=4]
 ```
 
-- msgId，对于客户端来说msgId是由客户端producer实例端生成的，具体来说，调用方法`MessageClientIDSetter.createUniqIDBuffer()`生成唯一的Id；
-- offsetMsgId，offsetMsgId是由Broker服务端在写入消息时生成的（采用”IP地址+Port端口”与“CommitLog的物理偏移量地址”做了一个字符串拼接），其中offsetMsgId就是在RocketMQ控制台直接输入查询的那个messageId。
+- msgId，对于客户端来说msgId是由客户端 producer 实例端生成的，具体来说，调用方法`MessageClientIDSetter.createUniqIDBuffer()` 生成唯一的Id；
+- offsetMsgId，offsetMsgId 是由 Broker 服务端在写入消息时生成的（采用 ”IP地址+Port端口”与“CommitLog的物理偏移量地址” 做了一个字符串拼接），其中 offsetMsgId 就是在 RocketMQ 控制台直接输入查询的那个messageId。
+
+&nbsp;
+
+#### 3.7 用 `mqadmin` 工具 在指定Broker 节点上创建 topic , 提示成功， 但实际上此 topic 并未创建成功？
+
+> 因为在 Broker 的 slave 节点上创建 topic 有 bug
+>
+> RocketMQ 存在此 bug
+>
+> 需要在 master 节点上创建 topic 
+
+&nbsp;
+

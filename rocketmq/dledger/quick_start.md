@@ -5,8 +5,12 @@
 
 详细的新集群部署和旧集群升级指南请参考 [部署指南](deploy_guide.md)。
 
+&nbsp;
+
 ### 1. 源码构建
 构建分为两个部分，需要先构建 DLedger，然后 构建 RocketMQ
+
+&nbsp;
 
 #### 1.1 构建 DLedger
 
@@ -15,6 +19,8 @@
 `cd openmessaging-storage-dledger`
 
 `mvn clean install -DskipTests`
+
+&nbsp;
 
 #### 1.2 构建 RocketMQ
 
@@ -25,6 +31,8 @@
 `git checkout -b store_with_dledger origin/store_with_dledger`
 
 `mvn -Prelease-all -DskipTests clean install -U`
+
+&nbsp;
 
 ### 2. 快速部署
 
@@ -51,6 +59,8 @@
 `sh bin/dledger/fast-try.sh stop`
 
 快速部署，默认配置在 conf/dledger 里面，默认的存储路径在 /tmp/rmqstore。
+
+&nbsp;
 
 
 ### 3. 容灾切换
