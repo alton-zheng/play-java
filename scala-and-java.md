@@ -32,3 +32,26 @@
 
 其它语言特性的小区别就不一一列出了
 
+
+
+最大程度地应用了 Scala 类型系统的最好例子
+
+- https://github.com/milessabin/shapeless
+
+```xml
+
+<dependency>
+  <groupId>com.chuusai</groupId>
+  <artifactId>shapeless_2.13</artifactId>
+  <version>2.3.3</version>
+</dependency>
+```
+
+&nbsp;
+
+经典的函数库 Scalaz ： 
+
+```xml
+
+```
+
