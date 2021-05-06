@@ -427,3 +427,4 @@ https://www.alibabacloud.com/help/doc-detail/95837.htm?spm=a2c63.q38357.b99.171.
 ## 号外
 
 - [Scala 与 Java](scala-and-java.md)
+- [Scala-高级函数式编程](scala-high-level-fun-program.md)
