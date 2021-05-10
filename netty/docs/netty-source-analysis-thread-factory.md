@@ -358,25 +358,18 @@ final class FastThreadLocalRunnable implements Runnable {
 #### `FastThreadLocalThread` 源码剖析
 
 ```java
-package io.netty.util.concurrent;
-
-import io.netty.util.internal.InternalThreadLocalMap;
-import io.netty.util.internal.UnstableApi;
-
 public class FastThreadLocalThread extends Thread {
 
-    // This will be set to true if we have a chance to wrap the Runnable.
     // 对于此变量，官方已经解释了意思，简单而言，如果 Runnable 被 wrap 的话， 此变量会在代码中设置为 true
-    // 这里仅仅是一个标志位，说明 Runnable 被 Netty wrap 成 FastThreadLocalThread 了。
+    // 这里仅仅是一个标志符，说明 Runnable 被 Netty wrap 成 FastThreadLocalThread 了。
     private final boolean cleanupFastThreadLocals;
 
+    // ThreadLocal 容器
     private InternalThreadLocalMap threadLocalMap;
-
-    ...
 
     /**
      * 源码分析示例构建入口
-     * 1
+     * 步骤 1
      * @param group null
      * @param target r 线程需要执行的内容
      * @param name multithreadEventExecutorGroup-poolId-nextId
@@ -385,30 +378,38 @@ public class FastThreadLocalThread extends Thread {
 
         /**
          * 将 target 通用化，优势已在 FastThreadLocalRunnable 源码中进行标注
-         * 然后调用父类 Thread 创建 thread ,至于怎么创建的，脱离了 Netty 源码范围，想了解的自行去看。
+         * 然后调用父类 Thread 创建 thread ,至于怎么创建的，脱离了 Netty 源码范围，想了解的学习 JVM 和 高并发知识。
          */
         super(group, FastThreadLocalRunnable.wrap(target), name);
+
+        // 设置  cleanupFastThreadLocals 设置为 true
+        cleanupFastThreadLocals = true;
+
+    }
+
+    public FastThreadLocalThread(ThreadGroup group, Runnable target, String name, long stackSize) {
+        super(group, FastThreadLocalRunnable.wrap(target), name, stackSize);
         cleanupFastThreadLocals = true;
     }
 
     /**
-     * Returns the internal data structure that keeps the thread-local variables bound to this thread.
-     * Note that this method is for internal use only, and thus is subject to change at any time.
+     * 返回保持变量 thread-local 绑定到此线程的内部数据结构。
+     * 请注意，此方法仅供内部使用，因此可随时更改
      */
     public final InternalThreadLocalMap threadLocalMap() {
         return threadLocalMap;
     }
 
     /**
-     * Sets the internal data structure that keeps the thread-local variables bound to this thread.
-     * Note that this method is for internal use only, and thus is subject to change at any time.
+     * 设置内部数据结构，保持 thread-local 变量绑定到这个 thread。
+     * 请注意，此方法仅供内部使用，因此可随时更改
      */
     public final void setThreadLocalMap(InternalThreadLocalMap threadLocalMap) {
         this.threadLocalMap = threadLocalMap;
     }
 
     /**
-     * Returns {@code true} if {@link FastThreadLocal#removeAll()} will be called once {@link #run()} completes.
+     * 如果 {@link FastThreadLocal#removeAll()} 在 thread run() 完成后被调用， 则返回 true。
      */
     @UnstableApi
     public boolean willCleanupFastThreadLocals() {
@@ -416,7 +417,7 @@ public class FastThreadLocalThread extends Thread {
     }
 
     /**
-     * Returns {@code true} if {@link FastThreadLocal#removeAll()} will be called once {@link Thread#run()} completes.
+     * 返回指定 thread 的 cleanupFastThreadLocal 标记 
      */
     @UnstableApi
     public static boolean willCleanupFastThreadLocals(Thread thread) {
@@ -424,8 +425,9 @@ public class FastThreadLocalThread extends Thread {
                 ((FastThreadLocalThread) thread).willCleanupFastThreadLocals();
     }
 }
-
 ```
+
+&nbsp;
 
 每个 `FastThreadLocalThread` 内部有一个 `InternalThreadLocalMap` ， 它的 key 存储 `FastThreadLocal`
 
@@ -433,7 +435,7 @@ public class FastThreadLocalThread extends Thread {
 
 &nbsp;
 
-> 上一篇： 1.1.2.1.1 《create》: 提供 `RejectedExecutionHandlers` 《[Netty 源码深入剖析之 - RejectedExecutionHandlers](netty-source-analysis-rejected-execution-handlers.md)》
+> 上一篇：《[Netty 源码深入剖析之 - RejectedExecutionHandlers](netty-source-analysis-rejected-execution-handlers.md)》
 >
 > 下一篇：EventLoopGroup  《[Netty 源码深入剖析之 - MultithreadEventLoopGroup](netty-source-analysis-event-executor.md)》
 

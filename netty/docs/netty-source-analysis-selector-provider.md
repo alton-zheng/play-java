@@ -43,10 +43,7 @@ Netty 使用 Bootstrap 引导 Server 或 Client 启动，在此过程中 Bootstr
 
 ```java
 public class NioEventLoopGroup extends MultithreadEventLoopGroup {
-
     /**
-     * Create a new instance using the default number of threads, the default {@link ThreadFactory} and
-     * the {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
      * 示例代码，以此构造器为入口
      * 1.1 使用默认线程数创建 `NioEventLoopGroup` 实例。如何创建后续再讨论
      */
@@ -57,8 +54,6 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     /**
-     * Create a new instance using the specified number of threads, {@link ThreadFactory} and the
-     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
      * 1.1.1
      */
     public NioEventLoopGroup(int nThreads) {
@@ -66,23 +61,39 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
         this(nThreads, (Executor) null);
     }
 
-    // 1.1.1.1
-    // 当然了，用户也可以直接使用此构造器，传入 nThreads 和 Executor (Java 和 自定义的都可以)
-    // 如何使用最优 Executor 和甚至使用自定义的 Executor ，不在此进行讨论，它跟咱们的主题无关
+    /**
+     * 1.1.1.1
+     * 当然了，用户也可以直接使用此构造器，传入 nThreads 和 Executor (Java 和 自定义的都可以)
+     * 如何使用最优 Executor 和甚至使用自定义的 Executor ，不在此进行讨论，它跟咱们的主题无关
+     * @param nThreads 0
+     * @param executor null
+     */
     public NioEventLoopGroup(int nThreads, Executor executor) {
 
         // 使用 `SelectorProvider.provider()` 提供  `SelectorProvider`， 细节下文进行描述
         this(nThreads, executor, SelectorProvider.provider());
     }
 
-    // 1.1.1.2
+    /**
+     * 1.1.1.2
+     * @param nThreads 0
+     * @param executor null
+     * @param selectorProvider SelectorProvider.provider()
+     */
     public NioEventLoopGroup(
             int nThreads, Executor executor, final SelectorProvider selectorProvider) {
         //  使用 `DefaultSelectStrategyFactory.INSTANCE` 为 NioEventLoopGroup 提供默认的 `SelectStrategyFactory`。
         this(nThreads, executor, selectorProvider, DefaultSelectStrategyFactory.INSTANCE);
     }
 
-    // 1.1.1.2.1
+
+    /**
+     * 1.1.1.2.1
+     * @param nThreads 0
+     * @param executor null
+     * @param selectorProvider SelectorProvider.provider() 下面源码讲解
+     * @param selectStrategyFactory  DefaultSelectStrategyFactory.INSTANCE 下面源码中讲解
+     */
     public NioEventLoopGroup(int nThreads, Executor executor, final SelectorProvider selectorProvider,
                              final SelectStrategyFactory selectStrategyFactory) {
 
@@ -94,13 +105,14 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
         super(nThreads, executor, selectorProvider, selectStrategyFactory, RejectedExecutionHandlers.reject());
     }
 }
+
 ```
 
 上面的代码为此步骤中 NioEventLoopGroup 涉及到的代码， 和上面描述的一致。不断地调用其重载方法，这本身没什么？ 
 
 仔细看此类描述： `NioEventLoopGroup` 用于基于 NIO Selector 的 Channel 的实现。毫无疑问，此类必定用到了 Java NIO 核心组件 Selector，以及 Netty 基于 Java Native Channel 实现的 Channel。 
 
-对于 1、1.1， 1.1.1 这里不在赘述，后续会用到他们
+对于 1、1.1， 1.1.1 这里不在描述，后续会用到他们
 
 &nbsp;
 
@@ -110,7 +122,7 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
 
 java doc 的描述： 用于 selector 和 selectable channel 的 `Service-provider` 类。不熟悉 Selector 底层原理，对这句话理解不到真髓。
 
-这里对它进行深入剖析，其实就是此 Java VM 选择 OS 内核不同的 (Kernel) Multiplux 用于 I/O 操作用的。对于其他的 OS 本文不多作赘述，Linux 那么多路复用器都有哪些呢？
+这里对它进行深入剖析，其实就是此 Java VM 选择 OS 内核不同的 (Kernel) Multiplux 来对 I/O 进行操作。对于其他的 OS 本文不多作赘述，Linux 那么多路复用器都有哪些呢？
 
 - `epoll`
 
@@ -136,7 +148,7 @@ public abstract class SelectorProvider {
   /**
    * 如果定义了系统属性 java.nio.channels.spi.SelectorProvider， 则将属性值 类加载作为 selector provider。 
    * 定义方法： 
-   * e.g. -D-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider
+   * e.g. -Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider
    */
   private static boolean loadProviderFromProperty() {
     String cn = System.getProperty("java.nio.channels.spi.SelectorProvider");
@@ -193,8 +205,7 @@ public abstract class SelectorProvider {
         return true;
       } catch (ServiceConfigurationError sce) {
         if (sce.getCause() instanceof SecurityException) {
-          
-          // Ignore the security exception, try the next provider
+         
           // 如果获取到安全异常， 尝试迭代器中的下一个
           continue;
         }
@@ -240,6 +251,10 @@ public abstract class SelectorProvider {
 > 注意： 
 >
 > -  Netty 在不同 OS 中编译， DefaultSelectorProvider 是不同的
+
+&nbsp;
+
+下面针对不同系统，将 `DefaultSelectorProvider.create()` 方法源码进行剖析！
 
 - mac
 

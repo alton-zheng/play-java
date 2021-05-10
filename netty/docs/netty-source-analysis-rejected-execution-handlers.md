@@ -49,9 +49,17 @@ public interface RejectedExecutionHandler {
 &nbsp;
 
 - 用来创建不同的 RejectedExecutionHandlers 公开 `helper` 方法。
-- 当由于配置的时间限制无法添加 task 时，尝试 backoff。只有当 task 是从 event loop 外部添加的时候才会这样做，这意味着 EventExecutor.inEventLoop() 返回false。
+- 当由于配置的时间限制无法添加 task 时，尝试 backoff。只有当 task 是从 event loop 外部添加的时候才会这样做，这意味着 EventExecutor.inEventLoop() 返回 `false`。
 
 ```java
+package io.netty.util.concurrent;
+
+import io.netty.util.internal.ObjectUtil;
+
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
+
 public final class RejectedExecutionHandlers {
 
     private static final RejectedExecutionHandler REJECT = new RejectedExecutionHandler() {
@@ -75,8 +83,6 @@ public final class RejectedExecutionHandlers {
     }
 
     /**
-     * Tries to backoff when the task can not be added due restrictions for an configured amount of time. This
-     * is only done if the task was added from outside of the event loop which means
      * 此方法俗称补偿策略
      * 另一种 RejectedExecutionHandler ， 当由于配置的时间限制无法添加 task 时，尝试 backoff。
      * 被调用的场景： 只有当 task 是从 event loop 外部添加的时候才会这样做，这意味着 EventExecutor.inEventLoop() 返回false。
@@ -91,6 +97,7 @@ public final class RejectedExecutionHandlers {
          * ObjectUtil 它是一个很简单的一个 Java 工具类，有兴趣自己看看
          */
         ObjectUtil.checkPositive(retries, "retries");
+        
         final long backOffNanos = unit.toNanos(backoffAmount);
         return new RejectedExecutionHandler() {
             @Override
@@ -102,7 +109,7 @@ public final class RejectedExecutionHandlers {
                 if (!executor.inEventLoop()) {
                     for (int i = 0; i < retries; i++) {
                         // Try to wake up the executor so it will empty its task queue.
-                        // 尝试唤醒 executor，使其清空任务队列。详情请看 Java 多线程知识。不在讨论范围
+                        // 尝试唤醒 executor，使其清空 task 队列。详情请看 Java 多线程知识。不在讨论范围
                         executor.wakeup(false);
 
                         // 阻塞当前线程，阻塞时间  backOffNanos (纳秒)
@@ -119,8 +126,6 @@ public final class RejectedExecutionHandlers {
                     }
                 }
 
-                // Either we tried to add the task from within the EventLoop or we was not able to add it even with
-                // backoff.
                 /**
                  * executor 不在 event loop 中
                  * 或者在尝试 retries 次后，仍无法添加 task 到 executor 时

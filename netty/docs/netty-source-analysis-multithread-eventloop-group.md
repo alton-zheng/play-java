@@ -76,7 +76,7 @@ public abstract class MultithreadEventLoopGroup extends MultithreadEventExecutor
 
 主线剖析：
 
-![netty-multithread-event-executor-group-simple](/Users/alton/Desktop/netty-multithread-event-executor-group-simple.png)
+![netty-multithread-event-executor-group-simple](images/netty-multithread-event-executor-group-simple.png)
 
 ```java
 public abstract class MultithreadEventExecutorGroup extends AbstractEventExecutorGroup {
