@@ -77,6 +77,8 @@
 
 ### [高并发](java-concurrency)
 
+- [并发编程的挑战](java-concurrency/java-concurrency-challenge.md)
+
 - [多线程面试题](java-concurrency/interview.md)
 - [概览](java-concurrency/thread-overview.md)
 - [java-cas](java-concurrency/java-cas.md)

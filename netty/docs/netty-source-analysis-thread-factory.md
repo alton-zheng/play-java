@@ -9,7 +9,7 @@ Netty ThreadFactory 为 Event Loop 提供创建新线程的功能。在 `Multith
 为了更好让大家理解 Netty 源码底层逻辑，本文先对 Netty `Thread Factor` 进行深入剖析。 在这里简单描述下 Thread 工厂的作用： 
 
 - 按需创建新 thread 的对象。
-- 使用 Thread Factor 消除了对新建 thread 调用的硬编码，使应用程序能够使用特殊的 thread subclass、`priority` 等。
+- 使用 Thread Factory 消除了对新建 thread 调用的硬编码，使应用程序能够使用特殊的 thread subclass、`priority` 等。
 
 这个接口最简单的实现是:
 
@@ -33,6 +33,8 @@ Netty 源码剖析的以咱们的示例代码来描述，有更强的代入感�
 下面为构建 DefaultThreadFactory  UML 图。不包含如何创建 thread， 仅为 ThreadFactory 默认实现
 
 ![netty-thread-pool](images/netty-thread-pool.png)
+
+&nbsp;
 
 ```java
 public class DefaultThreadFactory implements ThreadFactory {
@@ -66,6 +68,26 @@ public class DefaultThreadFactory implements ThreadFactory {
         this(poolType, false, Thread.NORM_PRIORITY);
     }
 
+    public DefaultThreadFactory(String poolName) {
+        this(poolName, false, Thread.NORM_PRIORITY);
+    }
+
+    public DefaultThreadFactory(Class<?> poolType, boolean daemon) {
+        this(poolType, daemon, Thread.NORM_PRIORITY);
+    }
+
+    public DefaultThreadFactory(String poolName, boolean daemon) {
+        this(poolName, daemon, Thread.NORM_PRIORITY);
+    }
+
+    public DefaultThreadFactory(Class<?> poolType, int priority) {
+        this(poolType, false, priority);
+    }
+
+    public DefaultThreadFactory(String poolName, int priority) {
+        this(poolName, false, priority);
+    }
+
     // Step.2
 
     /**
@@ -88,9 +110,10 @@ public class DefaultThreadFactory implements ThreadFactory {
         // 检查 poolType, 为空时，抛出 poolType NullPointerException
         ObjectUtil.checkNotNull(poolType, "poolType");
 
-        // 获取 poolName,代码就不深入了， 直接说结果， 去除包名，只去类本身的名称
-        // 在示例中， poolName 为 multithreadEventExecutorGroup
+        // 获取 poolName,代码就不深入了， 直接说结果， 去除包名，只保留类本身的名称
         String poolName = StringUtil.simpleClassName(poolType);
+
+        // 在示例中， poolName 为 multithreadEventExecutorGroup
         switch (poolName.length()) {
             case 0:
                 return "unknown";
@@ -98,6 +121,7 @@ public class DefaultThreadFactory implements ThreadFactory {
                 return poolName.toLowerCase(Locale.US);
             default:
                 if (Character.isUpperCase(poolName.charAt(0)) && Character.isLowerCase(poolName.charAt(1))) {
+
                     // 示例走此逻辑
                     return Character.toLowerCase(poolName.charAt(0)) + poolName.substring(1);
                 } else {
@@ -108,13 +132,16 @@ public class DefaultThreadFactory implements ThreadFactory {
 
     /**
      * Step 4
-     * 到第4步位置，为构建此 DefaultThreadFactory
+     * 为构建此 DefaultThreadFactory
      * @param poolName multithreadEventExecutorGroup
      * @param daemon false
      * @param priority 5
      * @param threadGroup null
      */
     public DefaultThreadFactory(String poolName, boolean daemon, int priority, ThreadGroup threadGroup) {
+
+        // 检查 poolName 是否为空，为空抛出空指标异常
+        // 虽然示例代码不为空，但在其它场景，要小心抛空指针异常
         ObjectUtil.checkNotNull(poolName, "poolName");
 
         // priority 5 为中等优先级，不会越界
@@ -123,11 +150,12 @@ public class DefaultThreadFactory implements ThreadFactory {
                     "priority: " + priority + " (expected: Thread.MIN_PRIORITY <= priority <= Thread.MAX_PRIORITY)");
         }
 
-        // prefix 为 `multithreadEventExecutorGroup-number(递增，1 开始)-`
+        // prefix 为 `multithreadEventExecutorGroup-number(每个 DefaultThreadFactory 实例递增一次)-`
         prefix = poolName + '-' + poolId.incrementAndGet() + '-';
         this.daemon = daemon;
         this.priority = priority;
         this.threadGroup = threadGroup;
+
     }
 
     /**
@@ -160,7 +188,7 @@ public class DefaultThreadFactory implements ThreadFactory {
                 t.setDaemon(daemon);
             }
 
-            // 将新创建的 thread priority 等于此工厂 priority
+            // 将新创建的 thread priority 等于此工厂的 priority
             if (t.getPriority() != priority) {
                 t.setPriority(priority);
             }
@@ -323,7 +351,6 @@ final class FastThreadLocalRunnable implements Runnable {
         return runnable instanceof FastThreadLocalRunnable ? runnable : new FastThreadLocalRunnable(runnable);
     }
 }
-
 ```
 
 &nbsp;
@@ -408,5 +435,5 @@ public class FastThreadLocalThread extends Thread {
 
 > 上一篇： 1.1.2.1.1 《create》: 提供 `RejectedExecutionHandlers` 《[Netty 源码深入剖析之 - RejectedExecutionHandlers](netty-source-analysis-rejected-execution-handlers.md)》
 >
-> 下一篇：EventLoopGroup  《[Netty 源码深入剖析之 - MultithreadEventLoopGroup](netty-source-analysis-multithread-event-loop-group.md)》
+> 下一篇：EventLoopGroup  《[Netty 源码深入剖析之 - MultithreadEventLoopGroup](netty-source-analysis-event-executor.md)》
 
