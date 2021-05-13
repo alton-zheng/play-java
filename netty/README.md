@@ -46,6 +46,6 @@
 - [x] [Netty 源码深入剖析 - RejectedExecutionHandlers](docs/netty-source-analysis-rejected-execution-handlers.md)
 - [x] [Netty 源码深入剖析 - MultithreadEventLoopGroup](docs/netty-source-analysis-multithread-eventloop-group.md)
   - [x] [Netty 源码深入剖析 - ThreadFactory](docs/netty-source-analysis-thread-factory.md)
-  - [x] [Netty 源码深入剖析 - EventExecutor](docs/netty-source-analysis-event-executor.md)
+  - [x] [Netty 源码深入剖析 - EventLoop 之 EventExecutor](docs/netty-source-analysis-event-executor.md)
   - [x] [Netty 源码深入剖析 - EventExecutorChooser](docs/netty-source-analysis-event-executor-chooser.md)
 - [ ] 

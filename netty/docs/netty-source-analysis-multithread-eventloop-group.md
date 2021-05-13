@@ -180,7 +180,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
             boolean success = false;
             try {
                 // 使用 executor 和 参数 args 初始化 children 元素
-                // newChild 方法以示例中来说，在 NioEventLoopGroup 中覆写。
+                // newChild 方法以示例中来说，在 NioEventLoopGroup 中覆写。这里为 EventExecutor 专题入口
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {

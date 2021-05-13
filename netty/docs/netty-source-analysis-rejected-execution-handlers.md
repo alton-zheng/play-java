@@ -22,7 +22,13 @@ public final class DefaultSelectStrategyFactory implements SelectStrategyFactory
   /* 工厂模式， 构建 DefaultSelectStrategyFactory 实例*/  
   public static final SelectStrategyFactory INSTANCE = new DefaultSelectStrategyFactory();
 
-    private DefaultSelectStrategyFactory() { }
+  private DefaultSelectStrategyFactory() { }
+  
+  @Override
+  public SelectStrategy newSelectStrategy() {
+     return DefaultSelectStrategy.INSTANCE;
+  }
+  
 }
 ```
 
