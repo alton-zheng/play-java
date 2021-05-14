@@ -119,15 +119,15 @@ final class DefaultSelectStrategy implements SelectStrategy {
 
 源码剖析到此，对于整个代码层级应该有写概念在里边了，下面用将它们继承和实现层级以图的形式展示出来。不仅仅包含示例代码部分，还包含了实现了 EventLoop 的 SingleThreadEventLoop 类，以及继承自 SingleThreadEventLoop 类的所有子类（包含 NioEventLoop）。具体自行看下图： 
 
-![netty-arthitecture](/Users/alton/Desktop/netty-arthitecture.png)
+![netty-arthitecture](images/netty-arthitecture.png)
 
 &nbsp;
 
 下面来看如何构建 NioEventLoop 实例。  在代码讲解的过程中会遇到很多之前没剖析过的类和接口，在学习过程中请对照上图来进行剖析。
 
-![NioEventLoop](/Users/alton/Desktop/NioEventLoop.png)
+![NioEventLoop](images/NioEventLoop.png)
 
-
+&nbsp;
 
 
 
