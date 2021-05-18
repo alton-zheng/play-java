@@ -129,6 +129,127 @@ final class DefaultSelectStrategy implements SelectStrategy {
 
 &nbsp;
 
+上面图可以看出， 构建 NioEventLoop 实例中，不断地寻父，从 `SingleThreadEventExecutor` 开始属于 Java 原生库中关于高并发，线程核心库，这里不对它进行阐述（在这里只要知道它是 Java 单个线程的线程池即可，想要了解更多 `SingleThreadEventExecutor` 的信息，请看 Java Concurrency 相关知识）。
+
+```java
+```
+
+&nbsp;
+
+### Netty Selector
+
+&nbsp;
+
+#### SelectedSelectionKeySet
+
+SelectedSelectionKeySet 内部很简单，使用数组代替原 Selector 的中的 HashSet，提高性能。数组默认大小为1024，容量不够，扩容 2 倍。
+
+```java
+package io.netty.channel.nio;
+
+import java.nio.channels.SelectionKey;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
+final class SelectedSelectionKeySet extends AbstractSet<SelectionKey> {
+
+    SelectionKey[] keys;
+    int size;
+
+    // 无参构造，初始化 SelectionKey[] 数组
+    SelectedSelectionKeySet() {
+        keys = new SelectionKey[1024];
+    }
+
+    @Override
+    public boolean add(SelectionKey o) {
+        if (o == null) {
+            return false;
+        }
+
+        keys[size++] = o;
+
+        // 当大小等于 SelectionKey[] 长度时，进行扩容
+        if (size == keys.length) {
+            increaseCapacity();
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public Iterator<SelectionKey> iterator() {
+        return new Iterator<SelectionKey>() {
+            private int idx;
+
+            @Override
+            public boolean hasNext() {
+                return idx < size;
+            }
+
+            @Override
+            public SelectionKey next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return keys[idx++];
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    /**
+     * 重置
+     */
+    void reset() {
+        reset(0);
+    }
+
+    /**
+     * 重置 为 null
+     * @param start
+     */
+    void reset(int start) {
+        // 将 keys 所有元素置为 null
+        Arrays.fill(keys, start, size, null);
+        size = 0;
+    }
+
+    /**
+     * 增容，扩大 2 倍
+     */
+    private void increaseCapacity() {
+        SelectionKey[] newKeys = new SelectionKey[keys.length << 1];
+        System.arraycopy(keys, 0, newKeys, 0, size);
+        keys = newKeys;
+    }
+}
+```
+
+
+
 
 
 上一篇： [Netty 源码深入剖析 - ThreadFactory](netty-source-analysis-thread-factory.md)
