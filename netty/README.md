@@ -47,5 +47,6 @@
 - [x] [Netty 源码深入剖析 - MultithreadEventLoopGroup](docs/netty-source-analysis-multithread-eventloop-group.md)
   - [x] [Netty 源码深入剖析 - ThreadFactory](docs/netty-source-analysis-thread-factory.md)
   - [x] [Netty 源码深入剖析 - EventLoop 之 EventExecutor](docs/netty-source-analysis-event-executor.md)
-  - [x] [Netty 源码深入剖析 - EventExecutorChooser](docs/netty-source-analysis-event-executor-chooser.md)
+    - [ ] [Netty-源码深入剖析 - MpscUnboundedArrayQueue](docs/netty-source-analysis-mpsc-unbounded-array-queue.md)
+  - [ ] [Netty 源码深入剖析 - EventExecutorChooser](docs/netty-source-analysis-event-executor-chooser.md)
 - [ ] 
