@@ -139,13 +139,13 @@ final class DefaultSelectStrategy implements SelectStrategy {
 
 ### Netty Selector
 
-构建 `NioEventLoop` 实例过程中，将 Selector 经过优化，组合进来
+构建 `NioEventLoop` 实例过程中，将 Selector 经过优化，组合进来，如何组合的呢？首先来看看 `SelectedSelectionKeySet`  
 
 &nbsp;
 
 #### SelectedSelectionKeySet
 
-SelectedSelectionKeySet 内部很简单，使用数组代替原 Selector 的中的 HashSet，提高性能。数组默认大小为1024，容量不够，扩容 2 倍。
+SelectedSelectionKeySet 内部很简单，使用数组代替原 Selector 的中的 HashSet，提高性能。数组默认大小为1024，容量不够，扩容 2 倍。里边包装了 SelectionKey 数组
 
 ```java
 package io.netty.channel.nio;
@@ -247,6 +247,162 @@ final class SelectedSelectionKeySet extends AbstractSet<SelectionKey> {
         SelectionKey[] newKeys = new SelectionKey[keys.length << 1];
         System.arraycopy(keys, 0, newKeys, 0, size);
         keys = newKeys;
+    }
+}
+```
+
+&nbsp;
+
+#### SelectedSelectionKeySetSelector
+
+那么 `SelectedSelectionKeySet` 是如何被 Netty 组合的呢，其实吧， 它有属于为自己设计的 Selector 子类，在此类中，它能被很好的集成。 主角： `SelectedSelectionKeySetSelector` 
+
+对此类的注释， 对于 Selector 认识不深的小伙伴可以仔细看看，对 Selector 和 SelectedSelectionKeySet 熟悉的，可以略过，仅仅对他们进行了简单的包装处理
+
+```java
+/**
+ * 它是 Selector 的子类， 包装了上面对 Selector 优化的 SelectedSelectionKeySet 和 原生 Selector.
+ */
+final class SelectedSelectionKeySetSelector extends Selector {
+    private final SelectedSelectionKeySet selectionKeys;
+    private final Selector delegate;
+
+    /**
+     * 构造器
+     * 示例代码入口
+     * @param delegate 原生 Selector
+     * @param selectionKeys SelectedSelectionKeySet (数组数据结构来换取更优越的性能)
+     */
+    SelectedSelectionKeySetSelector(Selector delegate, SelectedSelectionKeySet selectionKeys) {
+        this.delegate = delegate;
+        this.selectionKeys = selectionKeys;
+    }
+
+
+    /**
+     * 覆写了 Selector 的 isOpen() 方法
+     * 判断 Selector 是否打开
+     * Selector 需要 open 才能正式进行 IO 操作
+     * @return
+     */
+    @Override
+    public boolean isOpen() {
+        return delegate.isOpen();
+    }
+
+    /**
+     * 覆写 Selector 的 provider
+     * 返回此 Selector 的 SelectorProvider
+     * 通俗点说，返回 Selector 的提供者
+     * @return
+     */
+    @Override
+    public SelectorProvider provider() {
+        return delegate.provider();
+    }
+
+    /**
+     * 覆写 Selector 的 keys 方法
+     * 非线程安全
+     * 返回 Selector 的 SelectionKey 集合
+     * 集合中的 key, 不能直接修改。 key 只有在它被取消并且它的通道被注销之后才会被删除。
+     * 任何修改 key set 的行为都会导致抛出 UnsupportedOperationException
+     *
+     * @return
+     */
+    @Override
+    public Set<SelectionKey> keys() {
+        return delegate.keys();
+    }
+
+    /**
+     * 覆写 Selector 的 selectedKeys 方法
+     * 非线程安全
+     * 此 set 的 SelectionKey 可以从 Set 中删除，但不能直接添加到该 Set 中.
+     * 任何向 Set 添加元素的行为都会导致抛出 UnsupportedOperationException.
+     * @return
+     */
+    @Override
+    public Set<SelectionKey> selectedKeys() {
+        return delegate.selectedKeys();
+    }
+
+    /**
+     * 覆写 Selector 的 selectNow 方法
+     * 选择对应的 Channel 已准备好进行 I/O 操作的一组 key
+     * 此方法执行 non-blocking select 操作
+     * 如果自上一个 select 操作以来没有可选择的 Channel, 则此方法立即返回 0
+     * 调用此方法将清除之前调用 wakeup 方法的效果
+     * @return 返回 select 操作更新其准备操作集 key 的数目，可能为 0
+     * @throws IOException I/O 操作过程中发生异常时，抛出
+     */
+    @Override
+    public int selectNow() throws IOException {
+
+        // 调用 Selector#selectNow() 方法前, 重置 selectionKeys,
+        // 具体实现在 SelectedSelectionKeySet 类中
+        selectionKeys.reset();
+        return delegate.selectNow();
+    }
+
+
+    /**
+     * 覆写 Selector select(int timeout) 方法
+     * 选择一组 key，其对应的通道已准备好进行I/O操作。
+     * 这个方法执行 blocking 选择操作。
+     * 只有在选择了至少一个 channel、调用了该 selector 的 wakeup 方法、中断了当前线程或给定的超时时间过期(以先到者为例)之后，它才返回。
+     *
+     * @param timeout 如果为正，在等待通道就绪时，阻塞时间最多为 timeout 毫秒，如果为零，无限阻塞; 一定不能是负数
+     * @return 已更新其准备操作集的键的数目，可能为零
+     * @throws IOException I/O 操作发生异常时，抛出此异常
+     */
+    @Override
+    public int select(long timeout) throws IOException {
+
+        // 调用 Selector#select() 方法前, 重置 selectionKeys,
+        // 具体实现在 SelectedSelectionKeySet 类中
+        selectionKeys.reset();
+        return delegate.select(timeout);
+    }
+
+    /**
+     * 与 select(long timeout) 功能一样，这里没有 timeout 时间
+     * @return 已更新其准备操作集的键的数目，可能为零
+     * @throws IOException 发生异常时，抛出
+     */
+    @Override
+    public int select() throws IOException {
+        selectionKeys.reset();
+        return delegate.select();
+    }
+
+    /**
+     * 覆写 Select#wakeup() 方法
+     * 使尚未返回的第一个 select 操作立即返回。
+     * 如果另一个线程在 select() 或 #select(long) 方法的调用中被阻塞，那么该调用将立即返回。
+     * 如果当前没有进行任何 select 操作，那么这些方法中的一个的下一个调用将立即返回，除非同时调用 #selectNow() 方法。
+     * 在任何情况下，该调用返回的值都可能是非零的。
+     * 后续调用 #select() 或 #select(long) 方法将像往常一样阻塞，除非在此期间再次调用该方法。
+     * 在两个连续的 select 操作之间多次调用此方法与只调用一次具有相同的效果。
+     * @return 当前 Selector
+     */
+    @Override
+    public Selector wakeup() {
+        return delegate.wakeup();
+    }
+
+    /**
+     * 覆写 Selector 的 close() 方法
+     * 关闭这个 Selector。
+     * 如果一个线程当前在这个 Selector 的 select 方法中被阻塞，那么它将被中断，就像调用 Selector 的 wakeup() 方法一样。
+     * 任何仍与此 Selector 关联的未取消 key 将失效，它们的 Channel 将被注销，与此 Selector 关联的任何其他资源将被释放。
+     * 如果此 Selector 已经关闭，则调用此方法无效。
+     * 关闭 Selector 后，除了调用此方法或 wakeup 方法外，任何进一步使用它的行为都会引发 ClosedSelectorException 异常。
+     * @throws IOException I/O 操作过程中，如果发生异常，将抛出此异常。
+     */
+    @Override
+    public void close() throws IOException {
+        delegate.close();
     }
 }
 ```
@@ -726,7 +882,11 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 }
 ```
 
+&nbsp;
 
+此专题分享到这里，如有其它内容，还会继续更新和充实。 
+
+&nbsp;
 
 上一篇： [Netty 源码深入剖析 - ThreadFactory](netty-source-analysis-thread-factory.md)
 
