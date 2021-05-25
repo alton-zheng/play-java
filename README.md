@@ -244,7 +244,7 @@
 - Structural Patterns
   - [x] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
   - [x] [适配器模式](design-patterns-in-java/design-patterns-adapter.md)
-- [x] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
+  - [x] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
   - [x] [组合模式](design-patterns-in-java/design-patterns-composite.md)
   - [x] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [外观模式](design-patterns-in-java/design-patterns-facade.md)
