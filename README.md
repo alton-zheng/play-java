@@ -231,13 +231,13 @@
 - Creational Patterns
 
   - [x] [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
+  - [x] [单例模式](design-patterns-in-java/design-patterns-singleton.md)
+  - [x] [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [x] [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
   - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
   - [x] [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory.md)
   - [x] [生成器模式](design-patterns-in-java/design-patterns-bulider.md)
   - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
-  - [x] [单例模式](design-patterns-in-java/design-patterns-singleton.md)
-  - [x] [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
-  - [x] [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
   - [x] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
   - [x] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
 
