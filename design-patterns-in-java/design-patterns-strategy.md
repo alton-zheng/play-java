@@ -207,7 +207,7 @@ class ExampleApplication is
 
 ## 在 Java 中使用策略模式
 
-**复杂度：** 
+**复杂度：** 1
 
 **流行度：** 3
 

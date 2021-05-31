@@ -202,69 +202,69 @@
 
 ## 设计模式
 
-- [x] [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
+- [ ] [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
 
-- [x] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
+- [ ] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
 
-- [x] [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
+- [ ] [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
 
-- [x] [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
+- [ ] [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
 
-- [x] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
+- [ ] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
 
-- [x] [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
+- [ ] [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
 
-- [x] [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
+- [ ] [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
 
-- [x] [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
+- [ ] [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
 
 - 面向对象设计原则
-  - [x] [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
-  - [x] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
-  - [x] [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
-  - [x] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
-  - [x] [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
-  - [x] [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
-  - [x] [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
-  - [x] [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
+  - [ ] [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
+  - [ ] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
+  - [ ] [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
+  - [ ] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
+  - [ ] [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
+  - [ ] [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
+  - [ ] [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
+  - [ ] [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
 
 - Creational Patterns
 
   - [x] [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
-  - [x] [单例模式](design-patterns-in-java/design-patterns-singleton.md)
-  - [x] [简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
-  - [x] [工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
-  - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
+  - [x] [1 - 单例模式](design-patterns-in-java/design-patterns-singleton.md)
+  - [x] [2 - 简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [x] [3 - 工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
   - [x] [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory.md)
-  - [x] [生成器模式](design-patterns-in-java/design-patterns-bulider.md)
-  - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
-  - [x] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
-  - [x] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
+  - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
+  - [ ] [Builder 模式](design-patterns-in-java/design-patterns-bulider.md)
+  - [ ] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
+  - [ ] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
+  - [ ] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
 
 - Structural Patterns
-  - [x] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
-  - [x] [适配器模式](design-patterns-in-java/design-patterns-adapter.md)
-  - [x] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
-  - [x] [组合模式](design-patterns-in-java/design-patterns-composite.md)
-  - [x] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
+  - [ ] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [ ] [适配器模式](design-patterns-in-java/design-patterns-adapter.md)
+  - [ ] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
+  - [ ] [组合模式](design-patterns-in-java/design-patterns-composite.md)
+  - [ ] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [外观模式](design-patterns-in-java/design-patterns-facade.md)
-  - [x] [享元模式](design-patterns-in-java/design-patterns-flyweight.md)
-  - [x] [代理模式](design-patterns-in-java/design-patterns-proxy.md)
+  - [ ] [享元模式](design-patterns-in-java/design-patterns-flyweight.md)
+  - [ ] [代理模式](design-patterns-in-java/design-patterns-proxy.md)
   
 - Behavioral Patterns
-  - [x] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
-  - [x] [责任链模式](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
-  - [x] [命令模式](design-patterns-in-java/design-patterns-command.md)
-  - [x] [迭代器模式](design-patterns-in-java/design-patterns-iterator.md)
-  - [x] [中介者模式](design-patterns-in-java/design-patterns-mediator.md)
-  - [x] [备忘录模式](design-patterns-in-java/design-patterns-memento.md)
+  - [ ] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
+  - [ ] [责任链模式](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
+  - [ ] [命令模式](design-patterns-in-java/design-patterns-command.md)
+  - [ ] [迭代器模式](design-patterns-in-java/design-patterns-iterator.md)
+  - [ ] [中介者模式](design-patterns-in-java/design-patterns-mediator.md)
+  - [ ] [备忘录模式](design-patterns-in-java/design-patterns-memento.md)
 
-  - [x] [观察者模式](design-patterns-in-java/design-patterns-observer.md)
-  - [x] [状态模式](design-patterns-in-java/design-patterns-state.md)
+  - [ ] [观察者模式](design-patterns-in-java/design-patterns-observer.md)
+  - [ ] [状态模式](design-patterns-in-java/design-patterns-state.md)
   - [x] [策略模式](design-patterns-in-java/design-patterns-strategy.md)
-  - [x] [模板方法模式](design-patterns-in-java/design-patterns-template-method.md)
-  - [x] [访问者模式](design-patterns-in-java/design-patterns-visitor.md)
-  - [x] [访问者和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
+  - [ ] [模板方法模式](design-patterns-in-java/design-patterns-template-method.md)
+  - [ ] [访问者模式](design-patterns-in-java/design-patterns-visitor.md)
+  - [ ] [访问者和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
 
 &nbsp;
 
