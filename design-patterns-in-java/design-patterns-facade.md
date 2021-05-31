@@ -345,7 +345,7 @@ public class VideoConversionFacade {
 
 ####  **Demo.java:** Client code
 
-```
+```java
 package refactoring_guru.facade.example;
 
 import refactoring_guru.facade.example.facade.VideoConversionFacade;
@@ -361,9 +361,11 @@ public class Demo {
 }
 ```
 
+&nbsp;
+
 ####  **OutputDemo.txt:** Execution result
 
-```
+```ABAP
 VideoConversionFacade: conversion started.
 CodecFactory: extracting ogg audio...
 BitrateReader: reading file...
