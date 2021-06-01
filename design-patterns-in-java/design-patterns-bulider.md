@@ -2,17 +2,25 @@
 
 亦称：建造者模式、Builder
 
+&nbsp;
+
 ##  意图
 
-**生成器模式**是一种创建型设计模式， 使你能够分步骤创建复杂对象。 该模式允许你使用相同的创建代码生成不同类型和形式的对象。
+**Builder 模式** 是一种创建型设计模式， 使你能够分步骤创建复杂对象。 该模式允许你使用相同的创建代码生成不同类型和形式的对象。
 
-![生成器设计模式](https://refactoringguru.cn/images/patterns/content/builder/builder-zh.png?id=6889a9ff5dbc070a084e)
+![生成器设计模式](images/builder-zh.png)
+
+&nbsp;
 
 ##  问题
 
-假设有这样一个复杂对象， 在对其进行构造时需要对诸多成员变量和嵌套对象进行繁复的初始化工作。 这些初始化代码通常深藏于一个包含众多参数且让人基本看不懂的构造函数中； 甚至还有更糟糕的情况， 那就是这些代码散落在客户端代码的多个位置。
+假设有这样一个复杂对象， 在对其进行构造时需要对诸多成员变量和嵌套对象进行繁复的初始化工作。 这些初始化代码通常深藏于一个包含众多参数且让人基本看不懂的构造函数中； 甚至还有更糟糕的情况， 那就是这些代码散落在 client 代码的多个位置。
 
-![大量子类会带来新的问题](https://refactoringguru.cn/images/patterns/diagrams/builder/problem1.png?id=11e715c5c97811f848c4)
+&nbsp;
+
+![大量子类会带来新的问题](images/problem1.png)
+
+&nbsp;&nbsp;
 
 如果为每种可能的对象都创建一个子类， 这可能会导致程序变得过于复杂。
 
@@ -22,47 +30,61 @@
 
 另一种方法则无需生成子类。 你可以在 `房屋`基类中创建一个包括所有可能参数的超级构造函数， 并用它来控制房屋对象。 这种方法确实可以避免生成子类， 但它却会造成另外一个问题。
 
-![可伸缩的构造函数](https://refactoringguru.cn/images/patterns/diagrams/builder/problem2.png?id=2e91039b6c7d2d2df6ee)
+![可伸缩的构造函数](images/problem5.png)
+
+&nbsp;
 
 拥有大量输入参数的构造函数也有缺陷： 这些参数也不是每次都要全部用上的。
 
-通常情况下， 绝大部分的参数都没有使用， 这使得[对于构造函数的调用十分不简洁](https://refactoringguru.cn/smells/long-parameter-list)。 例如， 只有很少的房子有游泳池， 因此与游泳池相关的参数十之八九是毫无用处的。
+通常情况下， 绝大部分的参数都没有使用， 这使得对于构造函数的调用十分不简洁。 例如， 只有很少的房子有游泳池， 因此与游泳池相关的参数十之八九是毫无用处的。
+
+&nbsp;
 
 ##  解决方案
 
 生成器模式建议将对象构造代码从产品类中抽取出来， 并将其放在一个名为*生成器*的独立对象中。
 
-![应用生成器模式](https://refactoringguru.cn/images/patterns/diagrams/builder/solution1.png?id=8ce82137f8935998de80)
+![应用生成器模式](images/solution3.png)
+
+&nbsp;
 
 生成器模式让你能够分步骤创建复杂对象。 生成器不允许其他对象访问正在创建中的产品。
 
-该模式会将对象构造过程划分为一组步骤， 比如 `build­Walls`创建墙壁和 `build­Door`创建房门创建房门等。 每次创建对象时， 你都需要通过生成器对象执行一系列步骤。 重点在于你无需调用所有步骤， 而只需调用创建特定对象配置所需的那些步骤即可。
+该模式会将对象构造过程划分为一组步骤， 比如 `build­Walls` 创建墙壁和 `build­Door` 创建房门创建房门等。 每次创建对象时， 你都需要通过生成器对象执行一系列步骤。 重点在于你无需调用所有步骤， 而只需调用创建特定对象配置所需的那些步骤即可。
 
 当你需要创建不同形式的产品时， 其中的一些构造步骤可能需要不同的实现。 例如， 木屋的房门可能需要使用木头制造， 而城堡的房门则必须使用石头制造。
 
 在这种情况下， 你可以创建多个不同的生成器， 用不同方式实现一组相同的创建步骤。 然后你就可以在创建过程中使用这些生成器 （例如按顺序调用多个构造步骤） 来生成不同类型的对象。
 
-![img](https://refactoringguru.cn/images/patterns/content/builder/builder-comic-1-zh.png?id=c39eaef88b3718af5b6d)
+![img](images/builder-comic-1-zh.png)
+
+&nbsp;
 
 不同生成器以不同方式执行相同的任务。
 
 例如， 假设第一个建造者使用木头和玻璃制造房屋， 第二个建造者使用石头和钢铁， 而第三个建造者使用黄金和钻石。 在调用同一组步骤后， 第一个建造者会给你一栋普通房屋， 第二个会给你一座小城堡， 而第三个则会给你一座宫殿。 但是， 只有在调用构造步骤的客户端代码可以通过通用接口与建造者进行交互时， 这样的调用才能返回需要的房屋。
 
+&nbsp;
+
 #### 主管
 
 你可以进一步将用于创建产品的一系列生成器步骤调用抽取成为单独的*主管*类。 主管类可定义创建步骤的执行顺序， 而生成器则提供这些步骤的实现。
 
-![img](https://refactoringguru.cn/images/patterns/content/builder/builder-comic-2-zh.png?id=3658d16be763a2d63409)
+![img](images/builder-comic-2-zh.png)
+
+&nbsp;
 
 主管知道需要哪些创建步骤才能获得可正常使用的产品。
 
-严格来说， 你的程序中并不一定需要主管类。 客户端代码可直接以特定顺序调用创建步骤。 不过， 主管类中非常适合放入各种例行构造流程， 以便在程序中反复使用。
+严格来说， 你的程序中并不一定需要主管类。 client 代码可直接以特定顺序调用创建步骤。 不过， 主管类中非常适合放入各种例行构造流程， 以便在程序中反复使用。
 
-此外， 对于客户端代码来说， 主管类完全隐藏了产品构造细节。 客户端只需要将一个生成器与主管类关联， 然后使用主管类来构造产品， 就能从生成器处获得构造结果了。
+此外， 对于 client 代码来说， 主管类完全隐藏了产品构造细节。 client 只需要将一个生成器与主管类关联， 然后使用主管类来构造产品， 就能从生成器处获得构造结果了。
+
+&nbsp;
 
 ##  生成器模式结构
 
-![生成器设计模式结构](https://refactoringguru.cn/images/patterns/diagrams/builder/structure.png?id=fe9e23559923ea0657aa)
+![生成器设计模式结构](images/structure4.png)
 
 1. **生成器** （Builder） 接口声明在所有类型生成器中通用的产品构造步骤。
 2. **具体生成器** （Concrete Builders） 提供构造过程的不同实现。 具体生成器也可以构造不遵循通用接口的产品。
@@ -70,11 +92,13 @@
 4. **主管** （Director） 类定义调用构造步骤的顺序， 这样你就可以创建和复用特定的产品配置。
 5. **客户端** （Client） 必须将某个生成器对象与主管类关联。 一般情况下， 你只需通过主管类构造函数的参数进行一次性关联即可。 此后主管类就能使用生成器对象完成后续所有的构造任务。 但在客户端将生成器对象传递给主管类制造方法时还有另一种方式。 在这种情况下， 你在使用主管类生产产品时每次都可以使用不同的生成器。
 
+&nbsp;
+
 ##  伪代码
 
 下面关于**生成器**模式的例子演示了你可以如何复用相同的对象构造代码来生成不同类型的产品——例如汽车 （Car）——及其相应的使用手册 （Manual）。
 
-![生成器模式结构示例](https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png?id=e3d142b1988117313b96)
+![生成器模式结构示例](images/example-zh.png)
 
 分步骤制造汽车并制作对应型号用户使用手册的示例
 
@@ -212,9 +236,11 @@ class Application is
         Manual manual = builder.getProduct()
 ```
 
-##  生成器模式适合应用场景
+&nbsp;
 
- 使用生成器模式可避免 “重叠构造函数 （telescopic constructor）” 的出现。
+##  Builder 模式适合应用场景
+
+ 使用 Builder 模式可避免 “重叠构造函数 （telescopic constructor）” 的出现。
 
  假设你的构造函数中有十个可选参数， 那么调用该函数会非常不方便； 因此， 你需要重载这个构造函数， 新建几个只有较少参数的简化版。 但这些构造函数仍需调用主构造函数， 传递一些默认数值来替代省略掉的参数。
 
@@ -236,11 +262,13 @@ class Pizza {
 
 基本生成器接口中定义了所有可能的制造步骤， 具体生成器将实现这些步骤来制造特定形式的产品。 同时， 主管类将负责管理制造步骤的顺序。
 
- 使用生成器构造[组合](https://refactoringguru.cn/design-patterns/composite)树或其他复杂对象。
+ 使用 Builder 构造 [组合](design-patterns-composite.md) 树或其他复杂对象。
 
  生成器模式让你能分步骤构造产品。 你可以延迟执行某些步骤而不会影响最终产品。 你甚至可以递归调用这些步骤， 这在创建对象树时非常方便。
 
 生成器在执行制造步骤时， 不能对外发布未完成的产品。 这可以避免客户端代码获取到不完整结果对象的情况。
+
+&nbsp;
 
 ## 实现方法
 
@@ -258,21 +286,26 @@ class Pizza {
 
 6. 只有在所有产品都遵循相同接口的情况下， 构造结果可以直接通过主管类获取。 否则， 客户端应当通过生成器获取构造结果。
 
+&nbsp;
+
 ##  生成器模式优缺点
 
--  你可以分步创建对象， 暂缓创建步骤或递归运行创建步骤。
--  生成不同形式的产品时， 你可以复用相同的制造代码。
--  *单一职责原则*。 你可以将复杂构造代码从产品的业务逻辑中分离出来。
+-  √ 你可以分步创建对象， 暂缓创建步骤或递归运行创建步骤。
+-  √ 生成不同形式的产品时， 你可以复用相同的制造代码。
+-  √ *单一职责原则*。 你可以将复杂构造代码从产品的业务逻辑中分离出来。
+-  x 由于该模式需要新增多个类， 因此代码整体复杂程度会有所增加。
 
--  由于该模式需要新增多个类， 因此代码整体复杂程度会有所增加。
+&nbsp;
 
 ##  与其他模式的关系
 
-- 在许多设计工作的初期都会使用[工厂方法模式](https://refactoringguru.cn/design-patterns/factory-method) （较为简单， 而且可以更方便地通过子类进行定制）， 随后演化为使用[抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)、 [原型模式](https://refactoringguru.cn/design-patterns/prototype)或[生成器模式](https://refactoringguru.cn/design-patterns/builder) （更灵活但更加复杂）。
-- [生成器](https://refactoringguru.cn/design-patterns/builder)重点关注如何分步生成复杂对象。 [抽象工厂](https://refactoringguru.cn/design-patterns/abstract-factory)专门用于生产一系列相关对象。 *抽象工厂*会马上返回产品， *生成器*则允许你在获取产品前执行一些额外构造步骤。
-- 你可以在创建复杂[组合模式](https://refactoringguru.cn/design-patterns/composite)树时使用[生成器](https://refactoringguru.cn/design-patterns/builder)， 因为这可使其构造步骤以递归的方式运行。
-- 你可以结合使用[生成器](https://refactoringguru.cn/design-patterns/builder)和[桥接模式](https://refactoringguru.cn/design-patterns/bridge)： *主管*类负责抽象工作， 各种不同的*生成器*负责*实现*工作。
-- [抽象工厂](https://refactoringguru.cn/design-patterns/abstract-factory)、 [生成器](https://refactoringguru.cn/design-patterns/builder)和[原型](https://refactoringguru.cn/design-patterns/prototype)都可以用[单例模式](https://refactoringguru.cn/design-patterns/singleton)来实现。
+- 在许多设计工作的初期都会使用 [工厂方法模式](design-patterns-factory-method-pattern.md) （较为简单， 而且可以更方便地通过子类进行定制）， 随后演化为使用 [抽象工厂模式](design-patterns-abstract-factory.md)、 [原型模式](design-patterns-prototype.md) 或 Builder 模式（更灵活但更加复杂）。
+- Builder重点关注如何分步生成复杂对象。 [抽象工厂](design-patterns-abstract-factory.md) 专门用于生产一系列相关对象。 *抽象工厂*会马上返回产品， 生成器则允许你在获取产品前执行一些额外构造步骤。
+- 你可以在创建复杂 [组合模式](design-patterns-composite.md) 树时使用 Builder， 因为这可使其构造步骤以递归的方式运行。
+- 你可以结合使用 Builder 和 [桥接模式](design-patterns-bridge.md)： *主管*类负责抽象工作， 各种不同的 Builder 负责实现工作。
+- [抽象工厂](design-patterns-abstract-factory.md)、 Builder 和 [原型](design-patterns-prototype.md) 都可以用 [单例模式](design-patterns-singleton.md) 来实现。
+
+&nbsp;
 
 # **Builder** in Java
 
@@ -280,13 +313,9 @@ class Pizza {
 
 Unlike other creational patterns, Builder doesn’t require products to have a common interface. That makes it possible to produce different products using the same construction process.
 
-[ Learn more about Builder ](https://refactoring.guru/design-patterns/builder)
+&nbsp;
 
 ## Usage of the pattern in Java
-
-**Complexity:** 
-
-**Popularity:** 
 
 **Usage examples:** The Builder pattern is a well-known pattern in Java world. It’s especially useful when you need to create an object with lots of possible configuration options.
 
@@ -300,7 +329,7 @@ Builder is widely used in Java core libraries:
 
 **Identification:** The Builder pattern can be recognized in a class, which has a single creation method and several methods to configure the resulting object. Builder methods often support chaining (for example, `someBuilder->setValueA(1)->setValueB(2)->create()`).
 
-
+&nbsp;
 
 ## Step-by-step car production
 
@@ -312,11 +341,13 @@ The Director controls the order of the construction. It knows which building ste
 
 The end result is retrieved from the builder object because the director can’t know the type of resulting product. Only the Builder object knows what does it build exactly.
 
+&nbsp;
+
 ##  **builders**
 
 ####  **builders/Builder.java:** Common builder interface
 
-```
+```java
 package refactoring_guru.builder.example.builders;
 
 import refactoring_guru.builder.example.cars.CarType;
@@ -338,9 +369,11 @@ public interface Builder {
 }
 ```
 
+&nbsp;
+
 ####  **builders/CarBuilder.java:** Builder of car
 
-```
+```java
 package refactoring_guru.builder.example.builders;
 
 import refactoring_guru.builder.example.cars.Car;
@@ -396,9 +429,11 @@ public class CarBuilder implements Builder {
 }
 ```
 
+&nbsp;
+
 ####  **builders/CarManualBuilder.java:** Builder of a car manual
 
-```
+```java
 package refactoring_guru.builder.example.builders;
 
 import refactoring_guru.builder.example.cars.Manual;
@@ -460,11 +495,13 @@ public class CarManualBuilder implements Builder{
 }
 ```
 
+&nbsp;
+
 ##  **cars**
 
 ####  **cars/Car.java:** Car product
 
-```
+```java
 package refactoring_guru.builder.example.cars;
 
 import refactoring_guru.builder.example.components.Engine;
@@ -531,9 +568,11 @@ public class Car {
 }
 ```
 
+&nbsp;
+
 ####  **cars/Manual.java:** Manual product
 
-```
+```java
 package refactoring_guru.builder.example.cars;
 
 import refactoring_guru.builder.example.components.Engine;
@@ -584,9 +623,11 @@ public class Manual {
 }
 ```
 
-####  **cars/CarType.java**
+&nbsp;
 
-```
+**cars/CarType.java**
+
+```java
 package refactoring_guru.builder.example.cars;
 
 public enum CarType {
@@ -594,11 +635,13 @@ public enum CarType {
 }
 ```
 
+&nbsp;
+
 ##  **components**
 
 ####  **components/Engine.java:** Product feature 1
 
-```
+```java
 package refactoring_guru.builder.example.components;
 
 /**
@@ -644,9 +687,11 @@ public class Engine {
 }
 ```
 
+&nbsp;
+
 ####  **components/GPSNavigator.java:** Product feature 2
 
-```
+```java
 package refactoring_guru.builder.example.components;
 
 /**
@@ -669,9 +714,11 @@ public class GPSNavigator {
 }
 ```
 
+&nbsp;
+
 ####  **components/Transmission.java:** Product feature 3
 
-```
+```java
 package refactoring_guru.builder.example.components;
 
 /**
@@ -682,9 +729,11 @@ public enum Transmission {
 }
 ```
 
+&nbsp;
+
 ####  **components/TripComputer.java:** Product feature 4
 
-```
+```java
 package refactoring_guru.builder.example.components;
 
 import refactoring_guru.builder.example.cars.Car;
@@ -714,11 +763,13 @@ public class TripComputer {
 }
 ```
 
+&nbsp;
+
 ##  **director**
 
 ####  **director/Director.java:** Director controls builders
 
-```
+```java
 package refactoring_guru.builder.example.director;
 
 import refactoring_guru.builder.example.builders.Builder;
@@ -763,9 +814,11 @@ public class Director {
 }
 ```
 
+&nbsp;
+
 ####  **Demo.java:** Client code
 
-```
+```java
 package refactoring_guru.builder.example;
 
 import refactoring_guru.builder.example.builders.CarBuilder;
@@ -806,9 +859,11 @@ public class Demo {
 }
 ```
 
+&nbsp;
+
 ####  **OutputDemo.txt:** Execution result
 
-```
+```ABAP
 Car built:
 SPORTS_CAR
 
