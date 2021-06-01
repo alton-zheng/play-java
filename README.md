@@ -228,6 +228,8 @@
   - [ ] [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
   - [ ] [总结](design-patterns-in-java/design-patterns-oop-design-principle.md)
 
+&nbsp;
+
 - Creational Patterns
 
   - [x] [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
@@ -238,13 +240,13 @@
   - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
   - [x] [Builder 模式](design-patterns-in-java/design-patterns-bulider.md)
   - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
-  - [ ] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
-  - [ ] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
+
+&nbsp;
 
 - Structural Patterns
-  - [ ] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
-  - [ ] [适配器模式](design-patterns-in-java/design-patterns-adapter.md)
-  - [ ] [桥接模式](design-patterns-in-java/design-patterns-bridge.md)
+  - [x] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [ ] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
+  - [ ] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
   - [ ] [组合模式](design-patterns-in-java/design-patterns-composite.md)
   - [ ] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [外观模式](design-patterns-in-java/design-patterns-facade.md)
