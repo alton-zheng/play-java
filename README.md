@@ -237,7 +237,7 @@
   - [x] [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory.md)
   - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
   - [x] [Builder 模式](design-patterns-in-java/design-patterns-bulider.md)
-  - [ ] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
+  - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
   - [ ] [对象池模式](design-patterns-in-java/design-patterns-object-pool-pattern.md)
   - [ ] [实验](design-patterns-in-java/design-patterns-create-experiment.md)
 

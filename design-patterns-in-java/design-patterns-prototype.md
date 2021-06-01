@@ -6,7 +6,9 @@
 
 **原型模式**是一种创建型设计模式， 使你能够复制已有对象， 而又无需使代码依赖它们所属的类。
 
-![原型设计模式](https://refactoringguru.cn/images/patterns/content/prototype/prototype.png?id=e912b1ada20bbf7b2ffc)
+![原型设计模式](images/prototype.png)
+
+&nbsp;
 
 ##  问题
 
@@ -16,23 +18,27 @@
 
 ![从外部复制对象会遇到什么问题？](https://refactoringguru.cn/images/patterns/content/prototype/prototype-comic-1-zh.png?id=8d65948003f95530ffa9)
 
-“从外部” 复制对象[并非](https://refactoringguru.cn/cargo-cult)总是可行。
+“从外部” 复制对象并非总是可行。
 
 直接复制还有另外一个问题。 因为你必须知道对象所属的类才能创建复制品， 所以代码必须依赖该类。 即使你可以接受额外的依赖性， 那还有另外一个问题： 有时你只知道对象所实现的接口， 而不知道其所属的具体类， 比如可向方法的某个参数传入实现了某个接口的任何对象。
 
+&nbsp;
+
 ##  解决方案
 
-原型模式将克隆过程委派给被克隆的实际对象。 模式为所有支持克隆的对象声明了一个通用接口， 该接口让你能够克隆对象， 同时又无需将代码和对象所属类耦合。 通常情况下， 这样的接口中仅包含一个 `克隆`方法。
+原型模式将克隆过程委派给被克隆的实际对象。 模式为所有支持克隆的对象声明了一个通用接口， 该接口让你能够克隆对象， 同时又无需将代码和对象所属类耦合。 通常情况下， 这样的接口中仅包含一个 `clone()` 方法。
 
-所有的类对 `克隆`方法的实现都非常相似。 该方法会创建一个当前类的对象， 然后将原始对象所有的成员变量值复制到新建的类中。 你甚至可以复制私有成员变量， 因为绝大部分编程语言都允许对象访问其同类对象的私有成员变量。
+所有的类对 `clone()` 方法的实现都非常相似。 该方法会创建一个当前类的对象， 然后将原始对象所有的成员变量值复制到新建的类中。 你甚至可以复制私有成员变量， 因为绝大部分编程语言都允许对象访问其同类对象的私有成员变量。
 
 支持克隆的对象即为*原型*。 当你的对象有几十个成员变量和几百种类型时， 对其进行克隆甚至可以代替子类的构造。
 
-![预生成原型](https://refactoringguru.cn/images/patterns/content/prototype/prototype-comic-2-zh.png?id=e41733fb200454870b15)
+![预生成原型](images/prototype-comic-2-zh.png)
 
 预生成原型可以代替子类的构造。
 
 其运作方式如下： 创建一系列不同类型的对象并不同的方式对其进行配置。 如果所需对象与预先配置的对象相同， 那么你只需克隆原型即可， 无需新建一个对象。
+
+&nbsp;
 
 ##  真实世界类比
 
@@ -44,33 +50,41 @@
 
 由于工业原型并不是真正意义上的自我复制， 因此细胞有丝分裂 （还记得生物学知识吗？） 或许是更恰当的类比。 有丝分裂会产生一对完全相同的细胞。 原始细胞就是一个原型， 它在复制体的生成过程中起到了推动作用。
 
+&nbsp;
+
 ##  原型模式结构
 
 #### 基本实现
 
-![原型设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/prototype/structure.png?id=088102c5e9785ff45deb)
+![原型设计模式的结构](images/structure5.png)
+
+&nbsp;
 
 1. **原型** （Prototype） 接口将对克隆方法进行声明。 在绝大多数情况下， 其中只会有一个名为 `clone`克隆的方法。
 2. **具体原型** （Concrete Prototype） 类将实现克隆方法。 除了将原始对象的数据复制到克隆体中之外， 该方法有时还需处理克隆过程中的极端情况， 例如克隆关联对象和梳理递归依赖等等。
 3. **客户端** （Client） 可以复制实现了原型接口的任何对象。
 
+&nbsp;
+
 #### 原型注册表实现
 
-![原型注册表](https://refactoringguru.cn/images/patterns/diagrams/prototype/structure-prototype-cache.png?id=609c2af5d14ed55dcbb2)
+![原型注册表](images/structure-prototype-cache.png)
 
 1. **原型注册表** （Prototype Registry） 提供了一种访问常用原型的简单方法， 其中存储了一系列可供随时复制的预生成对象。 最简单的注册表原型是一个 `名称 → 原型`的哈希表。 但如果需要使用名称以外的条件进行搜索， 你可以创建更加完善的注册表版本。
+
+&nbsp;
 
 ##  伪代码
 
 在本例中， **原型**模式能让你生成完全相同的几何对象副本， 同时无需代码与对象所属类耦合。
 
-![原型模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/prototype/example.png?id=47bc6c1058cb100b81e6)
+![原型模式示例的结构](images/example2.png)
 
 克隆一系列位于同一类层次结构中的对象。
 
 所有形状类都遵循同一个提供克隆方法的接口。 在复制自身成员变量值到结果对象前， 子类可调用其父类的克隆方法。
 
-```
+```java
 // 基础原型。
 abstract class Shape is
     field X: int
@@ -157,6 +171,8 @@ class Application is
         // 子元素的复制品。
 ```
 
+&nbsp;
+
 ##  原型模式适合应用场景
 
  如果你需要复制一些对象， 同时又希望代码独立于这些对象所属的具体类， 可以使用原型模式。
@@ -170,6 +186,8 @@ class Application is
  在原型模式中， 你可以使用一系列预生成的、 各种类型的对象作为原型。
 
 客户端不必根据需求对子类进行实例化， 只需找到合适的原型并对其进行克隆即可。
+
+&nbsp;
 
 ##  实现方式
 
@@ -187,22 +205,332 @@ class Application is
 
    最后还要将对子类构造函数的直接调用替换为对原型注册表工厂方法的调用。
 
+&nbsp;
+
 ##  原型模式优缺点
 
--  你可以克隆对象， 而无需与它们所属的具体类相耦合。
--  你可以克隆预生成原型， 避免反复运行初始化代码。
--  你可以更方便地生成复杂对象。
--  你可以用继承以外的方式来处理复杂对象的不同配置。
+-  √ 你可以克隆对象， 而无需与它们所属的具体类相耦合。
+-  √ 你可以克隆预生成原型， 避免反复运行初始化代码。
+-  √ 你可以更方便地生成复杂对象。
+-  √ 你可以用继承以外的方式来处理复杂对象的不同配置。
+-  × 克隆包含循环引用的复杂对象可能会非常麻烦。
 
--  克隆包含循环引用的复杂对象可能会非常麻烦。
+&nbsp;
 
 ##  与其他模式的关系
 
-- 在许多设计工作的初期都会使用[工厂方法模式](https://refactoringguru.cn/design-patterns/factory-method) （较为简单， 而且可以更方便地通过子类进行定制）， 随后演化为使用[抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)、 [原型模式](https://refactoringguru.cn/design-patterns/prototype)或[生成器模式](https://refactoringguru.cn/design-patterns/builder) （更灵活但更加复杂）。
-- [抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)通常基于一组[工厂方法](https://refactoringguru.cn/design-patterns/factory-method)， 但你也可以使用[原型模式](https://refactoringguru.cn/design-patterns/prototype)来生成这些类的方法。
-- [原型](https://refactoringguru.cn/design-patterns/prototype)可用于保存[命令模式](https://refactoringguru.cn/design-patterns/command)的历史记录。
-- 大量使用[组合模式](https://refactoringguru.cn/design-patterns/composite)和[装饰模式](https://refactoringguru.cn/design-patterns/decorator)的设计通常可从对于[原型](https://refactoringguru.cn/design-patterns/prototype)的使用中获益。 你可以通过该模式来复制复杂结构， 而非从零开始重新构造。
-- [原型](https://refactoringguru.cn/design-patterns/prototype)并不基于继承， 因此没有继承的缺点。 另一方面， *原型*需要对被复制对象进行复杂的初始化。 [工厂方法](https://refactoringguru.cn/design-patterns/factory-method)基于继承， 但是它不需要初始化步骤。
-- 有时候[原型](https://refactoringguru.cn/design-patterns/prototype)可以作为[备忘录模式](https://refactoringguru.cn/design-patterns/memento)的一个简化版本， 其条件是你需要在历史记录中存储的对象的状态比较简单， 不需要链接其他外部资源， 或者链接可以方便地重建。
-- [抽象工厂](https://refactoringguru.cn/design-patterns/abstract-factory)、 [生成器](https://refactoringguru.cn/design-patterns/builder)和[原型](https://refactoringguru.cn/design-patterns/prototype)都可以用[单例模式](https://refactoringguru.cn/design-patterns/singleton)来实现。
+- 在许多设计工作的初期都会使用 [工厂方法模式](design-patterns-factory-method-pattern.md) （较为简单， 而且可以更方便地通过子类进行定制）， 随后演化为使用 [抽象工厂模式](design-patterns-abstract-factory.md)、 [原型模式](design-patterns-prototype.md) 或 Builder 模式（更灵活但更加复杂）。
+- 原型模式可用于保存 [命令模式](design-patterns-command.md) 的历史记录
+- 大量使用 [组合模式](design-patterns-composite.md) 和 [装饰模式](design-patterns-decorator.md) 的实际通常对从对于原型的使用中获益。你可以通过该模式来复制复杂结构，而非从零开始重新构建。
+- 原型模式并不基于继承，因此没有继承的缺点。另一方面，原型模式需要对呗复制对象进行复杂的初始化。 工厂方法基于继承，但是它不需要初始化步骤。
+- 有时候原型模式可以作为 [备忘录模式](design-patterns-memento.md) 的一个简化版本，其条件是你需要在历史记录中存储的对象的状态比较简单，不需要连接其他外部资源，或者连接可以方便地重建。
+- [抽象工厂](design-patterns-abstract-factory.md)、 Builder 和 [原型](design-patterns-prototype.md) 都可以用 [单例模式](design-patterns-singleton.md) 来实现。
+
+&nbsp;
+
+# Java **原型**模式讲解和代码示例
+
+**原型**是一种创建型设计模式， 使你能够复制对象， 甚至是复杂对象， 而又无需使代码依赖它们所属的类。
+
+所有的原型类都必须有一个通用的接口， 使得即使在对象所属的具体类未知的情况下也能复制对象。 原型对象可以生成自身的完整副本， 因为相同类的对象可以相互访问对方的私有成员变量。
+
+&nbsp;
+
+## 在 Java 中使用模式
+
+**使用示例：** Java 的 `Cloneable` （可克隆） 接口就是立即可用的原型模式。
+
+任何类都可通过实现该接口来实现可被克隆的性质。
+
+[`java.lang.Object#clone()`](http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--) （类必须实现 [`java.lang.Cloneable`](http://docs.oracle.com/javase/8/docs/api/java/lang/Cloneable.html) 接口）
+
+**识别方法：** 原型可以简单地通过 `clone`或 `copy`等方法来识别。
+
+&nbsp;
+
+## 复制图形
+
+让我们来看看在不使用标准 `Cloneable` 接口的情况下如何实现原型模式。
+
+&nbsp;
+
+##  **shapes:** 形状列表
+
+####  **shapes/Shape.java:** 通用形状接口
+
+```java
+package refactoring_guru.prototype.example.shapes;
+
+import java.util.Objects;
+
+public abstract class Shape {
+    public int x;
+    public int y;
+    public String color;
+
+    public Shape() {
+    }
+
+    public Shape(Shape target) {
+        if (target != null) {
+            this.x = target.x;
+            this.y = target.y;
+            this.color = target.color;
+        }
+    }
+
+    public abstract Shape clone();
+
+    @Override
+    public boolean equals(Object object2) {
+        if (!(object2 instanceof Shape)) return false;
+        Shape shape2 = (Shape) object2;
+        return shape2.x == x && shape2.y == y && Objects.equals(shape2.color, color);
+    }
+}
+```
+
+&nbsp;
+
+####  **shapes/Circle.java:** 简单形状
+
+```java
+package refactoring_guru.prototype.example.shapes;
+
+public class Circle extends Shape {
+    public int radius;
+
+    public Circle() {
+    }
+
+    public Circle(Circle target) {
+        super(target);
+        if (target != null) {
+            this.radius = target.radius;
+        }
+    }
+
+    @Override
+    public Shape clone() {
+        return new Circle(this);
+    }
+
+    @Override
+    public boolean equals(Object object2) {
+        if (!(object2 instanceof Circle) || !super.equals(object2)) return false;
+        Circle shape2 = (Circle) object2;
+        return shape2.radius == radius;
+    }
+}
+```
+
+&nbsp;
+
+#### **shapes/Rectangle.java:** 另一个形状
+
+```java
+package refactoring_guru.prototype.example.shapes;
+
+public class Rectangle extends Shape {
+    public int width;
+    public int height;
+
+    public Rectangle() {
+    }
+
+    public Rectangle(Rectangle target) {
+        super(target);
+        if (target != null) {
+            this.width = target.width;
+            this.height = target.height;
+        }
+    }
+
+    @Override
+    public Shape clone() {
+        return new Rectangle(this);
+    }
+
+    @Override
+    public boolean equals(Object object2) {
+        if (!(object2 instanceof Rectangle) || !super.equals(object2)) return false;
+        Rectangle shape2 = (Rectangle) object2;
+        return shape2.width == width && shape2.height == height;
+    }
+}
+```
+
+&nbsp;
+
+####  **Demo.java:** 克隆示例
+
+```java
+package refactoring_guru.prototype.example;
+
+import refactoring_guru.prototype.example.shapes.Circle;
+import refactoring_guru.prototype.example.shapes.Rectangle;
+import refactoring_guru.prototype.example.shapes.Shape;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Demo {
+    public static void main(String[] args) {
+        List<Shape> shapes = new ArrayList<>();
+        List<Shape> shapesCopy = new ArrayList<>();
+
+        Circle circle = new Circle();
+        circle.x = 10;
+        circle.y = 20;
+        circle.radius = 15;
+        circle.color = "red";
+        shapes.add(circle);
+
+        Circle anotherCircle = (Circle) circle.clone();
+        shapes.add(anotherCircle);
+
+        Rectangle rectangle = new Rectangle();
+        rectangle.width = 10;
+        rectangle.height = 20;
+        rectangle.color = "blue";
+        shapes.add(rectangle);
+
+        cloneAndCompare(shapes, shapesCopy);
+    }
+
+    private static void cloneAndCompare(List<Shape> shapes, List<Shape> shapesCopy) {
+        for (Shape shape : shapes) {
+            shapesCopy.add(shape.clone());
+        }
+
+        for (int i = 0; i < shapes.size(); i++) {
+            if (shapes.get(i) != shapesCopy.get(i)) {
+                System.out.println(i + ": Shapes are different objects (yay!)");
+                if (shapes.get(i).equals(shapesCopy.get(i))) {
+                    System.out.println(i + ": And they are identical (yay!)");
+                } else {
+                    System.out.println(i + ": But they are not identical (booo!)");
+                }
+            } else {
+                System.out.println(i + ": Shape objects are the same (booo!)");
+            }
+        }
+    }
+}
+```
+
+&nbsp;
+
+#### **OutputDemo.txt:** 执行结果
+
+```ABAP
+0: Shapes are different objects (yay!)
+0: And they are identical (yay!)
+1: Shapes are different objects (yay!)
+1: And they are identical (yay!)
+2: Shapes are different objects (yay!)
+2: And they are identical (yay!)
+```
+
+&nbsp;
+
+#### 原型注册站
+
+你可以实现中心化的原型注册站 （或工厂）， 其中包含一系列预定义的原型对象。 这样一来， 你就可以通过传递对象名称或其他参数的方式从工厂处获得新的对象。 工厂将搜索合适的原型， 然后对其进行克隆复制， 最后将副本返回给你。
+
+&nbsp;
+
+##  **cache**
+
+####  **cache/BundledShapeCache.java:** 原型工厂
+
+```java
+package refactoring_guru.prototype.caching.cache;
+
+import refactoring_guru.prototype.example.shapes.Circle;
+import refactoring_guru.prototype.example.shapes.Rectangle;
+import refactoring_guru.prototype.example.shapes.Shape;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class BundledShapeCache {
+    private Map<String, Shape> cache = new HashMap<>();
+
+    public BundledShapeCache() {
+        Circle circle = new Circle();
+        circle.x = 5;
+        circle.y = 7;
+        circle.radius = 45;
+        circle.color = "Green";
+
+        Rectangle rectangle = new Rectangle();
+        rectangle.x = 6;
+        rectangle.y = 9;
+        rectangle.width = 8;
+        rectangle.height = 10;
+        rectangle.color = "Blue";
+
+        cache.put("Big green circle", circle);
+        cache.put("Medium blue rectangle", rectangle);
+    }
+
+    public Shape put(String key, Shape shape) {
+        cache.put(key, shape);
+        return shape;
+    }
+
+    public Shape get(String key) {
+        return cache.get(key).clone();
+    }
+}
+```
+
+&nbsp;
+
+#### **Demo.java:** 克隆示例
+
+```java
+package refactoring_guru.prototype.caching;
+
+import refactoring_guru.prototype.caching.cache.BundledShapeCache;
+import refactoring_guru.prototype.example.shapes.Shape;
+
+public class Demo {
+    public static void main(String[] args) {
+        BundledShapeCache cache = new BundledShapeCache();
+
+        Shape shape1 = cache.get("Big green circle");
+        Shape shape2 = cache.get("Medium blue rectangle");
+        Shape shape3 = cache.get("Medium blue rectangle");
+
+        if (shape1 != shape2 && !shape1.equals(shape2)) {
+            System.out.println("Big green circle != Medium blue rectangle (yay!)");
+        } else {
+            System.out.println("Big green circle == Medium blue rectangle (booo!)");
+        }
+
+        if (shape2 != shape3) {
+            System.out.println("Medium blue rectangles are two different objects (yay!)");
+            if (shape2.equals(shape3)) {
+                System.out.println("And they are identical (yay!)");
+            } else {
+                System.out.println("But they are not identical (booo!)");
+            }
+        } else {
+            System.out.println("Rectangle objects are the same (booo!)");
+        }
+    }
+}
+```
+
+&nbsp;
+
+####  **OutputDemo.txt:** 执行结果
+
+```ABAP
+Big green circle != Medium blue rectangle (yay!)
+Medium blue rectangles are two different objects (yay!)
+And they are identical (yay!)
+```
 
