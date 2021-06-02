@@ -244,18 +244,18 @@
 &nbsp;
 
 - Structural Patterns
-  - [x] [Strunctural Patterns overview](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [x] [Structural Patterns overview](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
   - [x] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
   - [x] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
-  - [ ] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
-  - [ ] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
+  - [x] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
+  - [x] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
   - [ ] [Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
   - [ ] [Proxy Pattern](design-patterns-in-java/design-patterns-proxy.md)
   
 - Behavioral Patterns
   - [ ] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
-  - [ ] [责任链模式](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
+  - [ ] [](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
   - [ ] [命令模式](design-patterns-in-java/design-patterns-command.md)
   - [ ] [迭代器模式](design-patterns-in-java/design-patterns-iterator.md)
   - [ ] [中介者模式](design-patterns-in-java/design-patterns-mediator.md)

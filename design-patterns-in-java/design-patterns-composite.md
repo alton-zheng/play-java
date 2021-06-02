@@ -2,17 +2,21 @@
 
 亦称：对象树、Object Tree、Composite
 
+&nbsp;
+
 ##  意图
 
-**组合模式**是一种结构型设计模式， 你可以使用它将对象组合成树状结构， 并且能像使用独立对象一样使用它们。
+**Conposite Pattern** 是一种 Strunctural Designer Pattern， 你可以使用它将对象组合成树状结构， 并且能像使用独立对象一样使用它们。
 
-![组合设计模式](https://refactoringguru.cn/images/patterns/content/composite/composite.png?id=73bcf0d94db360b636cd)
+![组合设计模式](images/composite.png)
+
+&nbsp;
 
 ##  问题
 
 如果应用的核心模型能用树状结构表示， 在应用中使用组合模式才有价值。
 
-例如， 你有两类对象：  `产品`和 `盒子` 。 一个盒子中可以包含多个 `产品`或者几个较小的 `盒子` 。 这些小 `盒子`中同样可以包含一些 `产品`或更小的 `盒子` ， 以此类推。
+例如， 你有两类对象：  `产品` 和 `盒子` 。 一个盒子中可以包含多个 `产品` 或者几个较小的 `盒子` 。 这些小 `盒子`中同样可以包含一些 `产品`或更小的 `盒子` ， 以此类推。
 
 假设你希望在这些类的基础上开发一个定购系统。 订单中可以包含无包装的简单产品， 也可以包含装满产品的盒子……以及其他盒子。 此时你会如何计算每张订单的总价格呢？
 
@@ -22,29 +26,35 @@
 
 你可以尝试直接计算： 打开所有盒子， 找到每件产品， 然后计算总价。 这在真实世界中或许可行， 但在程序中， 你并不能简单地使用循环语句来完成该工作。 你必须事先知道所有 `产品`和 `盒子`的类别， 所有盒子的嵌套层数以及其他繁杂的细节信息。 因此， 直接计算极不方便， 甚至完全不可行。
 
+&nbsp;
+
 ##  解决方案
 
-组合模式建议使用一个通用接口来与 `产品`和 `盒子`进行交互， 并且在该接口中声明一个计算总价的方法。
+Conposite Pattern 建议使用一个通用接口来与 `产品`和 `盒子`进行交互， 并且在该接口中声明一个计算总价的方法。
 
 那么方法该如何设计呢？ 对于一个产品， 该方法直接返回其价格； 对于一个盒子， 该方法遍历盒子中的所有项目， 询问每个项目的价格， 然后返回该盒子的总价格。 如果其中某个项目是小一号的盒子， 那么当前盒子也会遍历其中的所有项目， 以此类推， 直到计算出所有内部组成部分的价格。 你甚至可以在盒子的最终价格中增加额外费用， 作为该盒子的包装费用。
 
-![组合模式建议的解决方案](https://refactoringguru.cn/images/patterns/content/composite/composite-comic-1-zh.png?id=845971cd0cc64fb0f3e3)
+![组合模式建议的解决方案](images/composite-comic-1-zh.png)
 
 组合模式以递归方式处理对象树中的所有项目
 
 该方式的最大优点在于你无需了解构成树状结构的对象的具体类。 你也无需了解对象是简单的产品还是复杂的盒子。 你只需调用通用接口以相同的方式对其进行处理即可。 当你调用该方法后， 对象会将请求沿着树结构传递下去。
 
+&nbsp;
+
 ##  真实世界类比
 
-![部队结构的例子](https://refactoringguru.cn/images/patterns/diagrams/composite/live-example.png?id=548a7cec45b493af66e8)
+![部队结构的例子](images/live-example.png)
 
 部队结构的例子。
 
 大部分国家的军队都采用层次结构管理。 每支部队包括几个师， 师由旅构成， 旅由团构成， 团可以继续划分为排。 最后， 每个排由一小队实实在在的士兵组成。 军事命令由最高层下达， 通过每个层级传递， 直到每位士兵都知道自己应该服从的命令。
 
+&nbsp;
+
 ##  组合模式结构
 
-![组合设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/composite/structure-zh.png?id=205c2c970f77efe15b68)
+![组合设计模式的结构](images/conposite-structure-zh.png)
 
 1. **组件** （Component） 接口描述了树中简单项目和复杂项目所共有的操作。
 
@@ -58,11 +68,13 @@
 
 4. **客户端** （Client） 通过组件接口与所有项目交互。 因此， 客户端能以相同方式与树状结构中的简单或复杂项目交互。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， 我们将借助**组合**模式帮助你在图形编辑器中实现一系列的几何图形。
 
-![组合模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/composite/example.png?id=98ba81d07c979038dd2e)
+![组合模式示例的结构](images/conposite-example.png)
 
 几何形状编辑器示例。
 
@@ -146,6 +158,8 @@ class ImageEditor is
         all.draw()
 ```
 
+&nbsp;
+
 ##  组合模式适合应用场景
 
  如果你需要实现树状对象结构， 可以使用组合模式。
@@ -155,6 +169,8 @@ class ImageEditor is
  如果你希望客户端代码以相同方式处理简单和复杂元素， 可以使用该模式。
 
  组合模式中定义的所有元素共用同一个接口。 在这一接口的帮助下， 客户端不必在意其所使用的对象的具体类。
+
+&nbsp;
 
 ##  实现方式
 
@@ -172,71 +188,76 @@ class ImageEditor is
 
    记住， 这些操作可在组件接口中声明。 这将会违反_接口隔离原则_， 因为叶节点类中的这些方法为空。 但是， 这可以让客户端无差别地访问所有元素， 即使是组成树状结构的元素。
 
+&nbsp;
+
 ##  组合模式优缺点
 
 -  你可以利用多态和递归机制更方便地使用复杂树结构。
 -  *开闭原则*。 无需更改现有代码， 你就可以在应用中添加新元素， 使其成为对象树的一部分。
-
 -  对于功能差异较大的类， 提供公共接口或许会有困难。 在特定情况下， 你需要过度一般化组件接口， 使其变得令人难以理解。
-
-##  与其他模式的关系
-
-- [桥接模式](https://refactoringguru.cn/design-patterns/bridge)、 [状态模式](https://refactoringguru.cn/design-patterns/state)和[策略模式](https://refactoringguru.cn/design-patterns/strategy) （在某种程度上包括[适配器模式](https://refactoringguru.cn/design-patterns/adapter)） 模式的接口非常相似。 实际上， 它们都基于[组合模式](https://refactoringguru.cn/design-patterns/composite)——即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。
-
-- 你可以在创建复杂[组合](https://refactoringguru.cn/design-patterns/composite)树时使用[生成器模式](https://refactoringguru.cn/design-patterns/builder)， 因为这可使其构造步骤以递归的方式运行。
-
-- [责任链模式](https://refactoringguru.cn/design-patterns/chain-of-responsibility)通常和[组合模式](https://refactoringguru.cn/design-patterns/composite)结合使用。 在这种情况下， 叶组件接收到请求后， 可以将请求沿包含全体父组件的链一直传递至对象树的底部。
-
-- 你可以使用[迭代器模式](https://refactoringguru.cn/design-patterns/iterator)来遍历[组合](https://refactoringguru.cn/design-patterns/composite)树。
-
-- 你可以使用[访问者模式](https://refactoringguru.cn/design-patterns/visitor)对整个[组合](https://refactoringguru.cn/design-patterns/composite)树执行操作。
-
-- 你可以使用[享元模式](https://refactoringguru.cn/design-patterns/flyweight)实现[组合](https://refactoringguru.cn/design-patterns/composite)树的共享叶节点以节省内存。
-
-- [组合](https://refactoringguru.cn/design-patterns/composite)和[装饰模式](https://refactoringguru.cn/design-patterns/decorator)的结构图很相似， 因为两者都依赖递归组合来组织无限数量的对象。
-
-  *装饰*类似于*组合*， 但其只有一个子组件。 此外还有一个明显不同： *装饰*为被封装对象添加了额外的职责， *组合*仅对其子节点的结果进行了 “求和”。
-
-  但是， 模式也可以相互合作： 你可以使用*装饰*来扩展*组合*树中特定对象的行为。
-
-- 大量使用[组合](https://refactoringguru.cn/design-patterns/composite)和[装饰](https://refactoringguru.cn/design-patterns/decorator)的设计通常可从对于[原型模式](https://refactoringguru.cn/design-patterns/prototype)的使用中获益。 你可以通过该模式来复制复杂结构， 而非从零开始重新构造。
 
 &nbsp;
 
-# **Composite** in Java
+##  与其他模式的关系
 
-**Composite** is a structural design pattern that allows composing objects into a tree-like structure and work with the it as if it was a singular object.
+- Bridge Pattern、 State Pattern 和 Strategy Pattern （在某种程度上包括 Adapter ） 模式的接口非常相似。 实际上， 它们都基于 Conposite Pattern - 即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。
 
-Composite became a pretty popular solution for the most problems that require building a tree structure. Composite’s great feature is the ability to run methods recursively over the whole tree structure and sum up the results.
+- 你可以在创建复杂 Composite Pattern 树时使用 Builder Pattern， 因为这可使其构造步骤以递归的方式运行。
 
-[ Learn more about Composite ](https://refactoring.guru/design-patterns/composite)
+- [Chain of Responsibility Pattern](design-patterns-chain-of-responsibility.md) 通常和 Conposite Pattern 结合使用。 在这种情况下， 叶组件接收到请求后， 可以将请求沿包含全体父组件的链一直传递至对象树的底部。
 
-## Usage of the pattern in Java
+- 你可以使用 Iterator Pattern 来遍历 Conposite Pattern Tree。
 
-**Complexity:** 
+- 你可以使用 Visitor Pattern 对整个 Conposite Pattern 执行操作。
 
-**Popularity:** 
+- 你可以使用 Flyweight Pattern 实现 Conposite Pattern 的共享叶节点以节省内存。
 
-**Usage examples:** The Composite pattern is pretty common in Java code. It’s often used to represent hierarchies of user interface components or the code that works with graphs.
+- Conposite Pattern 和 Decorate Pattern 的结构图很相似， 因为两者都依赖递归组合来组织无限数量的对象。
 
-Here are some composite examples from standard Java libraries:
+- Decorate Pattern *类似于* Conposite Pattern， 但其只有一个子组件。 此外还有一个明显不同： *装饰*为被封装对象添加了额外的职责， *组合*仅对其子节点的结果进行了 “求和”。
 
-- [`java.awt.Container#add(Component)`](http://docs.oracle.com/javase/8/docs/api/java/awt/Container.html#add-java.awt.Component-) (practically all over Swing components)
-- [`javax.faces.component.UIComponent#getChildren()`](http://docs.oracle.com/javaee/7/api/javax/faces/component/UIComponent.html#getChildren--) (practically all over JSF UI components)
+  但是， 模式也可以相互合作： 你可以使用 Decorator 来扩展 COnposite Pattern 中特定对象的行为。
 
-**Identification:** If you have an object tree, and each object of a tree is a part of the same class hierarchy, this is most likely a composite. If methods of these classes delegate the work to child objects of the tree and do it via the base class/interface of the hierarchy, this is definitely a composite.
+- 大量使用 Conposite 和 Decorator 的设计通常可从对于 Prototype Pattern 的使用中获益。 你可以通过该模式来复制复杂结构， 而非从零开始重新构造。
 
+&nbsp;
 
+# Java **组合**模式讲解和代码示例
 
-## Simple and compound graphical shapes
+**组合**是一种结构型设计模式， 你可以使用它将对象组合成树状结构， 并且能像使用独立对象一样使用它们。
 
-This example shows how to create complex graphical shapes, composed of simpler shapes and treat both of them uniformly.
+对于绝大多数需要生成树状结构的问题来说， 组合都是非常受欢迎的解决方案。 组合最主要的功能是在整个树状结构上递归调用方法并对结果进行汇总。
+
+&nbsp;
+
+## 在 Java 中使用模式
+
+**复杂度：** 2
+
+**流行度：** 2
+
+**使用实例：** 组合模式在 Java 代码中很常见,常用于表示与图形打交道的用户界面组件或代码的层次结构。
+
+下面是一些来自 Java 标准程序库中的组合示例：
+
+- [`java.awt.Container#add(Component)`](http://docs.oracle.com/javase/8/docs/api/java/awt/Container.html#add-java.awt.Component-) （几乎广泛存在于 Swing 组件中）
+- [`javax.faces.component.UIComponent#getChildren()`](http://docs.oracle.com/javaee/7/api/javax/faces/component/UIComponent.html#getChildren--) （几乎广泛存在于 JSF UI 组件中）
+
+**识别方法：** 组合可以通过将同一抽象或接口类型的实例放入树状结构的行为方法来轻松识别。
+
+&nbsp;
+
+## 简单和复合图形
+
+本例展示了如何利用较为简单的形状来组成复杂图形， 以及如何统一处理简单和复杂图形。
+
+&nbsp;
 
 ##  **shapes**
 
-####  **shapes/Shape.java:** Common shape interface
+####  **shapes/Shape.java:** 通用形状接口
 
-```
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -255,9 +276,11 @@ public interface Shape {
 }
 ```
 
-####  **shapes/BaseShape.java:** Abstract shape with basic functionality
+&nbsp;
 
-```
+####  **shapes/BaseShape.java:** 提供基本功能的抽象形状
+
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -353,9 +376,11 @@ abstract class BaseShape implements Shape {
 }
 ```
 
-####  **shapes/Dot.java:** A dot
+&nbsp;
 
-```
+#### **shapes/Dot.java:** 点
+
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -385,9 +410,11 @@ public class Dot extends BaseShape {
 }
 ```
 
-####  **shapes/Circle.java:** A circle
+&nbsp;
 
-```
+####  **shapes/Circle.java:** 圆形
+
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -417,9 +444,11 @@ public class Circle extends BaseShape {
 }
 ```
 
-####  **shapes/Rectangle.java:** A rectangle
+#### &nbsp; 
 
-```
+#### **shapes/Rectangle.java:** 三角形
+
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -452,9 +481,11 @@ public class Rectangle extends BaseShape {
 }
 ```
 
-####  **shapes/CompoundShape.java:** Compound shape, which consists of other shape objects
+&nbsp;
 
-```
+#### **shapes/CompoundShape.java:** 由其他形状对象组成的复合形状
+
+```java
 package refactoring_guru.composite.example.shapes;
 
 import java.awt.*;
@@ -596,11 +627,13 @@ public class CompoundShape extends BaseShape {
 }
 ```
 
+&nbsp;
+
 ##  **editor**
 
-####  **editor/ImageEditor.java:** Shape editor
+####  **editor/ImageEditor.java:** 形状编辑器
 
-```
+```java
 package refactoring_guru.composite.example.editor;
 
 import refactoring_guru.composite.example.shapes.CompoundShape;
@@ -679,9 +712,11 @@ public class ImageEditor {
 }
 ```
 
-####  **Demo.java:** Client code
+&nbsp;
 
-```
+####  **Demo.java:** 客户端代码
+
+```java
 package refactoring_guru.composite.example;
 
 import refactoring_guru.composite.example.editor.ImageEditor;
@@ -716,6 +751,8 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.png:** Execution result
+&nbsp;
 
-![img](https://refactoring.guru/images/patterns/examples/java/composite/OutputDemo.png)
+####  **OutputDemo.png:** 执行结果
+
+![img](images/OutputDemo.png)
