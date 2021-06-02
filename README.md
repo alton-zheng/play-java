@@ -245,8 +245,8 @@
 
 - Structural Patterns
   - [x] [Strunctural Patterns overview](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
-  - [ ] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
-  - [ ] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
+  - [x] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
+  - [x] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
   - [ ] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
   - [ ] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [Facade Pattern](design-patterns-in-java/design-patterns-facade.md)

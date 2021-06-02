@@ -2,23 +2,29 @@
 
 亦称：Bridge
 
+&nbsp;
+
 ##  意图
 
-**桥接模式**是一种结构型设计模式， 可将一个大类或一系列紧密相关的类拆分为抽象和实现两个独立的层次结构， 从而能在开发时分别使用。
+**桥接模式**是一种 Strunctural Pattern， 可将一个大类或一系列紧密相关的类拆分为抽象和实现两个独立的层次结构， 从而能在开发时分别使用。
 
-![桥接设计模式](https://refactoringguru.cn/images/patterns/content/bridge/bridge.png?id=bd543d4fb32e11647767)
+![桥接设计模式](images/bridge.png)
+
+&nbsp; &nbsp;
 
 ##  问题
 
 *抽象？* *实现？* 听上去挺吓人？ 让我们慢慢来， 先考虑一个简单的例子。
 
-假如你有一个几何 `形状`Shape类， 从它能扩展出两个子类：  `圆形`Circle和 `方形`Square 。 你希望对这样的类层次结构进行扩展以使其包含颜色， 所以你打算创建名为 `红色`Red和 `蓝色`Blue的形状子类。 但是， 由于你已有两个子类， 所以总共需要创建四个类才能覆盖所有组合， 例如 `蓝色圆形`Blue­Circle和 `红色方形`Red­Square 。
+假如你有一个几何 形状 `Shape` 类， 从它能扩展出两个子类：圆形 `Circle` 和 方形 `Square` 。 你希望对这样的类层次结构进行扩展以使其包含颜色， 所以你打算创建名为 红色 `Red` 和 蓝色`Blue` 的形状子类。 但是， 由于你已有两个子类， 所以总共需要创建四个类才能覆盖所有组合， 例如 蓝色圆形 `Blue­Circle` 和 红色方形 `Red­Square` 。
 
-![桥接模式解决的问题](https://refactoringguru.cn/images/patterns/diagrams/bridge/problem-zh.png?id=b629ac68586280f371d1)
+![桥接模式解决的问题](images/problem-zh-5.png)
 
 所有组合类的数量将以几何级数增长。
 
 在层次结构中新增形状和颜色将导致代码复杂程度指数增长。 例如添加三角形状， 你需要新增两个子类， 也就是每种颜色一个； 此后新增一种新颜色需要新增三个子类， 即每种形状一个。 如此以往， 情况会越来越糟糕。
+
+&nbsp;
 
 ##  解决方案
 
@@ -26,15 +32,17 @@
 
 桥接模式通过将继承改为组合的方式来解决这个问题。 具体来说， 就是抽取其中一个维度并使之成为独立的类层次， 这样就可以在初始类中引用这个新层次的对象， 从而使得一个类不必拥有所有的状态和行为。
 
-![桥接模式的解决方案](https://refactoringguru.cn/images/patterns/diagrams/bridge/solution-zh.png?id=1e12aa93e72a643f325f)
+![桥接模式的解决方案](images/bridge-solution-zh.png)
 
 将一个类层次转化为多个相关的类层次， 避免单个类层次的失控。
 
 根据该方法， 我们可以将颜色相关的代码抽取到拥有 `红色`和 `蓝色`两个子类的颜色类中， 然后在 `形状`类中添加一个指向某一颜色对象的引用成员变量。 现在， 形状类可以将所有与颜色相关的工作委派给连入的颜色对象。 这样的引用就成为了 `形状`和 `颜色`之间的桥梁。 此后， 新增颜色将不再需要修改形状的类层次， 反之亦然。
 
+&nbsp;
+
 #### 抽象部分和实现部分
 
-设计模式*四人组*的著作 在桥接定义中提出了*抽象部分*和*实现部分*两个术语。 我觉得这些术语过于学术了， 反而让模式看上去比实际情况更加复杂。 在介绍过形状和颜色的简单例子后， 我们来看看四人组著作中让人望而生畏的词语的含义。
+设计模式*四人组* 的著作 在桥接定义中提出了 **抽象部分** 和 **实现部分** 两个术语。 我觉得这些术语过于学术了， 反而让模式看上去比实际情况更加复杂。 在介绍过形状和颜色的简单例子后， 我们来看看四人组著作中让人望而生畏的词语的含义。
 
 *抽象部分* （也被称为*接口*） 是一些实体的高阶控制层。 该层自身不完成任何具体的工作， 它需要将工作委派给*实现部分*层 （也被称为*平台*）。
 
@@ -49,7 +57,9 @@
 
 在最糟糕的情况下， 程序可能会是一团乱麻， 其中包含数百种条件语句， 连接着代码各处不同种类的 GUI 和各种 API。
 
-![在模块化代码中驾驭变化要容易得多](https://refactoringguru.cn/images/patterns/content/bridge/bridge-3-zh.png?id=4cd9192e85ecb4bd2524)
+![在模块化代码中驾驭变化要容易得多](images/bridge-3-zh.png)
+
+&nbsp;
 
 在庞杂的代码中， 即使是很小的改动都非常难以完成， 因为你必须要在*整体上*对代码有充分的理解。 而在较小且定义明确的模块中， 进行修改则要容易得多。
 
@@ -60,7 +70,9 @@
 - 抽象部分： 程序的 GUI 层。
 - 实现部分： 操作系统的 API。
 
-![跨平台结构](https://refactoringguru.cn/images/patterns/content/bridge/bridge-2-zh.png?id=d5aca46e6cc7bcc88c1e)
+![跨平台结构](images/bridge-2-zh.png)
+
+&nbsp;
 
 创建跨平台应用程序的一种方法
 
@@ -68,9 +80,11 @@
 
 最后的结果是： 你无需改动与 API 相关的类就可以修改 GUI 类。 此外如果想支持一个新的操作系统， 只需在实现部分层次中创建一个子类即可。
 
+&nbsp;
+
 ##  桥接模式结构
 
-![桥接设计模式](https://refactoringguru.cn/images/patterns/diagrams/bridge/structure-zh.png?id=8f6df21bea5074e798d6)
+![桥接设计模式](images/bridge-structure-zh.png)
 
 1. **抽象部分** （Abstraction） 提供高层控制逻辑， 依赖于完成底层实际工作的实现对象。
 
@@ -84,11 +98,13 @@
 
 5. 通常情况下， **客户端** （Client） 仅关心如何与抽象部分合作。 但是， 客户端需要将抽象对象与一个实现对象连接起来。
 
+&nbsp;
+
 ##  伪代码
 
 示例演示了**桥接**模式如何拆分程序中同时管理设备及其遥控器的庞杂代码。  `设备`Device类作为实现部分， 而 `遥控器`Remote类则作为抽象部分。
 
-![桥接模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/bridge/example-zh.png?id=57c1135dacb5e0c69dbf)
+![桥接模式示例的结构](images/bridge-example-zh.png)
 
 最初类层次结构被拆分为两个部分： 设备和遥控器。
 
@@ -98,7 +114,7 @@
 
 客户端代码通过遥控器构造函数将特定种类的遥控器与设备对象连接起来。
 
-```
+```java
 // “抽象部分”定义了两个类层次结构中“控制”部分的接口。它管理着一个指向“实
 // 现部分”层次结构中对象的引用，并会将所有真实工作委派给该对象。
 class RemoteControl is
@@ -156,6 +172,8 @@ radio = new Radio()
 remote = new AdvancedRemoteControl(radio)
 ```
 
+&nbsp;
+
 ##  桥接模式适合应用场景
 
  如果你想要拆分或重组一个具有多重功能的庞杂类 （例如能与多个数据库服务器进行交互的类）， 可以使用桥接模式。
@@ -172,7 +190,9 @@ remote = new AdvancedRemoteControl(radio)
 
  当然并不是说一定要实现这一点， 桥接模式可替换抽象部分中的实现对象， 具体操作就和给成员变量赋新值一样简单。
 
-顺便提一句， 最后一点是很多人混淆桥接模式和[策略](https://refactoringguru.cn/design-patterns/strategy)模式的主要原因。 记住， 设计模式并不仅是一种对类进行组织的方式， 它还能用于沟通意图和解决问题。
+顺便提一句， 最后一点是很多人混淆 Bridge Pattern 和 Strategy Pattern 的主要原因。 记住，设计模式并不仅是一种对类进行组织的方式， 它还能用于沟通意图和解决问题。
+
+&nbsp;
 
 ##  实现方式
 
@@ -184,57 +204,62 @@ remote = new AdvancedRemoteControl(radio)
 6. 如果你的高层逻辑有多个变体， 则可通过扩展抽象基类为每个变体创建一个精确抽象。
 7. 客户端代码必须将实现对象传递给抽象部分的构造函数才能使其能够相互关联。 此后， 客户端只需与抽象对象进行交互， 无需和实现对象打交道。
 
+&nbsp;
+
 ##  桥接模式优缺点
 
--  你可以创建与平台无关的类和程序。
--  客户端代码仅与高层抽象部分进行互动， 不会接触到平台的详细信息。
--  *开闭原则*。 你可以新增抽象部分和实现部分， 且它们之间不会相互影响。
--  *单一职责原则*。 抽象部分专注于处理高层逻辑， 实现部分处理平台细节。
+-  √ 你可以创建与平台无关的类和程序。
+-  √ 客户端代码仅与高层抽象部分进行互动， 不会接触到平台的详细信息。
+-  √ *开闭原则*。 你可以新增抽象部分和实现部分， 且它们之间不会相互影响。
+-  √ *单一职责原则*。 抽象部分专注于处理高层逻辑， 实现部分处理平台细节。
+-  × 对高内聚的类使用该模式可能会让代码更加复杂。
 
--  对高内聚的类使用该模式可能会让代码更加复杂。
+&nbsp;
 
 ##  与其他模式的关系
 
-- [桥接模式](https://refactoringguru.cn/design-patterns/bridge)通常会于开发前期进行设计， 使你能够将程序的各个部分独立开来以便开发。 另一方面， [适配器模式](https://refactoringguru.cn/design-patterns/adapter)通常在已有程序中使用， 让相互不兼容的类能很好地合作。
-- [桥接](https://refactoringguru.cn/design-patterns/bridge)、 [状态模式](https://refactoringguru.cn/design-patterns/state)和[策略模式](https://refactoringguru.cn/design-patterns/strategy) （在某种程度上包括[适配器](https://refactoringguru.cn/design-patterns/adapter)） 模式的接口非常相似。 实际上， 它们都基于[组合模式](https://refactoringguru.cn/design-patterns/composite)——即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。
-- 你可以将[抽象工厂模式](https://refactoringguru.cn/design-patterns/abstract-factory)和[桥接](https://refactoringguru.cn/design-patterns/bridge)搭配使用。 如果由*桥接*定义的抽象只能与特定实现合作， 这一模式搭配就非常有用。 在这种情况下， *抽象工厂*可以对这些关系进行封装， 并且对客户端代码隐藏其复杂性。
-- 你可以结合使用[生成器模式](https://refactoringguru.cn/design-patterns/builder)和[桥接模式](https://refactoringguru.cn/design-patterns/bridge)： *主管*类负责抽象工作， 各种不同的*生成器*负责*实现*工作。
+-  `Bridge`  通常会于开发前期进行设计， 使你能够将程序的各个部分独立开来以便开发。 另一方面， `Adapter Pattern` 通常在已有程序中使用， 让相互不兼容的类能很好地合作。
+- Bridge Pattern、 State Pattern 和 Strategy Pattern （在某种程度上包括 Adapter ） 模式的接口非常相似。 实际上， 它们都基于 Conposite Pattern - 即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。
+- 你可以将 Abstract Factory Pattern 和  Bridge Pattern 搭配使用。 如果由 *Bridge* 定义的抽象只能与特定实现合作， 这一模式搭配就非常有用。 在这种情况下， *抽象工厂* 可以对这些关系进行封装， 并且对 client 代码隐藏其复杂性。
+- 你可以结合使用 Builder Pattern 和 Bridge Pattern ： *主管*类负责抽象工作， 各种不同的*生成器*负责*实现*工作。
+
+&nbsp;
+
+# Java **桥接**模式讲解和代码示例
+
+**桥接**是一种结构型设计模式， 可将业务逻辑或一个大类拆分为不同的层次结构， 从而能独立地进行开发。
+
+层次结构中的第一层 （通常称为抽象部分） 将包含对第二层 （实现部分） 对象的引用。 抽象部分将能将一些 （有时是绝大部分） 对自己的调用委派给实现部分的对象。 所有的实现部分都有一个通用接口， 因此它们能在抽象部分内部相互替换。
+
+&nbsp;
+
+## 在 Java 中使用模式
+
+**复杂度：** 3
+
+**流行度：** 1
+
+**使用示例：** 桥接模式在处理跨平台应用、 支持多种类型的数据库服务器或与多个特定种类 （例如云平台和社交网络等） 的 API 供应商协作时会特别有用。
+
+**识别方法：** 桥接可以通过一些控制实体及其所依赖的多个不同平台之间的明确区别来进行识别。
 
 
 
-# **Bridge** in Java
+## 设备和远程控制之间的桥接
 
-**Bridge** is a structural design pattern that divides business logic or huge class into separate class hierarchies that can be developed independently.
+本例展示了远程控制器及其所控制的设备的类之间的分离。
 
-One of these hierarchies (often called the Abstraction) will get a reference to an object of the second hierarchy (Implementation). The abstraction will be able to delegate some (sometimes, most) of its calls to the implementations object. Since all implementations will have a common interface, they’d be interchangeable inside the abstraction.
+远程控制器是抽象部分， 设备则是其实现部分。 由于有通用的接口， 同一远程控制器可与不同的设备合作， 反过来也一样。
 
-[ Learn more about Bridge ](https://refactoring.guru/design-patterns/bridge)
+桥接模式允许在不改动另一层次代码的前提下修改已有类， 甚至创建新类。
 
-## Usage of the pattern in Java
-
-**Complexity:** 
-
-**Popularity:** 
-
-**Usage examples:** The Bridge pattern is especially useful when dealing with cross-platform apps, supporting multiple types of database servers or working with several API providers of a certain kind (for example, cloud platforms, social networks, etc.)
-
-**Identification:** Bridge can be recognized by a clear distinction between some controlling entity and several different platforms that it relies on.
-
-
-
-## Bridge between devices and remote controls
-
-This example shows separation between the classes of remotes and devices that they control.
-
-Remotes act as abstractions, and devices are their implementations. Thanks to the common interfaces, the same remotes can work with different devices and vice versa.
-
-The Bridge pattern allows changing or even creating new classes without touching the code of the opposite hierarchy.
+&nbsp;
 
 ##  **devices**
 
-####  **devices/Device.java:** Common interface of all devices
+####  **devices/Device.java:** 所有设备的通用接口
 
-```
+```java
 package refactoring_guru.bridge.example.devices;
 
 public interface Device {
@@ -256,9 +281,11 @@ public interface Device {
 }
 ```
 
-####  **devices/Radio.java:** Radio
+&nbsp;
 
-```
+####  **devices/Radio.java:** 收音机
+
+```java
 package refactoring_guru.bridge.example.devices;
 
 public class Radio implements Device {
@@ -319,7 +346,9 @@ public class Radio implements Device {
 }
 ```
 
-####  **devices/Tv.java:** TV
+&nbsp;
+
+####  **devices/Tv.java:** 电视机
 
 ```java
 package refactoring_guru.bridge.example.devices;
@@ -382,9 +411,11 @@ public class Tv implements Device {
 }
 ```
 
+&nbsp;
+
 ##  **remotes**
 
-####  **remotes/Remote.java:** Common interface for all remotes
+####  **remotes/Remote.java:** 所有远程控制器的通用接口
 
 ```java
 package refactoring_guru.bridge.example.remotes;
@@ -402,7 +433,9 @@ public interface Remote {
 }
 ```
 
-####  **remotes/BasicRemote.java:** Basic remote control
+&nbsp;
+
+####  **remotes/BasicRemote.java:** 基础远程控制器
 
 ```java
 package refactoring_guru.bridge.example.remotes;
@@ -454,7 +487,9 @@ public class BasicRemote implements Remote {
 }
 ```
 
-####  **remotes/AdvancedRemote.java:** Advanced remote control
+&nbsp;
+
+####  **remotes/AdvancedRemote.java:** 高级远程控制器
 
 ```java
 package refactoring_guru.bridge.example.remotes;
@@ -474,7 +509,9 @@ public class AdvancedRemote extends BasicRemote {
 }
 ```
 
-####  **Demo.java:** Client code
+&nbsp;
+
+####  **Demo.java:** 客户端代码
 
 ```java
 package refactoring_guru.bridge.example;
@@ -506,7 +543,9 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.txt:** Execution result
+&nbsp;
+
+#### **OutputDemo.txt:** 执行结果
 
 ```java
 Tests with basic remote.
@@ -547,3 +586,4 @@ Remote: mute
 | Current channel is 1
 ------------------------------------
 ```
+
