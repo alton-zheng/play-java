@@ -232,26 +232,26 @@
 
 - Creational Patterns
 
-  - [x] [创建型设计模式特点和分类](design-patterns-in-java/design-patterns-create-feature-and-type.md)
-  - [x] [1 - 单例模式](design-patterns-in-java/design-patterns-singleton.md)
-  - [x] [2 - 简单工厂模式](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
-  - [x] [3 - 工厂方法模式](design-patterns-in-java/design-patterns-factory-method-pattern.md)
-  - [x] [抽象工厂模式](design-patterns-in-java/design-patterns-abstract-factory.md)
-  - [x] [工厂方法比较](design-patterns-in-java/design-patterns-factory-comparison.md)
-  - [x] [Builder 模式](design-patterns-in-java/design-patterns-bulider.md)
-  - [x] [原型（Prototype）模式](design-patterns-in-java/design-patterns-prototype.md)
+  - [x] [Crateional Patterns Overview](design-patterns-in-java/design-patterns-create-feature-and-type.md)
+  - [x] [1 - Singleton Pattern](design-patterns-in-java/design-patterns-singleton.md)
+  - [x] [2.1 - Static Factory method Pattern](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [x] [2.2  - Factory method Pattern](design-patterns-in-java/design-patterns-factory-method-pattern.md)
+  - [x] [3 - Abstract Factory Pattern](design-patterns-in-java/design-patterns-abstract-factory.md)
+  - [x] [Compare of Factory Pattern](design-patterns-in-java/design-patterns-factory-comparison.md)
+  - [x] [4 - Builder Pattern](design-patterns-in-java/design-patterns-bulider.md)
+  - [x] [5 - Prototype Pattern](design-patterns-in-java/design-patterns-prototype.md)
 
 &nbsp;
 
 - Structural Patterns
-  - [x] [结构性设计模式概述](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
+  - [x] [Strunctural Patterns overview](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
   - [ ] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
   - [ ] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
-  - [ ] [组合模式](design-patterns-in-java/design-patterns-composite.md)
-  - [ ] [装饰模式](design-patterns-in-java/design-patterns-decorator.md)
-  - [x] [外观模式](design-patterns-in-java/design-patterns-facade.md)
-  - [ ] [享元模式](design-patterns-in-java/design-patterns-flyweight.md)
-  - [ ] [代理模式](design-patterns-in-java/design-patterns-proxy.md)
+  - [ ] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
+  - [ ] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
+  - [x] [Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
+  - [ ] [Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
+  - [ ] [Proxy Pattern](design-patterns-in-java/design-patterns-proxy.md)
   
 - Behavioral Patterns
   - [ ] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
