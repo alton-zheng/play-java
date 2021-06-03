@@ -250,7 +250,7 @@
   - [x] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
   - [x] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
-  - [ ] [Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
+  - [x] [Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
   - [ ] [Proxy Pattern](design-patterns-in-java/design-patterns-proxy.md)
   
 - Behavioral Patterns

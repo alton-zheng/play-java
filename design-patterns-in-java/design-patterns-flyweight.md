@@ -2,11 +2,17 @@
 
 亦称：缓存、Cache、Flyweight
 
+&nbsp;
+
 ##  意图
 
 **享元模式**是一种结构型设计模式， 它摒弃了在每个对象中保存所有数据的方式， 通过共享多个对象所共有的相同状态， 让你能在有限的内存容量中载入更多对象。
 
-![享元设计模式](https://refactoringguru.cn/images/patterns/content/flyweight/flyweight-zh.png?id=3454f49363769767c6ff)
+&nbsp;
+
+![享元设计模式](images/flyweight-zh.png)
+
+&nbsp;
 
 ##  问题
 
@@ -16,13 +22,15 @@
 
 真正的问题与粒子系统有关。 每个粒子 （一颗子弹、 一枚导弹或一块弹片） 都由包含完整数据的独立对象来表示。 当玩家在游戏中鏖战进入高潮后的某一时刻， 游戏将无法在剩余内存中载入新建粒子， 于是程序就崩溃了。
 
-![享元模式问题](https://refactoringguru.cn/images/patterns/diagrams/flyweight/problem-zh.png?id=e5ca1f9794625b5cca0c)
+![享元模式问题](images/flyweight-problem-zh.png)
+
+&nbsp;
 
 ##  解决方案
 
-仔细观察 `粒子`Particle类， 你可能会注意到颜色 （color） 和精灵图 （sprite）这两个成员变量所消耗的内存要比其他变量多得多。 更糟糕的是， 对于所有的粒子来说， 这两个成员变量所存储的数据几乎完全一样 （比如所有子弹的颜色和精灵图都一样）。
+仔细观察粒子 `Particle` 类， 你可能会注意到颜色 （color） 和精灵图 （sprite）这两个成员变量所消耗的内存要比其他变量多得多。 更糟糕的是， 对于所有的粒子来说， 这两个成员变量所存储的数据几乎完全一样 （比如所有子弹的颜色和精灵图都一样）。
 
-![享元模式的解决方案](https://refactoringguru.cn/images/patterns/diagrams/flyweight/solution1-zh.png?id=68634a0aa0dc94ea8d65)
+![享元模式的解决方案](images/flyweight-solution1-zh.png)
 
 每个粒子的另一些状态 （坐标、 移动矢量和速度） 则是不同的。 因为这些成员变量的数值会不断变化。 这些数据代表粒子在存续期间不断变化的情景， 但每个粒子的颜色和精灵图则会保持不变。
 
@@ -30,25 +38,33 @@
 
 享元模式建议不在对象中存储外在状态， 而是将其传递给依赖于它的一个特殊方法。 程序只在对象中保存内在状态， 以方便在不同情景下重用。 这些对象的区别仅在于其内在状态 （与外在状态相比， 内在状态的变体要少很多）， 因此你所需的对象数量会大大削减。
 
-![享元模式的解决方案](https://refactoringguru.cn/images/patterns/diagrams/flyweight/solution3-zh.png?id=56d1d3bafd2d241952f1)
+![享元模式的解决方案](images/fly-weight-solution3-zh.png)
 
 让我们回到游戏中。 假如能从粒子类中抽出外在状态， 那么我们只需三个不同的对象 （子弹、 导弹和弹片） 就能表示游戏中的所有粒子。 你现在很可能已经猜到了， 我们将这样一个仅存储内在状态的对象称为享元。
+
+&nbsp;
 
 #### 外在状态存储
 
 那么外在状态会被移动到什么地方呢？ 总得有类来存储它们， 对不对？ 在大部分情况中， 它们会被移动到容器对象中， 也就是我们应用享元模式前的聚合对象中。
 
-在我们的例子中， 容器对象就是主要的 `游戏`Game对象， 其会将所有粒子存储在名为 `粒子`particles的成员变量中。 为了能将外在状态移动到这个类中， 你需要创建多个数组成员变量来存储每个粒子的坐标、 方向矢量和速度。 除此之外， 你还需要另一个数组来存储指向代表粒子的特定享元的引用。 这些数组必须保持同步， 这样你才能够使用同一索引来获取关于某个粒子的所有数据。
+在我们的例子中， 容器对象就是主要的 游戏 `Game` 对象， 其会将所有粒子存储在名为 粒子 `particles` 的成员变量中。 为了能将外在状态移动到这个类中， 你需要创建多个数组成员变量来存储每个粒子的坐标、 方向矢量和速度。 除此之外， 你还需要另一个数组来存储指向代表粒子的特定享元的引用。 这些数组必须保持同步， 这样你才能够使用同一索引来获取关于某个粒子的所有数据。
 
-![享元模式的解决方案](https://refactoringguru.cn/images/patterns/diagrams/flyweight/solution2-zh.png?id=454812ef83d91d5fb432)
+![享元模式的解决方案](images/flyweight-solution2-zh.png)
+
+&nbsp;
 
 更优雅的解决方案是创建独立的情景类来存储外在状态和对享元对象的引用。 在该方法中， 容器类只需包含一个数组。
 
 稍等！ 这样的话情景对象数量不是会和不采用该模式时的对象数量一样多吗？ 的确如此， 但这些对象要比之前小很多。 消耗内存最多的成员变量已经被移动到很少的几个享元对象中了。 现在， 一个享元大对象会被上千个情境小对象复用， 因此无需再重复存储数千个大对象的数据。
 
+&nbsp;
+
 #### 享元与不可变性
 
 由于享元对象可在不同的情景中使用， 你必须确保其状态不能被修改。 享元类的状态只能由构造函数的参数进行一次性初始化， 它不能对其他对象公开其设置器或公有成员变量。
+
+&nbsp;
 
 #### 享元工厂
 
@@ -56,9 +72,11 @@
 
 你可以选择在程序的不同地方放入该函数。 最简单的选择就是将其放置在享元容器中。 除此之外， 你还可以新建一个工厂类， 或者创建一个静态的工厂方法并将其放入实际的享元类中。
 
+&nbsp;
+
 ##  享元模式结构
 
-![享元设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/flyweight/structure.png?id=c1e7e1748f957a479282)
+![享元设计模式的结构](images/flyweight-structure.png)
 
 1. 享元模式只是一种优化。 在应用该模式之前， 你要确定程序中存在与大量类似对象同时占用内存相关的内存消耗问题， 并且确保该问题无法使用其他更好的方式来解决。
 2. **享元** （Flyweight） 类包含原始对象中部分能在多个对象中共享的状态。 同一享元对象可在许多不同情景中使用。 享元中存储的状态被称为 “内在状态”。 传递给享元方法的状态被称为 “外在状态”。
@@ -67,17 +85,19 @@
 5. **客户端** （Client） 负责计算或存储享元的外在状态。 在客户端看来， 享元是一种可在运行时进行配置的模板对象， 具体的配置方式为向其方法中传入一些情景数据参数。
 6. **享元工厂** （Flyweight Factory） 会对已有享元的缓存池进行管理。 有了工厂后， 客户端就无需直接创建享元， 它们只需调用工厂并向其传递目标享元的一些内在状态即可。 工厂会根据参数在之前已创建的享元中进行查找， 如果找到满足条件的享元就将其返回； 如果没有找到就根据参数新建享元。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **享元**模式能有效减少在画布上渲染数百万个树状对象时所需的内存。
 
 ![享元模式的示例](https://refactoringguru.cn/images/patterns/diagrams/flyweight/example.png?id=0818d078c1a79f373e96)
 
-该模式从主要的 `树`Tree类中抽取内在状态， 并将其移动到享元类 `树种类`Tree­Type之中。
+该模式从主要的 树 `Tree` 类中抽取内在状态， 并将其移动到享元类树种类 `Tree­Type` 之中。
 
 最初程序需要在多个对象中存储相同数据， 而现在仅需在几个享元对象中保存数据， 然后在作为情景的 `树`对象中连入享元即可。 客户端代码使用享元工厂创建树对象并封装搜索指定对象的复杂行为， 并能在需要时复用对象。
 
-```
+```java
 // 享元类包含一个树的部分状态。这些成员变量保存的数值对于特定树而言是唯一
 // 的。例如，你在这里找不到树的坐标。但这里有很多树木之间所共有的纹理和颜
 // 色。由于这些数据的体积通常非常大，所以如果让每棵树都其进行保存的话将耗
@@ -126,6 +146,8 @@ class Forest is
             tree.draw(canvas)
 ```
 
+&nbsp;
+
 ##  享元模式适合应用场景
 
  仅在程序必须支持大量对象且没有足够的内存容量时使用享元模式。
@@ -135,6 +157,8 @@ class Forest is
 - 程序需要生成数量巨大的相似对象
 - 这将耗尽目标设备的所有内存
 - 对象中包含可抽取且能在多个对象间共享的重复状态。
+
+&nbsp;
 
 ##  实现方式
 
@@ -146,60 +170,61 @@ class Forest is
 4. 你可以有选择地创建工厂类来管理享元缓存池， 它负责在新建享元时检查已有的享元。 如果选择使用工厂， 客户端就只能通过工厂来请求享元， 它们需要将享元的内在状态作为参数传递给工厂。
 5. 客户端必须存储和计算外在状态 （情景） 的数值， 因为只有这样才能调用享元对象的方法。 为了使用方便， 外在状态和引用享元的成员变量可以移动到单独的情景类中。
 
+&nbsp;
+
 ##  享元模式优缺点
 
--  如果程序中有很多相似对象， 那么你将可以节省大量内存。
+-  √ 如果程序中有很多相似对象， 那么你将可以节省大量内存。
+-  × 你可能需要牺牲执行速度来换取内存， 因为他人每次调用享元方法时都需要重新计算部分情景数据。
+-  × 代码会变得更加复杂。 团队中的新成员总是会问：  “为什么要像这样拆分一个实体的状态？”。
 
--  你可能需要牺牲执行速度来换取内存， 因为他人每次调用享元方法时都需要重新计算部分情景数据。
--  代码会变得更加复杂。 团队中的新成员总是会问：  “为什么要像这样拆分一个实体的状态？”。
+&nbsp;
 
 ##  与其他模式的关系
 
-- 你可以使用[享元模式](https://refactoringguru.cn/design-patterns/flyweight)实现[组合模式](https://refactoringguru.cn/design-patterns/composite)树的共享叶节点以节省内存。
-- [享元](https://refactoringguru.cn/design-patterns/flyweight)展示了如何生成大量的小型对象， [外观模式](https://refactoringguru.cn/design-patterns/facade)则展示了如何用一个对象来代表整个子系统。
-- 如果你能将对象的所有共享状态简化为一个享元对象， 那么[享元](https://refactoringguru.cn/design-patterns/flyweight)就和[单例模式](https://refactoringguru.cn/design-patterns/singleton)类似了。 但这两个模式有两个根本性的不同。
-  1. 只会有一个单例实体， 但是*享元*类可以有多个实体， 各实体的内在状态也可以不同。
-  2. *单例*对象可以是可变的。 享元对象是不可变的。
+- 你可以使用享元模式实现组合模式树的共享叶节点以节省内存。
+- Flyweight 展示了如何生成大量的小型对象，外观模式则展示了如何用一个对象来代表整个子系统。
+- 如果你能将对象的所有共享状态简化为一个享元对象， 那么 Flyweight 就和单例模式类似了。 但这两个模式有两个根本性的不同。
+  1. Singleton Pattern 只会有一个 Singleton 实体， 但是 Flyweight 类可以有多个实体， 各实体的内在状态也可以不同。
+  2. Singleton 对象可以是可变的。 Flyweight 对象是不可变的。
 
+&nbsp;
 
+# Java **享元**模式讲解和代码示例
 
-# **Flyweight** in Java
+**Flyweight** 是一种结构型设计模式， 它允许你在消耗少量内存的情况下支持大量对象。
 
-**Flyweight** is a structural design pattern that allows programs to support vast quantities of objects by keeping their memory consumption low.
+模式通过共享多个对象的部分状态来实现上述功能。 换句话来说， 享元会将不同对象的相同数据进行缓存以节省内存。
 
-The pattern achieves it by sharing parts of object state between multiple objects. In other words, the Flyweight saves RAM by caching the same data used by different objects.
+&nbsp;
 
-[ Learn more about Flyweight ](https://refactoring.guru/design-patterns/flyweight)
+## 在 Java 中使用模式
 
-## Usage of the pattern in Java
+**使用示例：** 享元模式只有一个目的： 将内存消耗最小化。 如果你的程序没有遇到内存容量不足的问题， 则可以暂时忽略该模式。
 
-**Complexity:** 
+享元模式在核心 Java 程序库中的示例：
 
-**Popularity:** 
+- [`java.lang.Integer#valueOf(int)`](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#valueOf-int-) （以及 [`Boolean`](https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html#valueOf-boolean-)、 [`Byte`](https://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html#valueOf-byte-)、 [`Character`](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#valueOf-char-)、 [`Short`](https://docs.oracle.com/javase/8/docs/api/java/lang/Short.html#valueOf-short-)、 [`Long`](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#valueOf-long-) 和 [`Big­Decimal`](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html#valueOf-long-int-)）
 
-**Usage examples:** The Flyweight pattern has a single purpose: minimizing memory intake. If your program doesn’t struggle with a shortage of RAM, then you might just ignore this pattern for a while.
+**识别方法：** 享元可以通过构建方法来识别， 它会返回缓存对象而不是创建新的对象。
 
-Examples of Flyweight in core Java libraries:
+&nbsp;
 
-- [`java.lang.Integer#valueOf(int)`](http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#valueOf-int-) (also [`Boolean`](http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html#valueOf-boolean-), [`Byte`](http://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html#valueOf-byte-), [`Character`](http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#valueOf-char-), [`Short`](http://docs.oracle.com/javase/8/docs/api/java/lang/Short.html#valueOf-short-), [`Long`](http://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#valueOf-long-) and [`BigDecimal`](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html#valueOf-long-int-))
+## 渲染一片森林
 
-**Identification:** Flyweight can be recognized by a creation method that returns cached objects instead of creating new.
+本例中， 我们将渲染一片森林 （1,000,000 棵树）！ 每棵树都由包含一些状态的对象来表示 （坐标和纹理等）。 尽管程序能够完成其主要工作， 但很显然它需要消耗大量内存。
 
+原因很简单： 太多树对象包含重复数据 （名称、 纹理和颜色）。 因此我们可用享元模式来将这些数值存储在单独的享元对象中 （ `Tree­Type`类）。 现在我们不再将相同数据存储在数千个 `Tree`对象中， 而是使用一组特殊的数值来引用其中一个享元对象。
 
+客户端代码不会知道任何事情， 因为重用享元对象的复杂机制隐藏在了享元工厂中。
 
-## Rendering a forest
-
-In this example, we’re going to render a forest (1.000.000 trees)! Each tree will be represented by its own object that has some state (coordinates, texture and so on). Although the program does its primary job, naturally, it consumes a lot of RAM.
-
-The reason is simple: too many tree objects contain duplicate data (name, texture, color). That’s why we can apply the Flyweight pattern and store these values inside separate flyweight objects (the `TreeType` class). Now, instead of storing the same data in thousands of `Tree` objects, we’re going to reference one of the flyweight objects with a particular set of values.
-
-The client code isn’t going to notice anything since the complexity of reusing flyweight objects is buried inside a flyweight factory.
+&nbsp;
 
 ##  **trees**
 
-####  **trees/Tree.java:** Contains state unique for each tree
+####  **trees/Tree.java:** 包含每棵树的独特状态
 
-```
+```java
 package refactoring_guru.flyweight.example.trees;
 
 import java.awt.*;
@@ -221,9 +246,11 @@ public class Tree {
 }
 ```
 
-####  **trees/TreeType.java:** Contains state shared by several trees
+&nbsp;
 
-```
+####  **trees/TreeType.java:** 包含多棵树共享的状态
+
+```java
 package refactoring_guru.flyweight.example.trees;
 
 import java.awt.*;
@@ -248,9 +275,11 @@ public class TreeType {
 }
 ```
 
-####  **trees/TreeFactory.java:** Encapsulates complexity of flyweight creation
+&nbsp;
 
-```
+#### **trees/TreeFactory.java:** 封装创建 Flyweight 的复杂机制
+
+```java
 package refactoring_guru.flyweight.example.trees;
 
 import java.awt.*;
@@ -271,11 +300,13 @@ public class TreeFactory {
 }
 ```
 
+&nbsp;
+
 ##  **forest**
 
-####  **forest/Forest.java:** Forest, which we draw
+####  **forest/Forest.java:** 我们绘制的森林
 
-```
+```java
 package refactoring_guru.flyweight.example.forest;
 
 import refactoring_guru.flyweight.example.trees.Tree;
@@ -305,9 +336,11 @@ public class Forest extends JFrame {
 }
 ```
 
-####  **Demo.java:** Client code
+&nbsp;
 
-```
+####  **Demo.java:** 客户端代码
+
+```java
 package refactoring_guru.flyweight.example;
 
 import refactoring_guru.flyweight.example.forest.Forest;
@@ -346,11 +379,15 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.png:** Screenshot
+&nbsp;
 
-![img](https://refactoring.guru/images/patterns/examples/java/flyweight/OutputDemo.png)
+#### **OutputDemo.png:** 屏幕截图
 
-####  **OutputDemo.txt:** RAM usage stats
+![img](https://refactoringguru.cn/images/patterns/examples/java/flyweight/OutputDemo.png?id=8bcaaf279411a0b13b42)
+
+&nbsp;
+
+####  **OutputDemo.txt:** 内存使用统计
 
 ```java
 1000000 trees drawn
@@ -361,4 +398,3 @@ Tree size (8 bytes) * 1000000
 ---------------------
 Total: 7MB (instead of 36MB)
 ```
-
