@@ -14,4 +14,4 @@
 
 &nbsp;
 
-以上 5 种创建型模式，除了 [工厂方法模式](design-patterns-factory-method-pattern.md) 属于类创建型模式，其他的全部属于对象创建型模式，我们将在之后的教程中详细地介绍它们的特点、结构与应用。
+以上 5 种创建型模式，除了 [工厂方法模式](design-patterns-factory-method-pattern.md) 属于类创建型模式，其他的全部属于对象创建型模式。

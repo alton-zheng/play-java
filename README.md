@@ -234,25 +234,27 @@
 
   - [x] [Crateional Patterns Overview](design-patterns-in-java/design-patterns-create-feature-and-type.md)
   - [x] [1 - Singleton Pattern](design-patterns-in-java/design-patterns-singleton.md)
-  - [x] [2.1 - Static Factory method Pattern](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
-  - [x] [2.2  - Factory method Pattern](design-patterns-in-java/design-patterns-factory-method-pattern.md)
-  - [x] [3 - Abstract Factory Pattern](design-patterns-in-java/design-patterns-abstract-factory.md)
+  - [x] [2 - Prototype Pattern](design-patterns-in-java/design-patterns-prototype.md)
+  - [x] [3.1 - Static Factory method Pattern](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
+  - [x] 3[.2  - Factory method Pattern](design-patterns-in-java/design-patterns-factory-method-pattern.md)
+  - [x] [4 - Abstract Factory Pattern](design-patterns-in-java/design-patterns-abstract-factory.md)
   - [x] [Compare of Factory Pattern](design-patterns-in-java/design-patterns-factory-comparison.md)
-  - [x] [4 - Builder Pattern](design-patterns-in-java/design-patterns-bulider.md)
-  - [x] [5 - Prototype Pattern](design-patterns-in-java/design-patterns-prototype.md)
+  - [x] [5 - Builder Pattern](design-patterns-in-java/design-patterns-bulider.md)
 
 &nbsp;
 
 - Structural Patterns
   - [x] [Structural Patterns overview](design-patterns-in-java/design-patterns-structual-patterns-overview.md)
-  - [x] [Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
-  - [x] [Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
-  - [x] [Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
-  - [x] [Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
-  - [x] [Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
-  - [x] [Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
-  - [x] [Proxy Pattern](design-patterns-in-java/design-patterns-proxy.md)
-  
+  - [x] [6 - Adapt Pattern](design-patterns-in-java/design-patterns-adapter.md)
+  - [x] [7- Bridge Pattern](design-patterns-in-java/design-patterns-bridge.md)
+  - [x] [8- Conposite Pattern](design-patterns-in-java/design-patterns-composite.md)
+  - [x] [9- Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
+  - [x] [10- Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
+  - [x] [11 - Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
+  - [x] [12 - Proxy Pattern ](design-patterns-in-java/design-patterns-proxy.md)
+
+&nbsp;
+
 - Behavioral Patterns
   - [ ] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
   - [ ] [](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
