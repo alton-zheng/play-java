@@ -1,14 +1,16 @@
 # 责任链模式
 
-![Chain of Responsibility](images/chain-of-responsibility-mini-title.png)
+![Chain of Responsibility](images/chain-of-responsibility-mini-title.png)亦称：职责链模式、命令链、CoR、Chain of Command、Chain of Responsibility
 
-亦称：职责链模式、命令链、CoR、Chain of Command、Chain of Responsibility
+&nbsp;
 
 ##  意图
 
 **责任链模式**是一种行为设计模式， 允许你将请求沿着处理者链进行发送。 收到请求后， 每个处理者均可对请求进行处理， 或将其传递给链上的下个处理者。
 
-![责任链设计模式](https://refactoringguru.cn/images/patterns/content/chain-of-responsibility/chain-of-responsibility.png?id=56c10d0dc712546cc283)
+![责任链设计模式](images/chain-of-responsibility.png)
+
+&nbsp;
 
 ##  问题
 
@@ -16,7 +18,9 @@
 
 简单规划后， 你会意识到这些检查必须依次进行。 只要接收到包含用户凭据的请求， 应用程序就可尝试对进入系统的用户进行认证。 但如果由于用户凭据不正确而导致认证失败， 那就没有必要进行后续检查了。
 
-![责任链解决的问题](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/problem1-zh.png?id=2d4f709ac35ffa927555)
+![责任链解决的问题](images/problem1-zh.png)
+
+&nbsp;
 
 请求必须经过一系列检查后才能由订购系统来处理。
 
@@ -26,13 +30,17 @@
 - 过了一段时间， 有人注意到系统无法抵御暴力密码破解方式的攻击。 为了防范这种情况， 你立刻添加了一个检查步骤来过滤来自同一 IP 地址的重复错误请求。
 - 又有人提议你可以对包含同样数据的重复请求返回缓存中的结果， 从而提高系统响应速度。 因此， 你新增了一个检查步骤， 确保只有没有满足条件的缓存结果时请求才能通过并被发送给系统。
 
-![每增加一个检查步骤，程序都变得更加臃肿、混乱和丑陋](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/problem2-zh.png?id=4f8ffb9621a722ed7351)
+![每增加一个检查步骤，程序都变得更加臃肿、混乱和丑陋](images/chain-of-responsibility-problem2-zh.png)
+
+&nbsp;
 
 代码变得越来越多， 也越来越混乱。
 
 检查代码本来就已经混乱不堪， 而每次新增功能都会使其更加臃肿。 修改某个检查步骤有时会影响其他的检查步骤。 最糟糕的是， 当你希望复用这些检查步骤来保护其他系统组件时， 你只能复制部分代码， 因为这些组件只需部分而非全部的检查步骤。
 
 系统会变得让人非常费解， 而且其维护成本也会激增。 你在艰难地和这些代码共处一段时间后， 有一天终于决定对整个系统进行重构。
+
+&nbsp;
 
 ##  解决方案
 
@@ -44,7 +52,9 @@
 
 在我们的订购系统示例中， 处理者会在进行请求处理工作后决定是否继续沿着链传递请求。 如果请求中包含正确的数据， 所有处理者都将执行自己的主要行为， 无论该行为是身份验证还是数据缓存。
 
-![处理者依次排列，组成一条链](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/solution1-zh.png?id=b852e6cd659ebe75b3bf)
+![处理者依次排列，组成一条链](images/chain-of-resposibilitiy-solution1-zh.png)
+
+&nbsp;
 
 处理者依次排列， 组成一条链。
 
@@ -52,15 +62,19 @@
 
 例如， 当用户点击按钮时， 按钮产生的事件将沿着 GUI 元素链进行传递， 最开始是按钮的容器 （如窗体或面板）， 直至应用程序主窗口。 链上第一个能处理该事件的元素会对其进行处理。 此外， 该例还有另一个值得我们关注的地方： 它表明我们总能从对象树中抽取出链来。
 
-![对象树的枝干可以组成一条链](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/solution2-zh.png?id=29b227c34a23f3298a62)
+![对象树的枝干可以组成一条链](images/chain-of-responsibility-solution2-zh.png)
 
 对象树的枝干可以组成一条链。
 
-所有处理者类均实现同一接口是关键所在。 每个具体处理者仅关心下一个包含 `execute`执行方法的处理者。 这样一来， 你就可以在运行时使用不同的处理者来创建链， 而无需将相关代码与处理者的具体类进行耦合。
+所有处理者类均实现同一接口是关键所在。 每个具体处理者仅关心下一个包含 `execute` 执行方法的处理者。 这样一来， 你就可以在运行时使用不同的处理者来创建链， 而无需将相关代码与处理者的具体类进行耦合。
+
+&nbsp;
 
 ##  真实世界类比
 
-![与技术支持交谈可能不容易](https://refactoringguru.cn/images/patterns/content/chain-of-responsibility/chain-of-responsibility-comic-1-zh.png?id=4de2ffbc2b9538c4a2cf)
+![与技术支持交谈可能不容易](images/chain-of-responsibility-comic-1-zh.png)
+
+&nbsp;
 
 给技术支持打电话时你可能得应对多名接听人员。
 
@@ -72,9 +86,11 @@
 
 最后， 接听人员将你的电话转接给了工程师， 他或许正缩在某幢办公大楼的阴暗地下室中， 坐在他所深爱的服务器机房里， 焦躁不安地期待着同一名真人交流。 工程师告诉了你新硬件设备驱动程序的下载网址， 以及如何在 Linux 系统上进行安装。 问题终于解决了！ 你挂断了电话， 满心欢喜。
 
+&nbsp;
+
 ##  责任链模式结构
 
-![责任链设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/structure.png?id=848f0fc8dca57a44974d)
+![责任链设计模式的结构](images/chain-of-responsibility-structure.png)
 
 1. **处理者** （Handler） 声明了所有具体处理者的通用接口。 该接口通常仅包含单个方法用于请求处理， 但有时其还会包含一个设置链上下个处理者的方法。
 
@@ -88,11 +104,13 @@
 
 4. **客户端** （Client） 可根据程序逻辑一次性或者动态地生成链。 值得注意的是， 请求可发送给链上的任意一个处理者， 而非必须是第一个处理者。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **责任链**模式负责为活动的 GUI 元素显示上下文帮助信息。
 
-![责任链结构的示例](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/example-zh.png?id=68376505084213f5eb17)
+![责任链结构的示例](images/chain-of-responsibility-example-zh.png)
 
 GUI 类使用组合模式生成。 每个元素都链接到自己的容器元素。 你可随时构建从当前元素开始的、 遍历其所有容器的元素链。
 
@@ -100,13 +118,15 @@ GUI 类使用组合模式生成。 每个元素都链接到自己的容器元素
 
 只要给一个简单的组件指定帮助文本， 它就可显示简短的上下文提示。 但更复杂的组件可自定义上下文帮助文本的显示方式， 例如显示手册摘录内容或在浏览器中打开一个网页。
 
-![责任链结构的示例](https://refactoringguru.cn/images/patterns/diagrams/chain-of-responsibility/example2-zh.png?id=981eacca0d9a89abcda6)
+![责任链结构的示例](images/chain-of-responsibility-example2-zh.png)
+
+&nbsp;
 
 帮助请求如何在 GUI 对象中移动。
 
 当用户将鼠标指针移动到某个元素并按下 `F1`键时， 程序检测到指针下的组件并对其发送帮助请求。 该请求不断向上传递到该元素所有的容器， 直至某个元素能够显示帮助信息。
 
-```
+```java
 // 处理者接口声明了一个创建处理者链的方法。还声明了一个执行请求的方法。
 interface ComponentWithContextualHelp is
     method showHelp()
@@ -186,6 +206,8 @@ class Application is
         component.showHelp()
 ```
 
+&nbsp;
+
 ##  责任链模式适合应用场景
 
  当程序需要使用不同方式处理不同种类请求， 而且请求类型和顺序预先未知时， 可以使用责任链模式。
@@ -199,6 +221,8 @@ class Application is
  如果所需处理者及其顺序必须在运行时进行改变， 可以使用责任链模式。
 
  如果在处理者类中有对引用成员变量的设定方法， 你将能动态地插入和移除处理者， 或者改变其顺序。
+
+&nbsp;
 
 ##  实现方式
 
@@ -227,32 +251,38 @@ class Application is
    - 部分请求可能无法到达链尾。
    - 其他请求可能直到链尾都未被处理。
 
+&nbsp;
+
 ##  责任链模式优缺点
 
--  你可以控制请求处理的顺序。
--  *单一职责原则*。 你可对发起操作和执行操作的类进行解耦。
--  *开闭原则*。 你可以在不更改现有代码的情况下在程序中新增处理者。
+-  √ 你可以控制请求处理的顺序。
+-  √ *单一职责原则*。 你可对发起操作和执行操作的类进行解耦。
+-  √ *开闭原则*。 你可以在不更改现有代码的情况下在程序中新增处理者。
+-  × 部分请求可能未被处理。
 
--  部分请求可能未被处理。
+&nbsp;
 
 ##  与其他模式的关系
 
-- [责任链模式](https://refactoringguru.cn/design-patterns/chain-of-responsibility)、 [命令模式](https://refactoringguru.cn/design-patterns/command)、 [中介者模式](https://refactoringguru.cn/design-patterns/mediator)和[观察者模式](https://refactoringguru.cn/design-patterns/observer)用于处理请求发送者和接收者之间的不同连接方式：
+- Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
 
-  - *责任链*按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
-  - *命令*在发送者和请求者之间建立单向连接。
-  - *中介者*清除了发送者和请求者之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
-  - *观察者*允许接收者动态地订阅或取消接收请求。
+  - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
+  - Command 在 Sender 和 Request 之间建立单向连接。
+  - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
+  -  Observer 允许 Receiver  动态地订阅或取消接收请求。
 
-- [责任链](https://refactoringguru.cn/design-patterns/chain-of-responsibility)通常和[组合模式](https://refactoringguru.cn/design-patterns/composite)结合使用。 在这种情况下， 叶组件接收到请求后， 可以将请求沿包含全体父组件的链一直传递至对象树的底部。
+- Chain-of-Responsibility 通常和 Conposite Pattern 结合使用。 在这种情况下， 叶组件接收到请求后， 可以将请求沿包含全体父组件的链一直传递至对象树的底部。
 
-- [责任链](https://refactoringguru.cn/design-patterns/chain-of-responsibility)的管理者可使用[命令模式](https://refactoringguru.cn/design-patterns/command)实现。 在这种情况下， 你可以对由请求代表的同一个上下文对象执行许多不同的操作。
+- Chain of Responsibility 的管理者可使用 Command Pattern 实现。 在这种情况下， 你可以对由请求代表的同一个上下文对象执行许多不同的操作。
 
-  还有另外一种实现方式， 那就是请求自身就是一个*命令*对象。 在这种情况下， 你可以对由一系列不同上下文连接而成的链执行相同的操作。
+  还有另外一种实现方式， 那就是请求自身就是一个 Command 对象。 在这种情况下， 你可以对由一系列不同上下文连接而成的链执行相同的操作。
 
-- [责任链](https://refactoringguru.cn/design-patterns/chain-of-responsibility)和[装饰模式](https://refactoringguru.cn/design-patterns/decorator)的类结构非常相似。 两者都依赖递归组合将需要执行的操作传递给一系列对象。 但是， 两者有几点重要的不同之处。
+- Chain of Responsibility Pattern 和 Decorator Pattern 的类结构非常相似。 两者都依赖递归 Conposite 将需要执行的操作传递给一系列对象。 但是， 两者有几点重要的不同之处。
 
-  [责任链](https://refactoringguru.cn/design-patterns/chain-of-responsibility)的管理者可以相互独立地执行一切操作， 还可以随时停止传递请求。 另一方面， 各种*装饰*可以在遵循基本接口的情况下扩展对象的行为。 此外， 装饰无法中断请求的传递。
+  - Chain of Responsibility 的管理者可以相互独立地执行一切操作， 还可以随时停止传递请求。 
+  - 另一方面， 各种 Decorator 可以在遵循基本接口的情况下扩展对象的行为。 此外，装饰无法中断请求的传递。
+
+&nbsp;
 
 # Java **责任链**模式讲解和代码示例
 
@@ -260,13 +290,9 @@ class Application is
 
 该模式允许多个对象来对请求进行处理， 而无需让发送者类与具体接收者类相耦合。 链可在运行时由遵循标准处理者接口的任意处理者动态生成。
 
-[ 进一步了解责任链模式 ](https://refactoringguru.cn/design-patterns/chain-of-responsibility)
+&nbsp;
 
 ## 在 Java 中使用模式
-
-**复杂度：** 
-
-**流行度：** 
 
 **使用示例：** 责任链模式在 Java 程序中并不常见， 因为它仅在代码与对象链打交道时才能发挥作用。
 
@@ -279,7 +305,7 @@ class Application is
 
 **识别方法：** 该模式可通过一组对象的行为方法间接调用其他对象的相同方法来识别， 而且所有对象都会遵循相同的接口。
 
-
+&nbsp;
 
 ## 过滤访问
 
@@ -287,11 +313,13 @@ class Application is
 
 本例与许多作者给出的该模式的标准版本有些不同。 绝大多数模式示例都会寻找正确的处理者， 并在处理后退出链。 但在这里我们会执行每个处理者， 直至某个处理者**无法处理**请求。 请注意， 尽管流程略有不同， 但这仍是责任链模式。
 
+&nbsp;
+
 ##  **middleware**
 
 ####  **middleware/Middleware.java:** 基础验证接口
 
-```
+```java
 package refactoring_guru.chain_of_responsibility.example.middleware;
 
 /**
@@ -326,9 +354,11 @@ public abstract class Middleware {
 }
 ```
 
+&nbsp;
+
 ####  **middleware/ThrottlingMiddleware.java:** 检查请求数量限制
 
-```
+```java
 package refactoring_guru.chain_of_responsibility.example.middleware;
 
 /**
@@ -369,9 +399,11 @@ public class ThrottlingMiddleware extends Middleware {
 }
 ```
 
-####  **middleware/UserExistsMiddleware.java:** 检查用户登录信息
+&nbsp;
 
-```
+**middleware/UserExistsMiddleware.java:** 检查用户登录信息
+
+```java
 package refactoring_guru.chain_of_responsibility.example.middleware;
 
 import refactoring_guru.chain_of_responsibility.example.server.Server;
@@ -400,9 +432,11 @@ public class UserExistsMiddleware extends Middleware {
 }
 ```
 
+&nbsp;
+
 ####  **middleware/RoleCheckMiddleware.java:** 检查用户角色
 
-```
+```java
 package refactoring_guru.chain_of_responsibility.example.middleware;
 
 /**
@@ -420,11 +454,13 @@ public class RoleCheckMiddleware extends Middleware {
 }
 ```
 
+&nbsp;
+
 ##  **server**
 
 ####  **server/Server.java:** 授权目标
 
-```
+```java
 package refactoring_guru.chain_of_responsibility.example.server;
 
 import refactoring_guru.chain_of_responsibility.example.middleware.Middleware;
@@ -476,9 +512,11 @@ public class Server {
 }
 ```
 
+&nbsp;
+
 ####  **Demo.java:** 客户端代码
 
-```
+```java
 package refactoring_guru.chain_of_responsibility.example;
 
 import refactoring_guru.chain_of_responsibility.example.middleware.Middleware;
@@ -528,9 +566,11 @@ public class Demo {
 }
 ```
 
+&nbsp;
+
 ####  **OutputDemo.txt:** 执行结果
 
-```
+```less
 Enter email: admin@example.com
 Input password: admin_pass
 Hello, admin!
@@ -542,3 +582,6 @@ Input password: user_pass
 Hello, user!
 Authorization have been successful!
 ```
+
+&nbsp;
+

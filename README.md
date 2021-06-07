@@ -257,7 +257,7 @@
 
 - Behavioral Patterns
   - [x] [Behavioral Patterns Overview](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
-  - [ ] [13 - Chain of Responsibility](design-patterns-in-java/design-patterns-chain-of-responsibility.md) 
+  - [x] [13 - Chain of Responsibility](design-patterns-in-java/design-patterns-chain-of-responsibility.md) 
   - [ ] [14- Command Pattern](design-patterns-in-java/design-patterns-command.md)
   - [ ] [15 - Mediator Pattern](design-patterns-in-java/design-patterns-mediator.md)
   - [ ] [16 - Visitor Pattern](design-patterns-in-java/design-patterns-visitor.md)
@@ -266,7 +266,7 @@
   - [ ] [18 - Observer Pattern](design-patterns-in-java/design-patterns-observer.md)
   - [ ] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
   - [ ] [20 - Iterator Pattern](design-patterns-in-java/design-patterns-iterator.md)
-  - [ ] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
+  - [x] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
   - [ ] [22 - Template Method](design-patterns-in-java/design-patterns-template-method.md)
 
 &nbsp;
