@@ -1,4 +1,4 @@
-# Play Java
+
 
 &nbsp;
 
@@ -256,19 +256,18 @@
 &nbsp;
 
 - Behavioral Patterns
-  - [ ] [Behavioral Patterns 概览](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
-  - [ ] [](design-patterns-in-java/design-patterns-chain-of-responsibility.md)
-  - [ ] [命令模式](design-patterns-in-java/design-patterns-command.md)
-  - [ ] [迭代器模式](design-patterns-in-java/design-patterns-iterator.md)
-  - [ ] [中介者模式](design-patterns-in-java/design-patterns-mediator.md)
-  - [ ] [备忘录模式](design-patterns-in-java/design-patterns-memento.md)
-
-  - [ ] [观察者模式](design-patterns-in-java/design-patterns-observer.md)
-  - [ ] [状态模式](design-patterns-in-java/design-patterns-state.md)
-  - [x] [策略模式](design-patterns-in-java/design-patterns-strategy.md)
-  - [ ] [模板方法模式](design-patterns-in-java/design-patterns-template-method.md)
-  - [ ] [访问者模式](design-patterns-in-java/design-patterns-visitor.md)
-  - [ ] [访问者和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
+  - [x] [Behavioral Patterns Overview](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
+  - [ ] [13 - Chain of Responsibility](design-patterns-in-java/design-patterns-chain-of-responsibility.md) 
+  - [ ] [14- Command Pattern](design-patterns-in-java/design-patterns-command.md)
+  - [ ] [15 - Mediator Pattern](design-patterns-in-java/design-patterns-mediator.md)
+  - [ ] [16 - Visitor Pattern](design-patterns-in-java/design-patterns-visitor.md)
+    - [ ] [Visitor 和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
+  - [ ] [17 - Memento Pattern](design-patterns-in-java/design-patterns-memento.md)
+  - [ ] [18 - Observer Pattern](design-patterns-in-java/design-patterns-observer.md)
+  - [ ] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
+  - [ ] [20 - Iterator Pattern](design-patterns-in-java/design-patterns-iterator.md)
+  - [ ] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
+  - [ ] [22 - Template Method](design-patterns-in-java/design-patterns-template-method.md)
 
 &nbsp;
 
