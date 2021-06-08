@@ -233,6 +233,9 @@ class Application is
 Java 标准程序库中的一些代理模式的示例：
 
 - [`java.lang.reflect.Proxy`](http://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Proxy.html)
+  - `jdk.proxy.ProxyGenerator.saveGeneratedFiles` -> `true`
+    - System.getProperties().put()
+    - 需要定义接口
 - [`java.rmi.*`](http://docs.oracle.com/javase/8/docs/api/java/rmi/package-summary.html)
 - [`javax.ejb.EJB`](http://docs.oracle.com/javaee/7/api/javax/ejb/EJB.html) （[查看评论](http://stackoverflow.com/questions/25514361/when-using-ejb-does-each-managed-bean-get-its-own-ejb-instance)）
 - [`javax.inject.Inject`](http://docs.oracle.com/javaee/7/api/javax/inject/Inject.html) （[查看评论](http://stackoverflow.com/questions/29651008/field-getobj-returns-all-nulls-on-injected-cdi-managed-beans-while-manually-i/29672591#29672591)）
@@ -635,3 +638,52 @@ Time elapsed: 5875ms
 Time saved by caching proxy: 3479ms
 ```
 
+&nbsp;
+
+#### CGLIB 实现动态代理不需要接口
+
+```xml
+<dependency>
+	<groupid>cglib</groupid>
+  <artifactId>cglib</artifactId>
+  <version>3.2.12</version>
+</dependency>
+```
+
+&nbsp;
+
+```java
+import java.util.Random;
+import java.lang.reflect.Method;
+
+public class Main {
+  
+  public static void main(String[] args) {
+    Enhancer enhancer = new Enhancer();
+    enhancer.setSupperclass(Test.class);
+    enhancer.setCallback(new TimeMethodInterceptor());
+    Test test = (Test)enhancer.create();
+    test.run();
+  }
+}
+
+class TimeMethodInterceptor implements MethodIntercepter {
+  @Override
+  public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) {
+    System.out.println("before");
+    Object result = null;
+    result = methodProxy.invokeSuper(o, objects);
+    System.out.println("after");
+    return result;
+  }
+}
+
+Class Test {
+  
+  public void run() {
+    // 这里忽略，不重要
+  }
+}
+```
+
+&nbsp;

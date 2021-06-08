@@ -251,7 +251,7 @@
   - [x] [9- Decorate Pattern](design-patterns-in-java/design-patterns-decorator.md)
   - [x] [10- Facade Pattern](design-patterns-in-java/design-patterns-facade.md)
   - [x] [11 - Flyweight Pattern](design-patterns-in-java/design-patterns-flyweight.md)
-  - [x] [12 - Proxy Pattern ](design-patterns-in-java/design-patterns-proxy.md)
+  - [x] [12 - Proxy Pattern](design-patterns-in-java/design-patterns-proxy.md)
 
 &nbsp;
 
