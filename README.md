@@ -1,8 +1,4 @@
 
-
-&nbsp;
-
-
 ## 网络 & IO
 
 &nbsp;
@@ -258,7 +254,7 @@
 - Behavioral Patterns
   - [x] [Behavioral Patterns Overview](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
   - [x] [13 - Chain of Responsibility](design-patterns-in-java/design-patterns-chain-of-responsibility.md) 
-  - [ ] [14- Command Pattern](design-patterns-in-java/design-patterns-command.md)
+  - [x] [14- Command Pattern](design-patterns-in-java/design-patterns-command.md)
   - [ ] [15 - Mediator Pattern](design-patterns-in-java/design-patterns-mediator.md)
   - [ ] [16 - Visitor Pattern](design-patterns-in-java/design-patterns-visitor.md)
     - [ ] [Visitor 和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
@@ -267,7 +263,7 @@
   - [ ] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
   - [ ] [20 - Iterator Pattern](design-patterns-in-java/design-patterns-iterator.md)
   - [x] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
-  - [ ] [22 - Template Method](design-patterns-in-java/design-patterns-template-method.md)
+  - [ ] [22 - Template Method Pattern](design-patterns-in-java/design-patterns-template-method.md)
 
 &nbsp;
 

@@ -1,36 +1,42 @@
-# 命令模式
+# 14 - 命令模式
 
 亦称：动作、事务、Action、Transaction、Command
+
+&nbsp;
 
 ##  意图
 
 **命令模式**是一种行为设计模式， 它可将请求转换为一个包含与请求相关的所有信息的独立对象。 该转换让你能根据不同的请求将方法参数化、 延迟请求执行或将其放入队列中， 且能实现可撤销操作。
 
-![命令设计模式](https://refactoringguru.cn/images/patterns/content/command/command-zh.png?id=e5971678fc9f5e2f3059)
+![命令设计模式](images/command-zh.png)
+
+&nbsp;
 
 ##  问题
 
 假如你正在开发一款新的文字编辑器， 当前的任务是创建一个包含多个按钮的工具栏， 并让每个按钮对应编辑器的不同操作。 你创建了一个非常简洁的 `按钮`类， 它不仅可用于生成工具栏上的按钮， 还可用于生成各种对话框的通用按钮。
 
-![命令模式解决的问题](https://refactoringguru.cn/images/patterns/diagrams/command/problem1.png?id=84189315a0e8d91da262)
+![命令模式解决的问题](images/command-problem1.png)
 
 应用中的所有按钮都可以继承相同的类
 
 尽管所有按钮看上去都很相似， 但它们可以完成不同的操作 （打开、 保存、 打印和应用等）。 你会在哪里放置这些按钮的点击处理代码呢？ 最简单的解决方案是在使用按钮的每个地方都创建大量的子类。 这些子类中包含按钮点击后必须执行的代码。
 
-![大量的按钮子类](https://refactoringguru.cn/images/patterns/diagrams/command/problem2.png?id=f0e33da1842b3a3ee3b4)
+![大量的按钮子类](images/command-problem2.png)
 
-大量的按钮子类。 没关系的。
+&nbsp;
 
-你很快就意识到这种方式有严重缺陷。 首先， 你创建了大量的子类， 当每次修改基类 `按钮`时， 你都有可能需要修改所有子类的代码。 简单来说， GUI 代码以一种拙劣的方式依赖于业务逻辑中的不稳定代码。
+你很快就意识到这种方式有严重缺陷。 首先， 你创建了大量的子类， 当每次修改基类 `Button`时， 你都有可能需要修改所有子类的代码。 简单来说， GUI 代码以一种拙劣的方式依赖于业务逻辑中的不稳定代码。
 
-![多个类实现同一功能](https://refactoringguru.cn/images/patterns/diagrams/command/problem3-zh.png?id=6418d15863a142a7519f)
+![多个类实现同一功能](images/command-problem3-zh.png)
 
-多个类实现同一功能。
+&nbsp;
 
 还有一个部分最难办。 复制/粘贴文字等操作可能会在多个地方被调用。 例如用户可以点击工具栏上小小的 “复制” 按钮， 或者通过上下文菜单复制一些内容， 又或者直接使用键盘上的 `Ctrl+C` 。
 
-我们的程序最初只有工具栏， 因此可以使用按钮子类来实现各种不同操作。 换句话来说，  `复制按钮`Copy­Button子类包含复制文字的代码是可行的。 在实现了上下文菜单、 快捷方式和其他功能后， 你要么需要将操作代码复制进许多个类中， 要么需要让菜单依赖于按钮， 而后者是更糟糕的选择。
+我们的程序最初只有工具栏， 因此可以使用按钮子类来实现各种不同操作。 换句话来说，  `复制按钮` Copy­Button子类包含复制文字的代码是可行的。 在实现了上下文菜单、 快捷方式和其他功能后， 你要么需要将操作代码复制进许多个类中， 要么需要让菜单依赖于按钮， 而后者是更糟糕的选择。
+
+&nbsp;
 
 ##  解决方案
 
@@ -38,27 +44,35 @@
 
 这在代码中看上去就像这样： 一个 GUI 对象传递一些参数来调用一个业务逻辑对象。 这个过程通常被描述为一个对象发送*请求*给另一个对象。
 
-![GUI 层可以直接访问业务逻辑层](https://refactoringguru.cn/images/patterns/diagrams/command/solution1-zh.png?id=ae19200346219d8dab71)
+![GUI 层可以直接访问业务逻辑层](images/command-solution1-zh.png)
+
+&nbsp;
 
 GUI 层可以直接访问业务逻辑层。
 
-命令模式建议 GUI 对象不直接提交这些请求。 你应该将请求的所有细节 （例如调用的对象、 方法名称和参数列表） 抽取出来组成*命令*类， 该类中仅包含一个用于触发请求的方法。
+命令模式建议 GUI 对象不直接提交这些请求。 你应该将请求的所有细节 （例如调用的对象、 方法名称和参数列表） 抽取出来组成 *Command* 类， 该类中仅包含一个用于触发请求的方法。
 
 命令对象负责连接不同的 GUI 和业务逻辑对象。 此后， GUI 对象无需了解业务逻辑对象是否获得了请求， 也无需了解其对请求进行处理的方式。 GUI 对象触发命令即可， 命令对象会自行处理所有细节工作。
 
-![通过命令访问业务逻辑层。](https://refactoringguru.cn/images/patterns/diagrams/command/solution2-zh.png?id=ba8af77475dbab21fb51)
+&nbsp;
 
-通过命令访问业务逻辑层。
+- 通过命令访问业务逻辑层
+
+![通过命令访问业务逻辑层。](images/command-solution2-zh.png)
 
 下一步是让所有命令实现相同的接口。 该接口通常只有一个没有任何参数的执行方法， 让你能在不和具体命令类耦合的情况下使用同一请求发送者执行不同命令。 此外还有额外的好处， 现在你能在运行时切换连接至发送者的命令对象， 以此改变发送者的行为。
 
 你可能会注意到遗漏的一块拼图——请求的参数。 GUI 对象可以给业务层对象提供一些参数。 但执行命令方法没有任何参数， 所以我们如何将请求的详情发送给接收者呢？ 答案是： 使用数据对命令进行预先配置， 或者让其能够自行获取数据。
 
-![GUI 对象将命令委派给命令对象](https://refactoringguru.cn/images/patterns/diagrams/command/solution3-zh.png?id=3cc7b441711ae6188366)
+- GUI 对象将命令委派给命令对象
 
-GUI 对象将命令委派给命令对象。
+![GUI 对象将命令委派给命令对象](images/command-solution3-zh.png)
 
-让我们回到文本编辑器。 应用命令模式后， 我们不再需要任何按钮子类来实现点击行为。 我们只需在 `按钮`Button基类中添加一个成员变量来存储对于命令对象的引用， 并在点击后执行该命令即可。
+
+
+&nbsp;
+
+让我们回到文本编辑器。 应用命令模式后， 我们不再需要任何按钮子类来实现点击行为。 我们只需在按钮 `Button` 基类中添加一个成员变量来存储对于 `Comand` 对象的引用， 并在点击后执行该命令即可。
 
 你需要为每个可能的操作实现一系列命令类， 并且根据按钮所需行为将命令和按钮连接起来。
 
@@ -66,15 +80,21 @@ GUI 对象将命令委派给命令对象。
 
 最后， 命令成为了减少 GUI 和业务逻辑层之间耦合的中间层。 而这仅仅是命令模式所提供的一小部分好处！
 
+&nbsp;
+
 ##  真实世界类比
 
-![在餐厅里点餐](https://refactoringguru.cn/images/patterns/content/command/command-comic-1.png?id=551df832f445080976f3)
+- 在餐厅点餐
 
-在餐厅里点餐。
+![在餐厅里点餐](images/command-comic-1.png)
+
+&nbsp;
 
 在市中心逛了很久的街后， 你找到了一家不错的餐厅， 坐在了临窗的座位上。 一名友善的服务员走近你， 迅速记下你点的食物， 写在一张纸上。 服务员来到厨房， 把订单贴在墙上。 过了一段时间， 厨师拿到了订单， 他根据订单来准备食物。 厨师将做好的食物和订单一起放在托盘上。 服务员看到托盘后对订单进行检查， 确保所有食物都是你要的， 然后将食物放到了你的桌上。
 
 那张纸就是一个命令， 它在厨师开始烹饪前一直位于队列中。 命令中包含与烹饪这些食物相关的所有信息。 厨师能够根据它马上开始烹饪， 而无需跑来直接和你确认订单详情。
+
+&nbsp;
 
 ##  命令模式结构
 
@@ -92,11 +112,13 @@ GUI 对象将命令委派给命令对象。
 
 5. **客户端** （Client） 会创建并配置具体命令对象。 客户端必须将包括接收者实体在内的所有请求参数传递给命令的构造函数。 此后， 生成的命令就可以与一个或多个发送者相关联了。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **命令**模式会记录已执行操作的历史记录， 以在需要时撤销操作。
 
-![命令模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/command/example.png?id=1f42c8395fe54d0e4090)
+![命令模式示例的结构](/Users/alton/Documents/profile/notebook/Java/play-java/design-patterns-in-java/images/command-example.png)
 
 文本编辑器中的可撤销操作。
 
@@ -104,7 +126,7 @@ GUI 对象将命令委派给命令对象。
 
 客户端代码 （GUI 元素和命令历史等） 没有和具体命令类相耦合， 因为它通过命令接口来使用命令。 这使得你能在无需修改已有代码的情况下在程序中增加新的命令。
 
-```
+```java
 // 命令基类会为所有具体命令定义通用接口。
 abstract class Command is
     protected field app: Application
@@ -229,7 +251,9 @@ class Application is
             command.undo()
 ```
 
-##  命令模式适合应用场景
+&nbsp;
+
+##  Command 模式适合应用场景
 
  如果你需要通过操作来参数化对象， 可使用命令模式。
 
@@ -247,9 +271,11 @@ class Application is
 
 为了能够回滚操作， 你需要实现已执行操作的历史记录功能。 命令历史记录是一种包含所有已执行命令对象及其相关程序状态备份的栈结构。
 
-这种方法有两个缺点。 首先， 程序状态的保存功能并不容易实现， 因为部分状态可能是私有的。 你可以使用[备忘录](https://refactoringguru.cn/design-patterns/memento)模式来在一定程度上解决这个问题。
+这种方法有两个缺点。 首先， 程序状态的保存功能并不容易实现， 因为部分状态可能是私有的。 你可以使用 Memento 模式来在一定程度上解决这个问题。
 
 其次， 备份状态可能会占用大量内存。 因此， 有时你需要借助另一种实现方式： 命令无需恢复原始状态， 而是执行反向操作。 反向操作也有代价： 它可能会很难甚至是无法实现。
+
+&nbsp;
 
 ##  实现方式
 
@@ -262,39 +288,44 @@ class Application is
    - 创建命令， 如有需要可将其关联至接收者。
    - 创建发送者并将其与特定命令关联。
 
+&nbsp;
+
 ##  命令模式优缺点
 
--  *单一职责原则*。 你可以解耦触发和执行操作的类。
--  *开闭原则*。 你可以在不修改已有客户端代码的情况下在程序中创建新的命令。
--  你可以实现撤销和恢复功能。
--  你可以实现操作的延迟执行。
--  你可以将一组简单命令组合成一个复杂命令。
+-  √ *单一职责原则*。 你可以解耦触发和执行操作的类。
+-  √ *开闭原则*。 你可以在不修改已有客户端代码的情况下在程序中创建新的命令。
+-  √ 你可以实现撤销和恢复功能。
+-  √ 你可以实现操作的延迟执行。
+-  √ 你可以将一组简单命令组合成一个复杂命令。
+-  × 代码可能会变得更加复杂， 因为你在发送者和接收者之间增加了一个全新的层次。
 
--  代码可能会变得更加复杂， 因为你在发送者和接收者之间增加了一个全新的层次。
+&nbsp;
 
 ##  与其他模式的关系
 
-- [责任链模式](https://refactoringguru.cn/design-patterns/chain-of-responsibility)、 [命令模式](https://refactoringguru.cn/design-patterns/command)、 [中介者模式](https://refactoringguru.cn/design-patterns/mediator)和[观察者模式](https://refactoringguru.cn/design-patterns/observer)用于处理请求发送者和接收者之间的不同连接方式：
+- - Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
 
-  - *责任链*按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
-  - *命令*在发送者和请求者之间建立单向连接。
-  - *中介者*清除了发送者和请求者之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
-  - *观察者*允许接收者动态地订阅或取消接收请求。
+    - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
+    - Command 在 Sender 和 Request 之间建立单向连接。
+    - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
+    - Observer 允许 Receiver  动态地订阅或取消接收请求。
 
-- [责任链](https://refactoringguru.cn/design-patterns/chain-of-responsibility)的管理者可使用[命令模式](https://refactoringguru.cn/design-patterns/command)实现。 在这种情况下， 你可以对由请求代表的同一个上下文对象执行许多不同的操作。
+- Chain of Responsibility 的管理者可使用 Command Pattern 实现。 在这种情况下， 你可以对由请求代表的同一个上下文对象执行许多不同的操作。
 
-  还有另外一种实现方式， 那就是请求自身就是一个*命令*对象。 在这种情况下， 你可以对由一系列不同上下文连接而成的链执行相同的操作。
+  还有另外一种实现方式， 那就是请求自身就是一个 Command 对象。 在这种情况下， 你可以对由一系列不同上下文连接而成的链执行相同的操作。
 
-- 你可以同时使用[命令](https://refactoringguru.cn/design-patterns/command)和[备忘录模式](https://refactoringguru.cn/design-patterns/memento)来实现 “撤销”。 在这种情况下， 命令用于对目标对象执行各种不同的操作， 备忘录用来保存一条命令执行前该对象的状态。
+- 你可以同时使用 Command 模式和 Memento 模式来实现 “撤销”。 在这种情况下， 命令用于对目标对象执行各种不同的操作， 备忘录用来保存一条命令执行前该对象的状态。
 
-- [命令](https://refactoringguru.cn/design-patterns/command)和[策略模式](https://refactoringguru.cn/design-patterns/strategy)看上去很像， 因为两者都能通过某些行为来参数化对象。 但是， 它们的意图有非常大的不同。
+- Command 和 Strategy Pattern 看上去很像， 因为两者都能通过某些行为来参数化对象。 但是， 它们的意图有非常大的不同。
 
-  - 你可以使用*命令*来将任何操作转换为对象。 操作的参数将成为对象的成员变量。 你可以通过转换来延迟操作的执行、 将操作放入队列、 保存历史命令或者向远程服务发送命令等。
-  - 另一方面， *策略*通常可用于描述完成某件事的不同方式， 让你能够在同一个上下文类中切换算法。
+  - 你可以使用 Command Pattern 来将任何操作转换为对象。 操作的参数将成为对象的成员变量。 你可以通过转换来延迟操作的执行、 将操作放入队列、 保存历史命令或者向远程服务发送命令等。
+  - 另一方面， Strategy Pattern 通常可用于描述完成某件事的不同方式， 让你能够在同一个上下文类中切换算法。
 
-- [原型模式](https://refactoringguru.cn/design-patterns/prototype)可用于保存[命令](https://refactoringguru.cn/design-patterns/command)的历史记录。
+- Prototype Pattern 可用于保存 Command Pattern 历史记录。
 
-- 你可以将[访问者模式](https://refactoringguru.cn/design-patterns/visitor)视为[命令模式](https://refactoringguru.cn/design-patterns/command)的加强版本， 其对象可对不同类的多种对象执行操作。
+- 你可以将 Visitor Pattern 视为 Command Pattern 的加强版本， 其对象可对不同类的多种对象执行操作。
+
+&nbsp;
 
 # Java **命令**模式讲解和代码示例
 
@@ -302,13 +333,9 @@ class Application is
 
 此类转换让你能够延迟进行或远程执行请求， 还可将其放入队列中。
 
-[ 进一步了解命令模式 ](https://refactoringguru.cn/design-patterns/command)
+&nbsp;
 
 ## 在 Java 中使用模式
-
-**复杂度：** 
-
-**流行度：** 
 
 **使用示例：** 命令模式在 Java 代码中很常见。 大部分情况下， 它被用于代替包含行为的参数化 UI 元素的回调函数， 此外还被用于对任务进行排序和记录操作历史记录等。
 
@@ -317,9 +344,9 @@ class Application is
 - [`java.lang.Runnable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html) 的所有实现
 - [`javax.swing.Action`](https://docs.oracle.com/javase/8/docs/api/javax/swing/Action.html) 的所有实现
 
-**识别方法：** 命令模式可以通过抽象或接口类型 （发送者） 中的行为方法来识别， 该类型调用另一个不同的抽象或接口类型 （接收者） 实现中的方法， 该实现则是在创建时由命令模式的实现封装。 命令类通常仅限于一些特殊行为。
+**识别方法：** 命令模式可以通过抽象或接口类型 （发送者） 中的行为方法来识别， 该类型调用另一个不同的抽象或接口类型 （接收者） 实现中的方法， 该实现则是在创建时由 Command 模式的实现封装。 命令类通常仅限于一些特殊行为。
 
-
+&nbsp;
 
 ## 文字编辑器和撤销
 
@@ -327,11 +354,13 @@ class Application is
 
 现在， 当程序执行撤销操作时， 它就需要从历史记录中取出最近执行的命令， 然后执行反向操作或者恢复由该命令保存的编辑器历史状态。
 
+&nbsp;
+
 ##  **commands**
 
 ####  **commands/Command.java:** 抽象基础命令
 
-```
+```java
 package refactoring_guru.command.example.commands;
 
 import refactoring_guru.command.example.editor.Editor;
@@ -356,9 +385,11 @@ public abstract class Command {
 }
 ```
 
+&nbsp;
+
 ####  **commands/CopyCommand.java:** 将所选文字复制到剪贴板
 
-```
+```java
 package refactoring_guru.command.example.commands;
 
 import refactoring_guru.command.example.editor.Editor;
@@ -377,9 +408,11 @@ public class CopyCommand extends Command {
 }
 ```
 
+&nbsp;
+
 ####  **commands/PasteCommand.java:** 从剪贴板粘贴文字
 
-```
+```java
 package refactoring_guru.command.example.commands;
 
 import refactoring_guru.command.example.editor.Editor;
@@ -401,9 +434,11 @@ public class PasteCommand extends Command {
 }
 ```
 
+&nbsp;
+
 ####  **commands/CutCommand.java:** 将文字剪切到剪贴板
 
-```
+```java
 package refactoring_guru.command.example.commands;
 
 import refactoring_guru.command.example.editor.Editor;
@@ -433,9 +468,11 @@ public class CutCommand extends Command {
 }
 ```
 
+&nbsp;
+
 ####  **commands/CommandHistory.java:** 命令历史
 
-```
+```java
 package refactoring_guru.command.example.commands;
 
 import java.util.Stack;
@@ -455,11 +492,13 @@ public class CommandHistory {
 }
 ```
 
+&nbsp;
+
 ##  **editor**
 
 ####  **editor/Editor.java:** 文字编辑器的 GUI
 
-```
+```java
 package refactoring_guru.command.example.editor;
 
 import refactoring_guru.command.example.commands.*;
@@ -540,9 +579,11 @@ public class Editor {
 }
 ```
 
+&nbsp;
+
 ####  **Demo.java:** 客户端代码
 
-```
+```java
 package refactoring_guru.command.example;
 
 import refactoring_guru.command.example.editor.Editor;
@@ -555,6 +596,8 @@ public class Demo {
 }
 ```
 
+&nbsp;
+
 ####  **OutputDemo.png:** 执行结果
 
-![img](https://refactoringguru.cn/images/patterns/examples/java/command/OutputDemo.png)
+![img](images/command-outputdemo.png)
