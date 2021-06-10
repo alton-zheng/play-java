@@ -255,7 +255,7 @@
   - [x] [Behavioral Patterns Overview](design-patterns-in-java/design-patterns-behavioral-patterns-overview.md)
   - [x] [13 - Chain of Responsibility](design-patterns-in-java/design-patterns-chain-of-responsibility.md) 
   - [x] [14- Command Pattern](design-patterns-in-java/design-patterns-command.md)
-  - [ ] [15 - Mediator Pattern](design-patterns-in-java/design-patterns-mediator.md)
+  - [x] [15 - Mediator Pattern](design-patterns-in-java/design-patterns-mediator.md)
   - [ ] [16 - Visitor Pattern](design-patterns-in-java/design-patterns-visitor.md)
     - [ ] [Visitor 和双分派](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
   - [ ] [17 - Memento Pattern](design-patterns-in-java/design-patterns-memento.md)

@@ -303,12 +303,12 @@ class Application is
 
 ##  与其他模式的关系
 
-- - Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
+- Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
 
-    - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
-    - Command 在 Sender 和 Request 之间建立单向连接。
-    - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
-    - Observer 允许 Receiver  动态地订阅或取消接收请求。
+  - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
+  - Command 在 Sender 和 Request 之间建立单向连接。
+  - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
+  - Observer 允许 Receiver  动态地订阅或取消接收请求。
 
 - Chain of Responsibility 的管理者可使用 Command Pattern 实现。 在这种情况下， 你可以对由请求代表的同一个上下文对象执行许多不同的操作。
 

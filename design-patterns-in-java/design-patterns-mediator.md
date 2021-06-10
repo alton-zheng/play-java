@@ -2,27 +2,33 @@
 
 亦称：调解人、控制器、Intermediary、Controller、Mediator
 
+&nbsp;
+
 ##  意图
 
 **中介者模式**是一种行为设计模式， 能让你减少对象之间混乱无序的依赖关系。 该模式会限制对象之间的直接交互， 迫使它们通过一个中介者对象进行合作。
 
-![中介者设计模式](https://refactoringguru.cn/images/patterns/content/mediator/mediator.png?id=0264bd857a231b6ea2d0)
+![中介者设计模式](images/mediator.png)
+
+&nbsp;
 
 ##  问题
 
 假如你有一个创建和修改客户资料的对话框， 它由各种控件组成， 例如文本框 （Text­Field）、 复选框 （Checkbox） 和按钮 （Button） 等。
 
-![用户界面中各元素间的混乱关系](https://refactoringguru.cn/images/patterns/diagrams/mediator/problem1-zh.png?id=049cc273d233d1cbed67)
+![用户界面中各元素间的混乱关系](images/mediator-problem1-zh.png)
 
 用户界面中各元素间的关系会随程序发展而变得混乱。
 
 某些表单元素可能会直接进行互动。 例如， 选中 “我有一只狗” 复选框后可能会显示一个隐藏文本框用于输入狗狗的名字。 另一个例子是提交按钮必须在保存数据前校验所有输入内容。
 
-![UI 中各元素相互依赖](https://refactoringguru.cn/images/patterns/diagrams/mediator/problem2.png?id=072c51eee4dd90c09728)
+![UI 中各元素相互依赖](images/mediator-problem2.png)
 
 元素间存在许多关联。 因此， 对某些元素进行修改可能会影响其他元素。
 
 如果直接在表单元素代码中实现业务逻辑， 你将很难在程序其他表单中复用这些元素类。 例如， 由于复选框类与狗狗的文本框相耦合， 所以将无法在其他表单中使用它。 你要么使用渲染资料表单时用到的所有类， 要么一个都不用。
+
+&nbsp;
 
 ##  解决方案
 
@@ -30,7 +36,7 @@
 
 在资料编辑表单的例子中， 对话框 （Dialog） 类本身将作为中介者， 其很可能已知自己所有的子元素， 因此你甚至无需在该类中引入新的依赖关系。
 
-![UI 元素必须通过中介者进行沟通。](https://refactoringguru.cn/images/patterns/diagrams/mediator/solution1-zh.png?id=3c9f17ea90ddb9bf2a9d)
+![UI 元素必须通过中介者进行沟通。](images/mediator-solution1-zh.png)
 
 UI 元素必须通过中介者对象进行间接沟通。
 
@@ -40,9 +46,11 @@ UI 元素必须通过中介者对象进行间接沟通。
 
 采用这种方式， 中介者模式让你能在单个中介者对象中封装多个对象间的复杂关系网。 类所拥有的依赖关系越少， 就越易于修改、 扩展或复用。
 
+&nbsp;
+
 ##  真实世界类比
 
-![空中交通管制塔台](https://refactoringguru.cn/images/patterns/diagrams/mediator/live-example.png?id=aa1de3cb7b63aa623e63)
+![空中交通管制塔台](images/mediator-live-example.png)
 
 飞行器驾驶员之间不会通过相互沟通来决定下一架降落的飞机。 所有沟通都通过控制塔台进行。
 
@@ -50,9 +58,11 @@ UI 元素必须通过中介者对象进行间接沟通。
 
 塔台无需管制飞行全程， 只需在航站区加强管控即可， 因为该区域的决策参与者数量对于飞行员来说实在太多了。
 
+&nbsp;
+
 ##  中介者模式结构
 
-![中介者设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/mediator/structure.png?id=1f2accc7820ecfe9665b)
+![中介者设计模式的结构](images/mediator-structure.png)
 
 1. **组件** （Component） 是各种包含业务逻辑的类。 每个组件都有一个指向中介者的引用， 该引用被声明为中介者接口类型。 组件不知道中介者实际所属的类， 因此你可通过将其连接到不同的中介者以使其能在其他程序中复用。
 
@@ -64,11 +74,13 @@ UI 元素必须通过中介者对象进行间接沟通。
 
    对于组件来说， 中介者看上去完全就是一个黑箱。 发送者不知道最终会由谁来处理自己的请求， 接收者也不知道最初是谁发出了请求。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **中介者**模式可帮助你减少各种 UI 类 （按钮、 复选框和文本标签） 之间的相互依赖关系。
 
-![中介者模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/mediator/example.png?id=3151c153533e816e226b)
+![中介者模式示例的结构](images/mediator-example.png)
 
 UI 对话框类的结构
 
@@ -76,7 +88,7 @@ UI 对话框类的结构
 
 本例中的中介者是整个认证对话框。 对话框知道具体元素应如何进行合作并促进它们的间接交流。 当接收到事件通知后， 对话框会确定负责处理事件的元素并据此重定向请求。
 
-```
+```c
 // 中介者接口声明了一个能让组件将各种事件通知给中介者的方法。中介者可对这
 // 些事件做出响应并将执行工作传递给其他组件。
 interface Mediator is
@@ -145,6 +157,8 @@ class Checkbox extends Component is
     // ...
 ```
 
+&nbsp;
+
 ##  中介者模式适合应用场景
 
  当一些对象和其他对象紧密耦合以致难以对其进行修改时， 可使用中介者模式。
@@ -159,85 +173,87 @@ class Checkbox extends Component is
 
  由于所有组件间关系都被包含在中介者中， 因此你无需修改组件就能方便地新建中介者类以定义新的组件合作方式。
 
+&nbsp;
+
 ##  实现方式
 
 1. 找到一组当前紧密耦合， 且提供其独立性能带来更大好处的类 （例如更易于维护或更方便复用）。
 2. 声明中介者接口并描述中介者和各种组件之间所需的交流接口。 在绝大多数情况下， 一个接收组件通知的方法就足够了。 如果你希望在不同情景下复用组件类， 那么该接口将非常重要。 只要组件使用通用接口与其中介者合作， 你就能将该组件与不同实现中的中介者进行连接。
 3. 实现具体中介者类。 该类可从自行保存其下所有组件的引用中受益。
-4. 你可以更进一步， 让中介者负责组件对象的创建和销毁。 此后， 中介者可能会与[工厂](https://refactoringguru.cn/design-patterns/abstract-factory)或[外观](https://refactoringguru.cn/design-patterns/facade)类似。
+4. 你可以更进一步， 让中介者负责组件对象的创建和销毁。 此后， 中介者可能会与 Factory 或 Facade 类似。
 5. 组件必须保存对于中介者对象的引用。 该连接通常在组件的构造函数中建立， 该函数会将中介者对象作为参数传递。
 6. 修改组件代码， 使其可调用中介者的通知方法， 而非其他组件的方法。 然后将调用其他组件的代码抽取到中介者类中， 并在中介者接收到该组件通知时执行这些代码。
 
+&nbsp;
+
 ##  中介者模式优缺点
 
--  *单一职责原则*。 你可以将多个组件间的交流抽取到同一位置， 使其更易于理解和维护。
--  *开闭原则*。 你无需修改实际组件就能增加新的中介者。
--  你可以减轻应用中多个组件间的耦合情况。
--  你可以更方便地复用各个组件。
+-  √ *单一职责原则*。 你可以将多个组件间的交流抽取到同一位置， 使其更易于理解和维护。
+-  √ *开闭原则*。 你无需修改实际组件就能增加新的中介者。
+-  √ 你可以减轻应用中多个组件间的耦合情况。
+-  √ 你可以更方便地复用各个组件。
+-  一段时间后， 中介者可能会演化成为 [上帝对象](https://zh.wikipedia.org/wiki/%E4%B8%8A%E5%B8%9D%E5%AF%B9%E8%B1%A1)。
 
--  一段时间后， 中介者可能会演化成为[上帝对象](https://refactoringguru.cn/antipatterns/god-object)。
+&nbsp;
 
 ##  与其他模式的关系
 
-- [责任链模式](https://refactoringguru.cn/design-patterns/chain-of-responsibility)、 [命令模式](https://refactoringguru.cn/design-patterns/command)、 [中介者模式](https://refactoringguru.cn/design-patterns/mediator)和[观察者模式](https://refactoringguru.cn/design-patterns/observer)用于处理请求发送者和接收者之间的不同连接方式：
+- Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
 
-  - *责任链*按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
-  - *命令*在发送者和请求者之间建立单向连接。
-  - *中介者*清除了发送者和请求者之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
-  - *观察者*允许接收者动态地订阅或取消接收请求。
+  - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
+  - Command 在 Sender 和 Request 之间建立单向连接。
+  - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
+  - Observer 允许 Receiver  动态地订阅或取消接收请求。
 
-- [外观模式](https://refactoringguru.cn/design-patterns/facade)和[中介者](https://refactoringguru.cn/design-patterns/mediator)的职责类似： 它们都尝试在大量紧密耦合的类中组织起合作。
+- Facade 和 Mediator 的职责类似： 它们都尝试在大量紧密耦合的类中组织起合作。
 
-  - *外观*为子系统中的所有对象定义了一个简单接口， 但是它不提供任何新功能。 子系统本身不会意识到外观的存在。 子系统中的对象可以直接进行交流。
-  - *中介者*将系统中组件的沟通行为中心化。 各组件只知道中介者对象， 无法直接相互交流。
+  - Facade 为子系统中的所有对象定义了一个简单接口， 但是它不提供任何新功能。 子系统本身不会意识到facade 的存在。 子系统中的对象可以直接进行交流。
+  - Mediator 将系统中组件的沟通行为中心化。 各组件只知道中介者对象， 无法直接相互交流。
 
-- [中介者](https://refactoringguru.cn/design-patterns/mediator)和[观察者](https://refactoringguru.cn/design-patterns/observer)之间的区别往往很难记住。 在大部分情况下， 你可以使用其中一种模式， 而有时可以同时使用。 让我们来看看如何做到这一点。
+- Mediator 和 Observer 之间的区别往往很难记住。 在大部分情况下， 你可以使用其中一种模式， 而有时可以同时使用。 让我们来看看如何做到这一点。
 
-  *中介者*的主要目标是消除一系列系统组件之间的相互依赖。 这些组件将依赖于同一个中介者对象。 *观察者*的目标是在对象之间建立动态的单向连接， 使得部分对象可作为其他对象的附属发挥作用。
+  - Mediator 的主要目标是消除一系列系统组件之间的相互依赖。 这些组件将依赖于同一个中介者对象。 Observer 的目标是在对象之间建立动态的单向连接， 使得部分对象可作为其他对象的附属发挥作用。
 
-  有一种流行的中介者模式实现方式依赖于*观察者*。 中介者对象担当发布者的角色， 其他组件则作为订阅者， 可以订阅中介者的事件或取消订阅。 当*中介者*以这种方式实现时， 它可能看上去与*观察者*非常相似。
+  - 有一种流行的 Mediator 实现方式依赖于 Observer。 中介者对象担当发布者的角色， 其他组件则作为订阅者。 可以订阅 Mediator 的事件或取消订阅。 当 Mediator 以这种方式实现时， 它可能看上去与 Observer 非常相似。
 
-  当你感到疑惑时， 记住可以采用其他方式来实现中介者。 例如， 你可永久性地将所有组件链接到同一个中介者对象。 这种实现方式和*观察者*并不相同， 但这仍是一种中介者模式。
+  - 当你感到疑惑时， 记住可以采用其他方式来实现中介者。 例如， 你可永久性地将所有组件链接到同一个中介者对象。 这种实现方式和 Observer 并不相同， 但这仍是一种 Mediator。
+- 假设有一个程序， 其所有的组件都变成了发布者， 它们之间可以相互建立动态连接。 这样程序中就没有中心化的中介者对象， 而只有一些分布式的观察者。
 
-  假设有一个程序， 其所有的组件都变成了发布者， 它们之间可以相互建立动态连接。 这样程序中就没有中心化的中介者对象， 而只有一些分布式的观察者。
+&nbsp;
 
+# Java **中介者**模式讲解和代码示例
 
+**中介者**是一种行为设计模式， 让程序组件通过特殊的中介者对象进行间接沟通， 达到减少组件之间依赖关系的目的。
 
-# **Mediator** in Java
+中介者能使得程序更易于修改和扩展， 而且能更方便地对独立的组件进行复用， 因为它们不再依赖于很多其他的类。
 
-**Mediator** is a behavioral design pattern that reduces coupling between components of a program by making them communicate indirectly, through a special mediator object.
+&nbsp;
 
-The Mediator makes it easy to modify, extend and reuse individual components because they’re no longer dependent on the dozens of other classes.
+## 在 Java 中使用模式
 
-[ Learn more about Mediator ](https://refactoring.guru/design-patterns/mediator)
+**使用示例：** 中介者模式在 Java 代码中最常用于帮助程序 GUI 组件之间的通信。 在 MVC 模式中， 控制器是中介者的同义词。
 
-## Usage of the pattern in Java
+下面是核心 Java 程序库中该模式的一些示例：
 
-**Complexity:** 
-
-**Popularity:** 
-
-**Usage examples:** The most popular usage of the Mediator pattern in Java code is facilitating communications between GUI components of an app. The synonym of the Mediator is the Controller part of MVC pattern.
-
-Here are some examples of the pattern in core Java libraries:
-
-- [`java.util.Timer`](http://docs.oracle.com/javase/8/docs/api/java/util/Timer.html) (all `scheduleXXX()` methods)
+- [`java.util.Timer`](http://docs.oracle.com/javase/8/docs/api/java/util/Timer.html) （所有 `schedule­XXX()`方法）
 - [`java.util.concurrent.Executor#execute()`](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executor.html#execute-java.lang.Runnable-)
-- [`java.util.concurrent.ExecutorService`](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html) (`invokeXXX()` and `submit()` methods)
-- [`java.util.concurrent.ScheduledExecutorService`](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ScheduledExecutorService.html) (all `scheduleXXX()` methods)
+- [`java.util.concurrent.ExecutorService`](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html) （ `invoke­XXX()`和 `submit­()`方法）
+- [`java.util.concurrent.ScheduledExecutorService`](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ScheduledExecutorService.html) （所有 `schedule­XXX()`方法）
 - [`java.lang.reflect.Method#invoke()`](http://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html#invoke-java.lang.Object-java.lang.Object...-)
 
+&nbsp;
 
+## 笔记程序
 
-## Notes app
+本例展示了如何将许多 GUI 元素组织起来， 使其在中介者的帮助下无需相互依赖就能合作。
 
-This example shows how to organize lots of GUI elements so that they cooperate with the help of a mediator but don’t depend on each other.
+&nbsp;
 
 ##  **components:** Colleague classes
 
 ####  **components/Component.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -249,11 +265,14 @@ public interface Component {
     void setMediator(Mediator mediator);
     String getName();
 }
+
 ```
+
+&nbsp;
 
 ####  **components/AddButton.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -290,9 +309,11 @@ public class AddButton extends JButton implements Component {
 }
 ```
 
+&nbsp;
+
 ####  **components/DeleteButton.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -328,9 +349,11 @@ public class DeleteButton extends JButton  implements Component {
 }
 ```
 
+&nbsp;
+
 ####  **components/Filter.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -395,9 +418,11 @@ public class Filter extends JTextField implements Component {
 }
 ```
 
+&nbsp;
+
 ####  **components/List.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -479,9 +504,11 @@ public class List extends JList implements Component {
 }
 ```
 
+&nbsp;
+
 ####  **components/SaveButton.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -517,9 +544,11 @@ public class SaveButton extends JButton implements Component {
 }
 ```
 
+&nbsp;
+
 ####  **components/TextBox.java**
 
-```
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -551,9 +580,11 @@ public class TextBox extends JTextArea implements Component {
 }
 ```
 
-####  **components/Title.java**
+&nbsp;
 
-```
+#### **components/Title.java**
+
+```java
 package refactoring_guru.mediator.example.components;
 
 import refactoring_guru.mediator.example.mediator.Mediator;
@@ -585,11 +616,13 @@ public class Title extends JTextField implements Component {
 }
 ```
 
+&nbsp;
+
 ##  **mediator**
 
-####  **mediator/Mediator.java:** Defines common mediator interface
+####  **mediator/Mediator.java:** 定义通用的中介者接口
 
-```
+```java
 package refactoring_guru.mediator.example.mediator;
 
 import refactoring_guru.mediator.example.components.Component;
@@ -614,9 +647,11 @@ public interface Mediator {
 }
 ```
 
-####  **mediator/Editor.java:** Concrete mediator
+&nbsp;
 
-```
+####  **mediator/Editor.java:** 具体中介者
+
+```java
 package refactoring_guru.mediator.example.mediator;
 
 import refactoring_guru.mediator.example.components.*;
@@ -813,9 +848,11 @@ public class Editor implements Mediator {
 }
 ```
 
-####  **mediator/Note.java:** A note’s class
+&nbsp;
 
-```
+#### **mediator/Note.java:** 笔记类
+
+```java
 package refactoring_guru.mediator.example.mediator;
 
 /**
@@ -852,9 +889,11 @@ public class Note {
 }
 ```
 
-####  **Demo.java:** Initialization code
+&nbsp;
 
-```
+#### **Demo.java:** 初始化代码
+
+```java
 package refactoring_guru.mediator.example;
 
 import refactoring_guru.mediator.example.components.*;
@@ -883,6 +922,10 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.png:** Execution result
+&nbsp;
 
-![img](https://refactoring.guru/images/patterns/examples/java/mediator/OutputDemo.png)
+####  **OutputDemo.png:** 执行结果
+
+![img](images/mediator-outputdemo.png)
+
+&nbsp;
