@@ -2,7 +2,7 @@
 
 让我们看看下面几何图形类的层次结构 （注意伪代码）：
 
-```
+```java
 interface Graphic is
     method draw()
 
@@ -32,9 +32,11 @@ class CompoundGraphic implements Graphic is
     // ...
 ```
 
+&nbsp;
+
 这些代码运行正常且程序处于开发阶段。 但某天你决定开发导出功能。 如果将导出功能的代码放入这些类中， 它们看上去会很奇怪。 因此， 你决定不在层次结构里的类中添加导出功能， 而是在层次结构外创建一个包含所有导出逻辑的新类。 该类将包含将每个对象的公有状态导出为 XML 字符串的方法。
 
-```
+```java
 class Exporter is
     method export(s: Shape) is
         print("导出形状")
@@ -50,7 +52,7 @@ class Exporter is
 
 这些代码看上去不错， 让我们运行试试：
 
-```
+```java
 class App() is
     method export(shape: Shape) is
         Exporter exporter = new Exporter()
@@ -62,9 +64,13 @@ app.export(new Circle());
 
 等等！ 为什么？！
 
+&nbsp;
+
 ## 像编译器一样思考
 
 注意： 下面的内容对于绝大多数面向对象编程的现代语言 （Java、 C# 和 PHP 等） 来说都是成立的。
+
+&nbsp;
 
 ### 后期/动态绑定
 
@@ -75,6 +81,8 @@ method drawShape(shape: Shape) is
     shape.draw();
 ```
 
+&nbsp;
+
 让我们看看... `Shape`形状类中定义了　 `draw`绘制方法。 稍等， 还有四个子类重写了该方法。 我们能否有把握地决定调用哪个实现呢？ 看上去不太可能。 确认的唯一方式是启动程序并检查传递给该方法的对象所属的类。 我们只知道一件事情： 该对象**将包含** `draw`方法的实现。
 
 因此， 最终的机器代码将检查 `s`参数的类并且从合适的类中选择 `draw`方法的实现。
@@ -82,17 +90,21 @@ method drawShape(shape: Shape) is
 这种动态类型检查被称为后期 （或动态） 绑定：
 
 - **后期**， 是因为我们在编译后和运行时才将对象及其实现链接起来。
-- **动态**， 是因为每个新对象都可能需要链接到不同的实现。
+- **动态**， 是因为每个新对象都可能需要链接到不同的实现
+
+&nbsp;
 
 ### 前期/静态绑定
 
 现在， 让我们来 “编译” 以下代码：
 
-```
+```java
 method exportShape(shape: Shape) is
     Exporter exporter = new Exporter()
     exporter.export(shape);
 ```
+
+&nbsp;
 
 第二行代码很清楚：  `Exporter`类没有构造方法， 因此我们仅能将对象初始化。 那么对 `export`导出方法的调用呢？  `Exporter`有五个同名但参数不同的方法。 调用哪一个呢？ 看来我们在这里也需要动态绑定。
 
@@ -106,11 +118,13 @@ method exportShape(shape: Shape) is
 
 这是唯一能够安全链接当前代码而不会造成模凌两可情形的实现。 因此尽管我们将 `Rectangle`对象传递给了 `export­Shape` ， 导出类仍将调用 `export(s: Shape)`方法。
 
+&nbsp;
+
 ## 双分派
 
 **双分派**是一个允许在重载时使用动态绑定的技巧。 下面是其实现方式：
 
-```
+```java
 class Visitor is
     method visit(s: Shape) is
         print("访问形状")
@@ -144,6 +158,10 @@ g.accept(v);
 // 输出："访问点"
 ```
 
+&nbsp;
+
 ### 后记
 
-尽管[访问者](https://refactoringguru.cn/design-patterns/visitor)模式基于双分派的原则创建， 但这并不是其主要目的。 访问者的目的是让你能为整个类层次结构添加 “外部” 操作， 而无需修改这些类的已有代码。
+尽管 Visitor 模式基于双分派的原则创建， 但这并不是其主要目的。 Visitor 的目的是让你能为整个类层次结构添加 “外部” 操作， 而无需修改这些类的已有代码。
+
+&nbsp;

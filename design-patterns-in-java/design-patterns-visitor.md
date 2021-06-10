@@ -2,25 +2,31 @@
 
 亦称：Visitor
 
+&nbsp;
+
 ##  意图
 
 **访问者模式**是一种行为设计模式， 它能将算法与其所作用的对象隔离开来。
 
-![访问者设计模式](https://refactoringguru.cn/images/patterns/content/visitor/visitor.png?id=f36d100188340db7a188)
+![访问者设计模式](images/visitor.png)
+
+&nbsp;
 
 ##  问题
 
 假如你的团队开发了一款能够使用巨型图像中地理信息的应用程序。 图像中的每个节点既能代表复杂实体 （例如一座城市）， 也能代表更精细的对象 （例如工业区和旅游景点等）。 如果节点代表的真实对象之间存在公路， 那么这些节点就会相互连接。 在程序内部， 每个节点的类型都由其所属的类来表示， 每个特定的节点则是一个对象。
 
-![将图像导出为 XML](https://refactoringguru.cn/images/patterns/diagrams/visitor/problem1.png?id=e7076532da1e936f3519)
+![将图像导出为 XML](images/visitor-problem1.png)
 
-将图像导出为 XML。
+&nbsp;
 
 一段时间后， 你接到了实现将图像导出到 XML 文件中的任务。 这些工作最初看上去非常简单。 你计划为每个节点类添加导出函数， 然后递归执行图像中每个节点的导出函数。 解决方案简单且优雅： 使用多态机制可以让导出方法的调用代码不会和具体的节点类相耦合。
 
 但你不太走运， 系统架构师拒绝批准对已有节点类进行修改。 他认为这些代码已经是产品了， 不想冒险对其进行修改， 因为修改可能会引入潜在的缺陷。
 
-![所有节点的类中都必须添加导出至 XML 文件的方法](https://refactoringguru.cn/images/patterns/diagrams/visitor/problem2-zh.png?id=5d616a01031ba9b4b6f7)
+![所有节点的类中都必须添加导出至 XML 文件的方法](images/visitor-problem2-zh.png)
+
+&nbsp;
 
 所有节点的类中都必须添加导出至 XML 文件的方法， 但如果在修改代码的过程中引入了任何缺陷， 那么整个程序都会面临风险。
 
@@ -28,19 +34,23 @@
 
 还有另一个原因， 那就是在此项任务完成后， 营销部门很有可能会要求程序提供导出其他类型文件的功能， 或者提出其他奇怪的要求。 这样你很可能会被迫再次修改这些重要但脆弱的类。
 
+&nbsp;
+
 ##  解决方案
 
 访问者模式建议将新行为放入一个名为*访问者*的独立类中， 而不是试图将其整合到已有类中。 现在， 需要执行操作的原始对象将作为参数被传递给访问者中的方法， 让方法能访问对象所包含的一切必要数据。
 
 如果现在该操作能在不同类的对象上执行会怎么样呢？ 比如在我们的示例中， 各节点类导出 XML 文件的实际实现很可能会稍有不同。 因此， 访问者类可以定义一组 （而不是一个） 方法， 且每个方法可接收不同类型的参数， 如下所示：
 
-```
+```c
 class ExportVisitor implements Visitor is
     method doForCity(City c) { ... }
     method doForIndustry(Industry f) { ... }
     method doForSightSeeing(SightSeeing ss) { ... }
     // ...
 ```
+
+&nbsp;
 
 但我们究竟应该如何调用这些方法 （尤其是在处理整个图像方面） 呢？ 这些方法的签名各不相同， 因此我们不能使用多态机制。 为了可以挑选出能够处理特定对象的访问者方法， 我们需要对它的类进行检查。 这是不是听上去像个噩梦呢？
 
@@ -56,9 +66,9 @@ foreach (Node node in graph)
 
 你可能会问， 我们为什么不使用方法重载呢？ 就是使用相同的方法名称， 但它们的参数不同。 不幸的是， 即使我们的编程语言 （例如 Java 和 C#） 支持重载也不行。 由于我们无法提前知晓节点对象所属的类， 所以重载机制无法执行正确的方法。 方法会将 `节点`基类作为输入参数的默认类型。
 
-但是， 访问者模式可以解决这个问题。 它使用了一种名为[双分派](https://refactoringguru.cn/design-patterns/visitor-double-dispatch)的技巧， 不使用累赘的条件语句也可下执行正确的方法。 与其让客户端来选择调用正确版本的方法， 不如将选择权委派给作为参数传递给访问者的对象。 由于该对象知晓其自身的类， 因此能更自然地在访问者中选出正确的方法。 它们会 “接收” 一个访问者并告诉其应执行的访问者方法。
+但是， 访问者模式可以解决这个问题。 它使用了一种名为 Visitor Double Dispatch 的技巧， 不使用累赘的条件语句也可下执行正确的方法。 与其让客户端来选择调用正确版本的方法， 不如将选择权委派给作为参数传递给访问者的对象。 由于该对象知晓其自身的类， 因此能更自然地在访问者中选出正确的方法。 它们会 “接收” 一个访问者并告诉其应执行的访问者方法。
 
-```
+```java
 // 客户端代码
 foreach (Node node in graph)
     node.accept(exportVisitor)
@@ -80,9 +90,13 @@ class Industry is
 
 现在， 如果我们抽取出所有访问者的通用接口， 所有已有的节点都能与我们在程序中引入的任何访问者交互。 如果需要引入与节点相关的某个行为， 你只需要实现一个新的访问者类即可。
 
+&nbsp;
+
 ##  真实世界类比
 
-![保险代理](https://refactoringguru.cn/images/patterns/content/visitor/visitor-comic-1.png?id=7ee4fa8800f7c4df4e1a)
+![保险代理](images/visitor-comic-1.png)
+
+&nbsp;
 
 优秀的保险代理人总能为不同类型的团体提供不同的保单。
 
@@ -92,27 +106,32 @@ class Industry is
 - 如果建筑是银行， 他会推销失窃保险。
 - 如果建筑是咖啡厅， 他会推销火灾和洪水保险。
 
+&nbsp;
+
 ##  访问者模式结构
 
-![访问者设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/visitor/structure-zh.png?id=e30b9ae4fb2267e5c361)
+![访问者设计模式的结构](images/visitor-structure-zh.png)
 
 1. **访问者** （Visitor） 接口声明了一系列以对象结构的具体元素为参数的访问者方法。 如果编程语言支持重载， 这些方法的名称可以是相同的， 但是其参数一定是不同的。
 2. **具体访问者** （Concrete Visitor） 会为不同的具体元素类实现相同行为的几个不同版本。
 3. **元素** （Element） 接口声明了一个方法来 “接收” 访问者。 该方法必须有一个参数被声明为访问者接口类型。
 4. **具体元素** （Concrete Element） 必须实现接收方法。 该方法的目的是根据当前元素类将其调用重定向到相应访问者的方法。 请注意， 即使元素基类实现了该方法， 所有子类都必须对其进行重写并调用访问者对象中的合适方法。
-5. **客户端** （Client） 通常会作为集合或其他复杂对象 （例如一个[组合](https://refactoringguru.cn/design-patterns/composite)树） 的代表。 客户端通常不知晓所有的具体元素类， 因为它们会通过抽象接口与集合中的对象进行交互。
+5. **客户端** （Client） 通常会作为集合或其他复杂对象 （例如一个 Conposite 树） 的代表。 客户端通常不知晓所有的具体元素类， 因为它们会通过抽象接口与集合中的对象进行交互。
+
+&nbsp;
 
 ##  伪代码
 
-在本例中， **访问者**模式为几何图像层次结构添加了对于 XML 文件导出功能的支持。
+在本例中， **Visitor** 模式为几何图像层次结构添加了对于 `XML` 文件导出功能的支持。
 
-![访问者模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/visitor/example.png?id=d66acd1b9096c47db17a)
+![访问者模式示例的结构](images/visitor-example.png)
+
+&nbsp;
 
 通过访问者对象将各种类型的对象导出为 XML 格式文件。
 
-```
-// 元素接口声明了一个`accept（接收）`方法，它会将访问者基础接口作为一个参
-// 数。
+```c
+// 元素接口声明了一个`accept（接收）`方法，它会将访问者基础接口作为一个参数
 interface Shape is
     method move(x, y)
     method draw()
@@ -183,7 +202,9 @@ class Application is
             shape.accept(exportVisitor)
 ```
 
-如果你并不十分理解为何本例中需要使用 `accept`接收方法， 我的一篇文章[访问者和双分派](https://refactoringguru.cn/design-patterns/visitor-double-dispatch)详细解释了这个问题。
+如果你并不十分理解为何本例中需要使用 `accept`接收方法， 我的一篇文章 [访问者和双分派](design-patterns-visitor-double-dispatch.md) 详细解释了这个问题。
+
+&nbsp;
 
 ##  访问者模式适合应用场景
 
@@ -198,6 +219,8 @@ class Application is
  当某个行为仅在类层次结构中的一些类中有意义， 而在其他类中没有意义时， 可使用该模式。
 
  你可将该行为抽取到单独的访问者类中， 只需实现接收相关类的对象作为参数的访问者方法并将其他方法留空即可。
+
+&nbsp;
 
 ##  实现方式
 
@@ -215,66 +238,67 @@ class Application is
 
 6. 客户端必须创建访问者对象并通过 “接收” 方法将其传递给元素。
 
-##  访问者模式优缺点
+&nbsp;
 
--  *开闭原则*。 你可以引入在不同类对象上执行的新行为， 且无需对这些类做出修改。
--  *单一职责原则*。 可将同一行为的不同版本移到同一个类中。
--  访问者对象可以在与各种对象交互时收集一些有用的信息。 当你想要遍历一些复杂的对象结构 （例如对象树）， 并在结构中的每个对象上应用访问者时， 这些信息可能会有所帮助。
+##  Visitor 模式优缺点
 
--  每次在元素层次结构中添加或移除一个类时， 你都要更新所有的访问者。
--  在访问者同某个元素进行交互时， 它们可能没有访问元素私有成员变量和方法的必要权限。
+-  √ *开闭原则*。 你可以引入在不同类对象上执行的新行为， 且无需对这些类做出修改。
+-  √ *单一职责原则*。 可将同一行为的不同版本移到同一个类中。
+-  √ 访问者对象可以在与各种对象交互时收集一些有用的信息。 当你想要遍历一些复杂的对象结构 （例如对象树）， 并在结构中的每个对象上应用访问者时， 这些信息可能会有所帮助。
+-  × 每次在元素层次结构中添加或移除一个类时， 你都要更新所有的访问者。
+-  × 在 Visitor 同某个元素进行交互时， 它们可能没有访问元素私有成员变量和方法的必要权限。
+
+&nbsp;
 
 ##  与其他模式的关系
 
-- 你可以将[访问者模式](https://refactoringguru.cn/design-patterns/visitor)视为[命令模式](https://refactoringguru.cn/design-patterns/command)的加强版本， 其对象可对不同类的多种对象执行操作。
-- 你可以使用[访问者](https://refactoringguru.cn/design-patterns/visitor)对整个[组合模式](https://refactoringguru.cn/design-patterns/composite)树执行操作。
-- 可以同时使用[访问者](https://refactoringguru.cn/design-patterns/visitor)和[迭代器模式](https://refactoringguru.cn/design-patterns/iterator)来遍历复杂数据结构， 并对其中的元素执行所需操作， 即使这些元素所属的类完全不同。
+- 你可以将 Visitor 视为 Command 的加强版本， 其对象可对不同类的多种对象执行操作。
+- 你可以使用 Visitor 对整个 Composite 树执行操作。
+- 可以同时使用 Visitor 和 Iterator 来遍历复杂数据结构， 并对其中的元素执行所需操作， 即使这些元素所属的类完全不同。
 
-
+&nbsp;
 
 ## 额外内容
 
-- 还在考虑为什么我们不能简单使用方法重载代替访问者模式？ 阅读我的文章[访问者和双分派](https://refactoringguru.cn/design-patterns/visitor-double-dispatch)了解更多幽暗的细节。
+- 还在考虑为什么我们不能简单使用方法重载代替访问者模式？ 阅读我的文章 [访问者和双分派](design-patterns-visitor-double-dispatch.md)  了解更多细节。
 
+&nbsp;
 
+# Java **访问者**模式讲解和代码示例
 
-# **Visitor** in Java
+**访问者**是一种行为设计模式， 允许你在不修改已有代码的情况下向已有类层次结构中增加新的行为。
 
-**Visitor** is a behavioral design pattern that allows adding new behaviors to existing class hierarchy without altering any existing code.
+> 阅读我们的文章 [访问者和双分派](design-patterns-visitor-double-dispatch.md) 以了解为什么不能通过方法重载来简单地替换访问者。
 
-> Read why Visitors can’t be simply replaced with method overloading in our article [Visitor and Double Dispatch](https://refactoring.guru/design-patterns/visitor-double-dispatch).
+&nbsp;
 
-[ Learn more about Visitor ](https://refactoring.guru/design-patterns/visitor)
+## 在 Java 中使用模式
 
-## Usage of the pattern in Java
+**使用示例：** 访问者不是常用的设计模式， 因为它不仅复杂， 应用范围也比较狭窄。
 
-**Complexity:** 
+这里是 Java 程序库代码中该模式的一些示例：
 
-**Popularity:** 
+- [`javax.lang.model.element.AnnotationValue`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/AnnotationValue.html) 和 [`Annotation­Value­Visitor`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/AnnotationValueVisitor.html)
+- [`javax.lang.model.element.Element`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Element.html) 和 [`Element­Visitor`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/ElementVisitor.html)
+- [`javax.lang.model.type.TypeMirror`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/type/TypeMirror.html) 和 [`Type­Visitor`](http://docs.oracle.com/javase/8/docs/api/javax/lang/model/type/TypeVisitor.html)
+- [`java.nio.file.FileVisitor`](http://docs.oracle.com/javase/8/docs/api/java/nio/file/FileVisitor.html) 和 [`Simple­File­Visitor`](http://docs.oracle.com/javase/8/docs/api/java/nio/file/SimpleFileVisitor.html)
+- [`javax.faces.component.visit.VisitContext`](http://docs.oracle.com/javaee/7/api/javax/faces/component/visit/VisitContext.html) 和 [`Visit­Callback`](http://docs.oracle.com/javaee/7/api/javax/faces/component/visit/VisitCallback.html)
 
-**Usage examples:** Visitor isn’t a very common pattern because of its complexity and narrow applicability.
+&nbsp;
 
-Here are some examples of pattern in core Java libraries:
+## 将形状导出为 XML 文件
 
-- [`javax.lang.model.element.AnnotationValue`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/AnnotationValue.html) and [`AnnotationValueVisitor`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/AnnotationValueVisitor.html)
-- [`javax.lang.model.element.Element`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Element.html) and [`ElementVisitor`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/ElementVisitor.html)
-- [`javax.lang.model.type.TypeMirror`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/type/TypeMirror.html) and [`TypeVisitor`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/type/TypeVisitor.html)
-- [`java.nio.file.FileVisitor`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileVisitor.html) and [`SimpleFileVisitor`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/SimpleFileVisitor.html)
-- [`javax.faces.component.visit.VisitContext`](https://docs.oracle.com/javaee/7/api/javax/faces/component/visit/VisitContext.html) and [`VisitCallback`](https://docs.oracle.com/javaee/7/api/javax/faces/component/visit/VisitCallback.html)
+在本例中， 我们希望将一系列几何形状导出为 XML 文件。 重点在于我们不希望直接修改形状代码， 或者至少能确保最小程度的修改。
 
+最终， 访问者模式建立了一个框架， 允许我们在不修改已有类的情况下向形状层次结构中添加新的行为。
 
-
-## Exporting shapes into XML
-
-In this example, we would want to export a set of geometric shapes into XML. The catch is that we don’t want to change the code of shapes directly or at least keep it to the minimum.
-
-In the end, the Visitor pattern establishes an infrastructure that allows us to add any behaviors to the shapes hierarchy without changing the existing code of those classes.
+&nbsp;
 
 ##  **shapes**
 
-####  **shapes/Shape.java:** Common shape interface
+####  **shapes/Shape.java:** 通用形状接口
 
-```
+```java
 package refactoring_guru.visitor.example.shapes;
 
 import refactoring_guru.visitor.example.visitor.Visitor;
@@ -286,9 +310,11 @@ public interface Shape {
 }
 ```
 
-####  **shapes/Dot.java:** A dot
+&nbsp;
 
-```
+####  **shapes/Dot.java:** 点
+
+```java
 package refactoring_guru.visitor.example.shapes;
 
 import refactoring_guru.visitor.example.visitor.Visitor;
@@ -336,9 +362,11 @@ public class Dot implements Shape {
 }
 ```
 
-####  **shapes/Circle.java:** A circle
+&nbsp;
 
-```
+#### **shapes/Circle.java:** 圆形
+
+```java
 package refactoring_guru.visitor.example.shapes;
 
 import refactoring_guru.visitor.example.visitor.Visitor;
@@ -362,9 +390,11 @@ public class Circle extends Dot {
 }
 ```
 
-####  **shapes/Rectangle.java:** A rectangle
+&nbsp;
 
-```
+####  **shapes/Rectangle.java:** 矩形
+
+```java
 package refactoring_guru.visitor.example.shapes;
 
 import refactoring_guru.visitor.example.visitor.Visitor;
@@ -421,9 +451,11 @@ public class Rectangle implements Shape {
 }
 ```
 
-####  **shapes/CompoundShape.java:** A compound shape
+&nbsp;
 
-```
+####  **shapes/CompoundShape.java:** 组合形状
+
+```java
 package refactoring_guru.visitor.example.shapes;
 
 import refactoring_guru.visitor.example.visitor.Visitor;
@@ -464,11 +496,13 @@ public class CompoundShape implements Shape {
 }
 ```
 
+&nbsp;
+
 ##  **visitor**
 
-####  **visitor/Visitor.java:** Common visitor interface
+####  **visitor/Visitor.java:** 通用访问者接口
 
-```
+```java
 package refactoring_guru.visitor.example.visitor;
 
 import refactoring_guru.visitor.example.shapes.Circle;
@@ -487,9 +521,11 @@ public interface Visitor {
 }
 ```
 
-####  **visitor/XMLExportVisitor.java:** Concrete visitor, exports all shapes into XML
+&nbsp;
 
-```
+####  **visitor/XMLExportVisitor.java:** 具体访问者， 将所有形状导出为 XML 文件
+
+```java
 package refactoring_guru.visitor.example.visitor;
 
 import refactoring_guru.visitor.example.shapes.*;
@@ -553,9 +589,11 @@ public class XMLExportVisitor implements Visitor {
 }
 ```
 
-####  **Demo.java:** Client code
+&nbsp;
 
-```
+####  **Demo.java:** 客户端代码
+
+```java
 package refactoring_guru.visitor.example;
 
 import refactoring_guru.visitor.example.shapes.*;
@@ -586,9 +624,9 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.txt:** Execution result
+####  **OutputDemo.txt:** 执行结果
 
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <circle>
     <id>2</id>
@@ -629,3 +667,4 @@ public class Demo {
 </compound_graphic>
 ```
 
+&nbsp;
