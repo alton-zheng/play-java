@@ -2,11 +2,15 @@
 
 亦称：快照、Snapshot、Memento
 
+&nbsp;
+
 ##  意图
 
 **备忘录模式**是一种行为设计模式， 允许在不暴露对象实现细节的情况下保存和恢复对象之前的状态。
 
-![备忘录设计模式](https://refactoringguru.cn/images/patterns/content/memento/memento-zh.png?id=b9a5346bb3fb6f60ced9)
+![备忘录设计模式](images/memento-zh.png)
+
+&nbsp;
 
 ##  问题
 
@@ -14,7 +18,9 @@
 
 后来， 你决定让用户能撤销施加在文本上的任何操作。 这项功能在过去几年里变得十分普遍， 因此用户期待任何程序都有这项功能。 你选择采用直接的方式来实现该功能： 程序在执行任何操作前会记录所有的对象状态， 并将其保存下来。 当用户此后需要撤销某个操作时， 程序将从历史记录中获取最近的快照， 然后使用它来恢复所有对象的状态。
 
-![在编辑器中撤销操作](https://refactoringguru.cn/images/patterns/diagrams/memento/problem1-zh.png?id=a61d5eb91c92e13058a0)
+![在编辑器中撤销操作](/Users/alton/Documents/profile/notebook/Java/play-java/design-patterns-in-java/images/memento-problem1-zh.png)
+
+&nbsp;
 
 程序在执行操作前保存所有对象的状态快照， 稍后可通过快照将对象恢复到之前的状态。
 
@@ -22,7 +28,9 @@
 
 现在我们暂时忽略这个问题， 假设对象都像嬉皮士一样： 喜欢开放式的关系并会公开其所有状态。 尽管这种方式能够解决当前问题， 让你可随时生成对象的状态快照， 但这种方式仍存在一些严重问题。 未来你可能会添加或删除一些成员变量。 这听上去很简单， 但需要对负责复制受影响对象状态的类进行更改。
 
-![如何复制对象的私有状态？](https://refactoringguru.cn/images/patterns/diagrams/memento/problem2-zh.png?id=caf940fdd7cc2de0a67d)
+![如何复制对象的私有状态？](images/mememto-problem2-zh.png)
+
+&nbsp;
 
 如何复制对象的私有状态？
 
@@ -32,6 +40,8 @@
 
 我们似乎走进了一条死胡同： 要么会暴露类的所有内部细节而使其过于脆弱； 要么会限制对其状态的访问权限而无法生成快照。 那么， 我们还有其他方式来实现 “撤销” 功能吗？
 
+&nbsp;
+
 ##  解决方案
 
 我们刚才遇到的所有问题都是封装 “破损” 造成的。 一些对象试图超出其职责范围的工作。 由于在执行某些行为时需要获取数据， 所以它们侵入了其他对象的私有空间， 而不是让这些对象来完成实际的工作。
@@ -40,9 +50,11 @@
 
 模式建议将对象状态的副本存储在一个名为*备忘录* （Memento） 的特殊对象中。 除了创建备忘录的对象外， 任何对象都不能访问备忘录的内容。 其他对象必须使用受限接口与备忘录进行交互， 它们可以获取快照的元数据 （创建时间和操作名称等）， 但不能获取快照中原始对象的状态。
 
-![原发器拥有对备忘录的完全权限，负责人则只能访问元数据](https://refactoringguru.cn/images/patterns/diagrams/memento/solution-zh.png?id=84cb4ff37a2557b58bba)
+原发器拥有对备忘录的完全访问权限， 负责人则只能访问元数据
 
-原发器拥有对备忘录的完全访问权限， 负责人则只能访问元数据。
+![原发器拥有对备忘录的完全权限，负责人则只能访问元数据](images/memento-solution-zh.png)
+
+&nbsp;
 
 这种限制策略允许你将备忘录保存在通常被称为*负责人* （Caretakers） 的对象中。 由于负责人仅通过受限接口与备忘录互动， 故其无法修改存储在备忘录内部的状态。 同时， 原发器拥有对备忘录所有成员的访问权限， 从而能随时恢复其以前的状态。
 
@@ -50,15 +62,17 @@
 
 当用户触发撤销操作时， 历史类将从栈中取回最近的备忘录， 并将其传递给编辑器以请求进行回滚。 由于编辑器拥有对备忘录的完全访问权限， 因此它可以使用从备忘录中获取的数值来替换自身的状态。
 
+&nbsp;
+
 ##  备忘录模式结构
 
 #### 基于嵌套类的实现
 
 该模式的经典实现方式依赖于许多流行编程语言 （例如 C++、 C# 和 Java） 所支持的嵌套类。
 
-![基于嵌套类的备忘录](https://refactoringguru.cn/images/patterns/diagrams/memento/structure1.png?id=4b4a42363a005b617d4d)
+![基于嵌套类的备忘录](images/memento-structure1.png)
 
-1. **原发器** （Originator） 类可以生成自身状态的快照， 也可以在需要时通过快照恢复自身状态。
+1. **原发器** （`Originator`） 类可以生成自身状态的快照， 也可以在需要时通过快照恢复自身状态。
 
 2. **备忘录** （Memento） 是原发器状态快照的值对象 （value object）。 通常做法是将备忘录设为不可变的， 并通过构造函数一次性传递数据。
 
@@ -68,38 +82,48 @@
 
 4. 在该实现方法中， 备忘录类将被嵌套在原发器中。 这样原发器就可访问备忘录的成员变量和方法， 即使这些方法被声明为私有。 另一方面， 负责人对于备忘录的成员变量和方法的访问权限非常有限： 它们只能在栈中保存备忘录， 而不能修改其状态。
 
+&nbsp;
+
 #### 基于中间接口的实现
 
 另外一种实现方法适用于不支持嵌套类的编程语言 （没错， 我说的就是 PHP）。
 
-![不使用嵌套类的备忘录](https://refactoringguru.cn/images/patterns/diagrams/memento/structure2.png?id=fcff71cb648389be2e30)
+![不使用嵌套类的备忘录](images/memento-structure2.png)
 
 1. 在没有嵌套类的情况下， 你可以规定负责人仅可通过明确声明的中间接口与备忘录互动， 该接口仅声明与备忘录元数据相关的方法， 限制其对备忘录成员变量的直接访问权限。
 2. 另一方面， 原发器可以直接与备忘录对象进行交互， 访问备忘录类中声明的成员变量和方法。 这种方式的缺点在于你需要将备忘录的所有成员变量声明为公有。
+
+&nbsp;
 
 #### 封装更加严格的实现
 
 如果你不想让其他类有任何机会通过备忘录来访问原发器的状态， 那么还有另一种可用的实现方式。
 
-![封装更加严格的备忘录](https://refactoringguru.cn/images/patterns/diagrams/memento/structure3.png?id=6c3ef6a916be8c8ec6d6)
+![封装更加严格的备忘录](images/memento-structure3.png)
 
 1. 这种实现方式允许存在多种不同类型的原发器和备忘录。 每种原发器都和其相应的备忘录类进行交互。 原发器和备忘录都不会将其状态暴露给其他类。
-2. 负责人此时被明确禁止修改存储在备忘录中的状态。 但负责人类将独立于原发器， 因为此时恢复方法被定义在了备忘录类中。
-3. 每个备忘录将与创建了自身的原发器连接。 原发器会将自己及状态传递给备忘录的构造函数。 由于这些类之间的紧密联系， 只要原发器定义了合适的设置器 （setter）， 备忘录就能恢复其状态。
+2. Caretaker 此时被明确禁止修改存储在备忘录中的状态。 但 `Caretaker` 类将独立于原发器， 因为此时恢复方法被定义在了备忘录类中。
+3. 每个备忘录将与创建了自身的原发器连接。 Originator 会将自己及状态传递给 Memento 的构造函数。 由于这些类之间的紧密联系， 只要原发器定义了合适的设置器 （setter）， 备忘录就能恢复其状态。
+
+&nbsp;
 
 ##  伪代码
 
-本例结合使用了[命令](https://refactoringguru.cn/design-patterns/command)模式与备忘录模式， 可保存复杂文字编辑器的状态快照， 并能在需要时从快照中恢复之前的状态。
+本例结合使用了 Command 模式与 Memento 模式， 可保存复杂文字编辑器的状态快照， 并能在需要时从快照中恢复之前的状态。
 
-![备忘录示例的结构](https://refactoringguru.cn/images/patterns/diagrams/memento/example.png?id=fb2196b065f374a1c2a6)
+![备忘录示例的结构](images/memento-example.png)
+
+&nbsp;
 
 保存文字编辑器状态的快照。
 
-命令 （command） 对象将作为负责人， 它们会在执行与命令相关的操作前获取编辑器的备忘录。 当用户试图撤销最近的命令时， 编辑器可以使用保存在命令中的备忘录来将自身回滚到之前的状态。
+命令 （command） 对象将作为 `Caretaker`， 它们会在执行与命令相关的操作前获取编辑器的备忘录。 当用户试图撤销最近的命令时， 编辑器可以使用保存在命令中的备忘录来将自身回滚到之前的状态。
 
-备忘录类没有声明任何公有的成员变量、 获取器 （getter） 和设置器， 因此没有对象可以修改其内容。 备忘录与创建自己的编辑器相连接， 这使得备忘录能够通过编辑器对象的设置器传递数据， 恢复与其相连接的编辑器的状态。 由于备忘录与特定的编辑器对象相连接， 程序可以使用中心化的撤销栈实现对多个独立编辑器窗口的支持。
+Memento 类没有声明任何公有的成员变量、 获取器 getter 和 setter， 因此没有对象可以修改其内容。 Memento 与创建自己的编辑器相连接， 这使得 Memento 能够通过编辑器对象的 setter 传递数据， 恢复与其相连接的编辑器的状态。 由于 Memento 与特定的编辑器对象相连接， 程序可以使用中心化的撤销栈实现对多个独立编辑器窗口的支持。
 
-```
+&nbsp;
+
+```c
 // 原发器中包含了一些可能会随时间变化的重要数据。它还定义了在备忘录中保存
 // 自身状态的方法，以及从备忘录中恢复状态的方法。
 class Editor is
@@ -139,7 +163,7 @@ class Snapshot is
         editor.setCursor(curX, curY)
         editor.setSelectionWidth(selectionWidth)
 
-// 命令对象可作为负责人。在这种情况下，命令会在修改原发器状态之前获取一个
+// 命令对象可作为 Caretaker。在这种情况下，命令会在修改原发器状态之前获取一个
 // 备忘录。当需要撤销时，它会从备忘录中恢复原发器的状态。
 class Command is
     private field backup: Snapshot
@@ -153,6 +177,8 @@ class Command is
     // ...
 ```
 
+&nbsp;
+
 ##  备忘录模式适合应用场景
 
  当你需要创建对象状态快照来恢复其之前的状态时， 可以使用备忘录模式。
@@ -162,6 +188,8 @@ class Command is
  当直接访问对象的成员变量、 获取器或设置器将导致封装被突破时， 可以使用该模式。
 
  备忘录让对象自行负责创建其状态的快照。 任何其他对象都不能读取快照， 这有效地保障了数据的安全性。
+
+&nbsp;
 
 ##  实现方式
 
@@ -183,59 +211,62 @@ class Command is
 
 8. 负责人与原发器之间的连接可以移动到备忘录类中。 在本例中， 每个备忘录都必须与创建自己的原发器相连接。 恢复方法也可以移动到备忘录类中， 但只有当备忘录类嵌套在原发器中， 或者原发器类提供了足够多的设置器并可对其状态进行重写时， 这种方式才能实现。
 
+&nbsp;
+
 ##  备忘录模式优缺点
 
--  你可以在不破坏对象封装情况的前提下创建对象状态快照。
--  你可以通过让负责人维护原发器状态历史记录来简化原发器代码。
+-  √ 你可以在不破坏对象封装情况的前提下创建对象状态快照。
+-  √ 你可以通过让 Caretaker 维护 Originator 状态历史记录来简化原发器代码。
+-  √ 如果客户端过于频繁地创建备忘录， 程序将消耗大量内存。
+-  × Caretaker 必须完整跟踪原发器的生命周期， 这样才能销毁弃用的备忘录。
+-  × 绝大部分动态编程语言 （例如 PHP、 Python 和 JavaScript） 不能确保备忘录中的状态不被修改。
 
--  如果客户端过于频繁地创建备忘录， 程序将消耗大量内存。
--  负责人必须完整跟踪原发器的生命周期， 这样才能销毁弃用的备忘录。
--  绝大部分动态编程语言 （例如 PHP、 Python 和 JavaScript） 不能确保备忘录中的状态不被修改。
+&nbsp;
 
 ##  与其他模式的关系
 
-- 你可以同时使用[命令模式](https://refactoringguru.cn/design-patterns/command)和[备忘录模式](https://refactoringguru.cn/design-patterns/memento)来实现 “撤销”。 在这种情况下， 命令用于对目标对象执行各种不同的操作， 备忘录用来保存一条命令执行前该对象的状态。
-- 你可以同时使用[备忘录](https://refactoringguru.cn/design-patterns/memento)和[迭代器模式](https://refactoringguru.cn/design-patterns/iterator)来获取当前迭代器的状态， 并且在需要的时候进行回滚。
-- 有时候[原型模式](https://refactoringguru.cn/design-patterns/prototype)可以作为[备忘录](https://refactoringguru.cn/design-patterns/memento)的一个简化版本， 其条件是你需要在历史记录中存储的对象的状态比较简单， 不需要链接其他外部资源， 或者链接可以方便地重建。
+- 你可以同时使用 Command Pattern 和 Memento Pattern 来实现 “撤销”。 在这种情况下， 命令用于对目标对象执行各种不同的操作， Memento 用来保存一条 command 执行前该对象的状态。
+- 你可以同时使用 Memento Pattern 和 Iterator Pattern 来获取当前迭代器的状态， 并且在需要的时候进行回滚。
+- 有时候 Prototype 可以作为 Memento 的一个简化版本， 其条件是你需要在历史记录中存储的对象的状态比较简单， 不需要链接其他外部资源， 或者链接可以方便地重建。
 
-# **Memento** in Java
+&nbsp;
 
-**Memento** is a behavioral design pattern that allows making snapshots of an object’s state and restoring it in future.
+# Java **备忘录**模式讲解和代码示例
 
-The Memento doesn’t compromise the internal structure of the object it works with, as well as data kept inside the snapshots.
+**备忘录**是一种行为设计模式， 允许生成对象状态的快照并在以后将其还原。
 
-[ Learn more about Memento ](https://refactoring.guru/design-patterns/memento)
+备忘录不会影响它所处理的对象的内部结构， 也不会影响快照中保存的数据。
 
-## Usage of the pattern in Java
+&nbsp;
 
-**Complexity:** 
+## 在 Java 中使用模式
 
-**Popularity:** 
+**使用示例：** 备忘录的基本原则可通过序列化来实现， 这在 Java 语言中很常见。 尽管备忘录不是生成对象状态快照的唯一或最有效方法， 但它能在保护原始对象的结构不暴露给其他对象的情况下保存对象状态的备份。
 
-**Usage examples:** The Memento’s principle can be achieved using the serialization, which is quite common in Java. While it’s not the only and the most efficient way to make snapshots of an object’s state, it still allows storing state backups while protecting the originator’s structure from other objects.
+下面是核心 Java 程序库中该模式的一些示例：
 
-Here are some examples of the pattern in core Java libraries:
+- 所有 [`java.io.Serializable`](http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html) 的实现都可以模拟备忘录。
+- 所有 [`javax.faces.component.StateHolder`](http://docs.oracle.com/javaee/7/api/javax/faces/component/StateHolder.html) 的实现。
 
-- All [`java.io.Serializable`](http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html) implementations can simulate the Memento.
-- All [`javax.faces.component.StateHolder`](http://docs.oracle.com/javaee/7/api/javax/faces/component/StateHolder.html) implementations.
+&nbsp;
 
+## 形状编辑器和复杂的撤销/恢复功能
 
+该图像编辑器允许修改屏幕上形状的颜色和位置。 但任何修改都可被撤销和重复。
 
-## Shape editor and complex undo/redo
+“撤销” 功能基于备忘录和命令模式的合作。 编辑器记录命令的执行历史。 在执行任何命令之前， 它都会生成备份并将其连接到一个命令对象。 而在执行完成后， 它会将已执行的命令放入历史记录中。
 
-This graphical editor allows changing the color and position of the shapes on the screen. Any modification can be undone and repeated, though.
+当用户请求撤销操作时， 编辑器将从历史记录中获取最近的命令， 恢复在该命令内部保存的状态备份。 如果用户再次请求撤销操作， 编辑器将恢复历史记录中的下一个命令， 以此类推。
 
-The “undo” is based on the collaboration between the Memento and Command patterns. The editor tracks a history of performed commands. Before executing any command, it makes a backup and connects it to the command object. After the execution, it pushes the executed command into history.
+被撤销的命令都将保存在历史记录中， 直至用户对屏幕上的形状进行了修改。 这对恢复被撤销的命令来说至关重要。
 
-When a user requests the undo, the editor fetches a recent command from the history and restores the state from the backup kept inside that command. If the user requests another undo, the editor takes a following command from the history and so on.
-
-Reverted commands are kept in history until the user makes some modifications to the shapes on the screen. This is crucial for redoing undone commands.
+&nbsp;
 
 ##  **editor**
 
-####  **editor/Editor.java:** Editor code
+####  **editor/Editor.java:** 编辑器代码
 
-```
+```java
 package refactoring_guru.memento.example.editor;
 
 import refactoring_guru.memento.example.commands.Command;
@@ -310,9 +341,11 @@ public class Editor extends JComponent {
 }
 ```
 
-####  **editor/Canvas.java:** Canvas code
+&nbsp;
 
-```
+#### **editor/Canvas.java:** 画布代码
+
+```java
 package refactoring_guru.memento.example.editor;
 
 import refactoring_guru.memento.example.commands.ColorCommand;
@@ -486,11 +519,13 @@ class Canvas extends java.awt.Canvas {
 }
 ```
 
+&nbsp;
+
 ##  **history**
 
-####  **history/History.java:** History stores commands and mementos
+####  **history/History.java:** 保存命令和备忘录的历史记录
 
-```
+```java
 package refactoring_guru.memento.example.history;
 
 import refactoring_guru.memento.example.commands.Command;
@@ -566,9 +601,11 @@ public class History {
 }
 ```
 
-####  **history/Memento.java:** Memento class
+&nbsp;
 
-```
+####  **history/Memento.java:** 备忘录类
+
+```java
 package refactoring_guru.memento.example.history;
 
 import refactoring_guru.memento.example.editor.Editor;
@@ -588,11 +625,13 @@ public class Memento {
 }
 ```
 
-##  **commands**
+&nbsp;
 
-####  **commands/Command.java:** Base command class
+## **commands**
 
-```
+####  **commands/Command.java:** 基础命令类
+
+```java
 package refactoring_guru.memento.example.commands;
 
 public interface Command {
@@ -601,9 +640,11 @@ public interface Command {
 }
 ```
 
-####  **commands/ColorCommand.java:** Changes color of selected shape
+&nbsp;
 
-```
+####  **commands/ColorCommand.java:** 修改已选形状的颜色
+
+```java
 package refactoring_guru.memento.example.commands;
 
 import refactoring_guru.memento.example.editor.Editor;
@@ -634,9 +675,11 @@ public class ColorCommand implements Command {
 }
 ```
 
-####  **commands/MoveCommand.java:** Moves selected shape
+&nbsp;
 
-```
+####  **commands/MoveCommand.java:** 移动已选形状
+
+```java
 package refactoring_guru.memento.example.commands;
 
 import refactoring_guru.memento.example.editor.Editor;
@@ -687,11 +730,13 @@ public class MoveCommand implements Command {
 }
 ```
 
-##  **shapes:** Various shapes
+&nbsp;
+
+##  **shapes:** 各种形状
 
 ####  **shapes/Shape.java**
 
-```
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -716,9 +761,11 @@ public interface Shape extends Serializable {
 }
 ```
 
+&nbsp;
+
 ####  **shapes/BaseShape.java**
 
-```
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -841,9 +888,11 @@ public abstract class BaseShape implements Shape {
 }
 ```
 
+&nbsp;
+
 ####  **shapes/Circle.java**
 
-```
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -874,9 +923,11 @@ public class Circle extends BaseShape {
 }
 ```
 
-####  **shapes/Dot.java**
+&nbsp;
 
-```
+#### **shapes/Dot.java**
+
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -906,9 +957,11 @@ public class Dot extends BaseShape {
 }
 ```
 
-####  **shapes/Rectangle.java**
+&nbsp;
 
-```
+#### **shapes/Rectangle.java**
+
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -941,9 +994,11 @@ public class Rectangle extends BaseShape {
 }
 ```
 
-####  **shapes/CompoundShape.java**
+&nbsp;
 
-```
+#### **shapes/CompoundShape.java**
+
+```java
 package refactoring_guru.memento.example.shapes;
 
 import java.awt.*;
@@ -1132,9 +1187,11 @@ public class CompoundShape extends BaseShape {
 }
 ```
 
-####  **Demo.java:** Initialization code
+&nbsp;
 
-```
+####  **Demo.java:** 初始化代码
+
+```java
 package refactoring_guru.memento.example;
 
 import refactoring_guru.memento.example.editor.Editor;
@@ -1168,7 +1225,8 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.png:** Screenshot
+&nbsp;
 
-![img](https://refactoring.guru/images/patterns/examples/java/memento/OutputDemo.png)
+#### **OutputDemo.png:** 屏幕截图
 
+![img](images/memento-outputdemo.png)
