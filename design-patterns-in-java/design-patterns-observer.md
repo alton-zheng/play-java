@@ -2,11 +2,15 @@
 
 亦称：事件订阅者、监听者、Event-Subscriber、Listener、Observer
 
+&nbsp;
+
 ##  意图
 
 **观察者模式**是一种行为设计模式， 允许你定义一种订阅机制， 可在对象事件发生时通知多个 “观察” 该对象的其他对象。
 
-![观察者设计模式](https://refactoringguru.cn/images/patterns/content/observer/observer.png?id=6088e31e1b0d4a417506)
+![观察者设计模式](images/observer.png)
+
+&nbsp;
 
 ##  问题
 
@@ -14,21 +18,34 @@
 
 顾客可以每天来商店看看产品是否到货。 但如果商品尚未到货时， 绝大多数来到商店的顾客都会空手而归。
 
-![访问商店或发送垃圾邮件](https://refactoringguru.cn/images/patterns/content/observer/observer-comic-1-zh.png?id=3d590140b01b145bcfb9)
+&nbsp;
 
-前往商店和发送垃圾邮件
+- 前往商店和发送垃圾邮件
+
+![访问商店或发送垃圾邮件](images/observer-comic-1-zh.png)
+
+
 
 另一方面， 每次新产品到货时， 商店可以向所有顾客发送邮件 （可能会被视为垃圾邮件）。 这样， 部分顾客就无需反复前往商店了， 但也可能会惹恼对新产品没有兴趣的其他顾客。
 
 我们似乎遇到了一个矛盾： 要么让顾客浪费时间检查产品是否到货， 要么让商店浪费资源去通知没有需求的顾客。
 
+&nbsp;
+
 ##  解决方案
 
 拥有一些值得关注的状态的对象通常被称为*目标*， 由于它要将自身的状态改变通知给其他对象， 我们也将其称为*发布者* （publisher）。 所有希望关注发布者状态变化的其他对象被称为*订阅者* （subscribers）。
 
-观察者模式建议你为发布者类添加订阅机制， 让每个对象都能订阅或取消订阅发布者事件流。 不要害怕！ 这并不像听上去那么复杂。 实际上， 该机制包括 1） 一个用于存储订阅者对象引用的列表成员变量； 2） 几个用于添加或删除该列表中订阅者的公有方法。
+观察者模式建议你为发布者类添加订阅机制， 让每个对象都能订阅或取消订阅发布者事件流。 不要害怕！ 这并不像听上去那么复杂。 实际上， 该机制包括
 
-![订阅机制](https://refactoringguru.cn/images/patterns/diagrams/observer/solution1-zh.png?id=dcecf95e748aa5b00bc9)
+- 一个用于存储订阅者对象引用的列表成员变量； 
+- 几个用于添加或删除该列表中订阅者的公有方法。
+
+&nbsp;
+
+![订阅机制](images/observer-solution1-zh.png)
+
+&nbsp;
 
 订阅机制允许对象订阅事件通知。
 
@@ -44,9 +61,13 @@
 
 如果你的应用中有多个不同类型的发布者， 且希望订阅者可兼容所有发布者， 那么你甚至可以进一步让所有订阅者遵循同样的接口。 该接口仅需描述几个订阅方法即可。 这样订阅者就能在不与具体发布者类耦合的情况下通过接口观察发布者的状态。
 
+&nbsp;
+
 ##  真实世界类比
 
-![杂志和报纸订阅](https://refactoringguru.cn/images/patterns/content/observer/observer-comic-2-zh.png?id=1e88e82f81e16d03488b)
+![杂志和报纸订阅](images/observer-comic-2-zh.png)
+
+&nbsp;
 
 杂志和报纸订阅。
 
@@ -54,9 +75,11 @@
 
 出版社负责维护订阅者列表， 了解订阅者对哪些刊物感兴趣。 当订阅者希望出版社停止寄送新一期的杂志时， 他们可随时从该列表中退出。
 
+&nbsp;
+
 ##  观察者模式结构
 
-![观察者设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/observer/structure.png?id=365b7e2b8fbecc8948f3)
+![观察者设计模式的结构](images/observer-structure.png)
 
 1. **发布者** （Publisher） 会向其他对象发送值得关注的事件。 事件会在发布者自身状态改变或执行特定行为后发生。 发布者中包含一个允许新订阅者加入和当前订阅者离开列表的订阅构架。
 2. 当新事件发生时， 发送者会遍历订阅列表并调用每个订阅者对象的通知方法。 该方法是在订阅者接口中声明的。
@@ -65,11 +88,13 @@
 5. 订阅者通常需要一些上下文信息来正确地处理更新。 因此， 发布者通常会将一些上下文数据作为通知方法的参数进行传递。 发布者也可将自身作为参数进行传递， 使订阅者直接获取所需的数据。
 6. **客户端** （Client） 会分别创建发布者和订阅者对象， 然后为订阅者注册发布者更新。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **观察者**模式允许文本编辑器对象将自身的状态改变通知给其他服务对象。
 
-![观察者模式示例的结构](https://refactoringguru.cn/images/patterns/diagrams/observer/example.png?id=6d0603ab5a00e4463b81)
+![观察者模式示例的结构](images/observer-example.png)
 
 将对象中发生的事件通知给其他对象。
 
@@ -79,7 +104,9 @@
 
 只要发布者通过同样的接口与所有订阅者进行交互， 那么在程序中新增订阅者时就无需修改已有发布者类的代码。
 
-```
+&nbsp;
+
+```java
 // 发布者基类包含订阅管理代码和通知方法。
 class EventManager is
     private field listeners: hash map of event types and listeners
@@ -160,6 +187,8 @@ class Application is
         editor.events.subscribe("save", emailAlerts)
 ```
 
+&nbsp;
+
 ##  观察者模式适合应用场景
 
  当一个对象状态的改变需要改变其他对象， 或实际对象是事先未知的或动态变化的时， 可使用观察者模式。
@@ -171,6 +200,8 @@ class Application is
  当应用中的一些对象必须观察其他对象时， 可使用该模式。 但仅能在有限时间内或特定情况下使用。
 
  订阅列表是动态的， 因此订阅者可随时加入或离开该列表。
+
+&nbsp;
 
 ##  实现方式
 
@@ -192,31 +223,31 @@ class Application is
 
 7. 客户端必须生成所需的全部订阅者， 并在相应的发布者处完成注册工作。
 
+&nbsp;
+
 ##  观察者模式优缺点
 
--  *开闭原则*。 你无需修改发布者代码就能引入新的订阅者类 （如果是发布者接口则可轻松引入发布者类）。
--  你可以在运行时建立对象之间的联系。
+-  √  *开闭原则*。 你无需修改发布者代码就能引入新的订阅者类 （如果是发布者接口则可轻松引入发布者类）。
+-  √  你可以在运行时建立对象之间的联系。
+-  × 订阅者的通知顺序是随机的。
 
--  订阅者的通知顺序是随机的。
+&nbsp;
 
 ##  与其他模式的关系
 
-- [责任链模式](https://refactoringguru.cn/design-patterns/chain-of-responsibility)、 [命令模式](https://refactoringguru.cn/design-patterns/command)、 [中介者模式](https://refactoringguru.cn/design-patterns/mediator)和[观察者模式](https://refactoringguru.cn/design-patterns/observer)用于处理请求发送者和接收者之间的不同连接方式：
+- Chain of Responsibility、Command、 Mediator 和 Observer 用于处理请求发送者和接收者之间的不同连接方式：
 
-  - *责任链*按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
-  - *命令*在发送者和请求者之间建立单向连接。
-  - *中介者*清除了发送者和请求者之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
-  - *观察者*允许接收者动态地订阅或取消接收请求。
+  - Chain of Responsibility 按照顺序将请求动态传递给一系列的潜在接收者， 直至其中一名接收者对请求进行处理。
+  - Command 在 Sender 和 Request 之间建立单向连接。
+  - Mediator 清除了 Sender 和 Request 之间的直接连接， 强制它们通过一个中介对象进行间接沟通。
+  - Observer 允许 Receiver  动态地订阅或取消接收请求。
+- Mediator 和 Observer 之间的区别往往很难记住。 在大部分情况下， 你可以使用其中一种模式， 而有时可以同时使用。 让我们来看看如何做到这一点。
+  - Mediator 的主要目标是消除一系列系统组件之间的相互依赖。 这些组件将依赖于同一个中介者对象。 *观察者*的目标是在对象之间建立动态的单向连接， 使得部分对象可作为其他对象的附属发挥作用。
+  - 有一种流行的 Mediator 模式实现方式依赖于 *Observer*。 Mediator 对象担当发布者的角色， 其他组件则作为订阅者， 可以订阅中介者的事件或取消订阅。 当*中介者*以这种方式实现时， 它可能看上去与*观察者*非常相似。
+  - 当你感到疑惑时， 记住可以采用其他方式来实现中介者。 例如， 你可永久性地将所有组件链接到同一个中介者对象。 这种实现方式和*观察者*并不相同， 但这仍是一种中介者模式。
+  - 假设有一个程序， 其所有的组件都变成了发布者， 它们之间可以相互建立动态连接。 这样程序中就没有中心化的中介者对象， 而只有一些分布式的观察者。
 
-- [中介者](https://refactoringguru.cn/design-patterns/mediator)和[观察者](https://refactoringguru.cn/design-patterns/observer)之间的区别往往很难记住。 在大部分情况下， 你可以使用其中一种模式， 而有时可以同时使用。 让我们来看看如何做到这一点。
-
-  *中介者*的主要目标是消除一系列系统组件之间的相互依赖。 这些组件将依赖于同一个中介者对象。 *观察者*的目标是在对象之间建立动态的单向连接， 使得部分对象可作为其他对象的附属发挥作用。
-
-  有一种流行的中介者模式实现方式依赖于*观察者*。 中介者对象担当发布者的角色， 其他组件则作为订阅者， 可以订阅中介者的事件或取消订阅。 当*中介者*以这种方式实现时， 它可能看上去与*观察者*非常相似。
-
-  当你感到疑惑时， 记住可以采用其他方式来实现中介者。 例如， 你可永久性地将所有组件链接到同一个中介者对象。 这种实现方式和*观察者*并不相同， 但这仍是一种中介者模式。
-
-  假设有一个程序， 其所有的组件都变成了发布者， 它们之间可以相互建立动态连接。 这样程序中就没有中心化的中介者对象， 而只有一些分布式的观察者。
+&nbsp;
 
 # Java **观察者**模式讲解和代码示例
 
@@ -224,13 +255,9 @@ class Application is
 
 观察者模式提供了一种作用于任何实现了订阅者接口的对象的机制， 可对其事件进行订阅和取消订阅。
 
-[ 进一步了解观察者模式 ](https://refactoringguru.cn/design-patterns/observer)
+&nbsp;
 
 ## 在 Java 中使用模式
-
-**复杂度：** 
-
-**流行度：** 
 
 **使用示例：** 观察者模式在 Java 代码中很常见， 特别是在 GUI 组件中。 它提供了在不与其他对象所属类耦合的情况下对其事件做出反应的方式。
 
@@ -244,7 +271,7 @@ class Application is
 
 **识别方法：** 该模式可以通过将对象存储在列表中的订阅方法， 和对于面向该列表中对象的更新方法的调用来识别。
 
-
+&nbsp;
 
 ## 事件订阅
 
@@ -252,11 +279,13 @@ class Application is
 
 订阅者类不与编辑器类相耦合， 且能在需要时在其他应用中复用。  `编辑器`类仅依赖于抽象订阅者接口。 这样就能允许在不改变编辑器代码的情况下添加新的订阅者类型。
 
+&nbsp;
+
 ##  **publisher**
 
 ####  **publisher/EventManager.java:** 基础发布者
 
-```
+```java
 package refactoring_guru.observer.example.publisher;
 
 import refactoring_guru.observer.example.listeners.EventListener;
@@ -295,11 +324,13 @@ public class EventManager {
 }
 ```
 
+&nbsp;
+
 ##  **editor**
 
 ####  **editor/Editor.java:** 具体发布者， 由其他对象追踪
 
-```
+```java
 package refactoring_guru.observer.example.editor;
 
 import refactoring_guru.observer.example.publisher.EventManager;
@@ -329,11 +360,13 @@ public class Editor {
 }
 ```
 
+&nbsp;
+
 ##  **listeners**
 
 ####  **listeners/EventListener.java:** 通用观察者接口
 
-```
+```java
 package refactoring_guru.observer.example.listeners;
 
 import java.io.File;
@@ -343,9 +376,11 @@ public interface EventListener {
 }
 ```
 
+&nbsp;
+
 ####  **listeners/EmailNotificationListener.java:** 收到通知后发送邮件
 
-```
+```java
 package refactoring_guru.observer.example.listeners;
 
 import java.io.File;
@@ -364,9 +399,11 @@ public class EmailNotificationListener implements EventListener {
 }
 ```
 
+&nbsp;
+
 ####  **listeners/LogOpenListener.java:** 收到通知后在日志中记录一条消息
 
-```
+```java
 package refactoring_guru.observer.example.listeners;
 
 import java.io.File;
@@ -385,9 +422,11 @@ public class LogOpenListener implements EventListener {
 }
 ```
 
+&nbsp;
+
 ####  **Demo.java:** 初始化代码
 
-```
+```java
 package refactoring_guru.observer.example;
 
 import refactoring_guru.observer.example.editor.Editor;
@@ -410,9 +449,12 @@ public class Demo {
 }
 ```
 
+&nbsp;
+
 ####  **OutputDemo.txt:** 执行结果
 
-```
+```basic
 Save to log \path\to\log\file.txt: Someone has performed open operation with the following file: test.txt
 Email to admin@example.com: Someone has performed save operation with the following file: test.txt
 ```
+
