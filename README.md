@@ -260,7 +260,7 @@
     - [x] [Visitor 和 Double Dispatch](design-patterns-in-java/design-patterns-visitor-double-dispatch.md)
   - [x] [17 - Memento Pattern](design-patterns-in-java/design-patterns-memento.md)
   - [x] [18 - Observer Pattern](design-patterns-in-java/design-patterns-observer.md)
-  - [ ] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
+  - [x] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
   - [ ] [20 - Iterator Pattern](design-patterns-in-java/design-patterns-iterator.md)
   - [x] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
   - [ ] [22 - Template Method Pattern](design-patterns-in-java/design-patterns-template-method.md)
