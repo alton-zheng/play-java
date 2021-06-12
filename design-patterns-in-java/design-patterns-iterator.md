@@ -1,22 +1,28 @@
 # 迭代器模式
 
-亦称：Iterator
+![title](images/iterator-title.png)  Iterator
 
-![title](images/iterator-title.png)
+
+
+&nbsp;
 
 ##  意图
 
 **迭代器模式**是一种行为设计模式， 让你能在不暴露集合底层表现形式 （列表、 栈和树等） 的情况下遍历集合中所有的元素。
 
-![迭代器设计模式](https://refactoringguru.cn/images/patterns/content/iterator/iterator-zh.png?id=ba3edc72276bad8f9be8)
+![迭代器设计模式](images/iterator-zh.png)
+
+&nbsp;
 
 ##  问题
 
 集合是编程中最常使用的数据类型之一。 尽管如此， 集合只是一组对象的容器而已。
 
-![各种类型的集合](https://refactoringguru.cn/images/patterns/diagrams/iterator/problem1.png?id=52ef2fe2d4920e3fed69)
+各种类型的集合
 
-各种类型的集合。
+![各种类型的集合](images/iterator-problem1.png)
+
+&nbsp;
 
 大部分集合使用简单列表存储元素。 但有些集合还会使用栈、 树、 图和其他复杂的数据结构。
 
@@ -24,7 +30,7 @@
 
 如果你的集合基于列表， 那么这项工作听上去仿佛很简单。 但如何遍历复杂数据结构 （例如树） 中的元素呢？ 例如， 今天你需要使用深度优先算法来遍历树结构， 明天可能会需要广度优先算法； 下周则可能会需要其他方式 （比如随机存取树中的元素）。
 
-![各种遍历算法](https://refactoringguru.cn/images/patterns/diagrams/iterator/problem2.png?id=f9c1a746c787320291c8)
+![各种遍历算法](images/iterator-problem2.png)
 
 可通过不同的方式遍历相同的集合。
 
@@ -32,11 +38,13 @@
 
 另一方面， 使用多种集合的客户端代码可能并不关心存储数据的方式。 不过由于集合提供不同的元素访问方式， 你的代码将不得不与特定集合类进行耦合。
 
+&nbsp;
+
 ##  解决方案
 
-迭代器模式的主要思想是将集合的遍历行为抽取为单独的*迭代器*对象。
+Iterator Pattern 的主要思想是将集合的遍历行为抽取为单独的*迭代器*对象。
 
-![迭代器可以实现不同算法](https://refactoringguru.cn/images/patterns/diagrams/iterator/solution1.png?id=2f5fbcce6099d8ea09b2)
+![迭代器可以实现不同算法](images/iterator-solution1.png)
 
 迭代器可实现多种遍历算法。 多个迭代器对象可同时遍历同一个集合。
 
@@ -46,11 +54,15 @@
 
 所有迭代器必须实现相同的接口。 这样一来， 只要有合适的迭代器， 客户端代码就能兼容任何类型的集合或遍历算法。 如果你需要采用特殊方式来遍历集合， 只需创建一个新的迭代器类即可， 无需对集合或客户端进行修改。
 
+&nbsp;
+
 ##  真实世界类比
 
-![漫步罗马的不同方式](https://refactoringguru.cn/images/patterns/content/iterator/iterator-comic-1-zh.png?id=a9afbec17373689723a8)
+漫步罗马的不同方式
 
-漫步罗马的不同方式。
+![漫步罗马的不同方式](images/iterator-comic-1-zh.png)
+
+&nbsp;
 
 你计划在罗马游览数天， 参观所有主要的旅游景点。 但在到达目的地后， 你可能会浪费很多时间绕圈子， 甚至找不到罗马斗兽场在哪里。
 
@@ -60,9 +72,11 @@
 
 所有这些选择(自由漫步、 智能手机导航或真人向导)都是这个由众多罗马景点组成的集合的迭代器。
 
+&nbsp;
+
 ##  迭代器模式结构
 
-![迭代器设计模式的结构](https://refactoringguru.cn/images/patterns/diagrams/iterator/structure.png?id=35ea851f8f6bbe51d79e)
+![迭代器设计模式的结构](images/iterator-structure.png)
 
 1. **迭代器** （Iterator） 接口声明了遍历集合所需的操作： 获取下一个元素、 获取当前位置和重新开始迭代等。
 
@@ -76,6 +90,8 @@
 
    客户端通常不会自行创建迭代器， 而是会从集合中获取。 但在特定情况下， 客户端可以直接创建一个迭代器 （例如当客户端需要自定义特殊迭代器时）。
 
+&nbsp;
+
 ##  伪代码
 
 在本例中， **迭代器**模式用于遍历一个封装了访问微信好友关系功能的特殊集合。 该集合提供使用不同方式遍历档案资料的多个迭代器。
@@ -88,7 +104,7 @@
 
 客户端仅通过接口与集合和迭代器交互， 也就不会同具体类耦合。 如果你决定将应用连接到全新的社交网络， 只需提供新的集合和迭代器类即可， 无需修改现有代码。
 
-```
+```java
 // 集合接口必须声明一个用于生成迭代器的工厂方法。如果程序中有不同类型的迭
 // 代器，你也可以声明多个方法。
 interface SocialNetwork is
@@ -180,6 +196,8 @@ class Application is
         spammer.send(iterator, "非常重要的消息")
 ```
 
+&nbsp;
+
 ##  迭代器模式适合应用场景
 
  当集合背后为复杂的数据结构， 且你希望对客户端隐藏其复杂性时 （出于使用便利性或安全性的考虑）， 可以使用迭代器模式。
@@ -194,6 +212,8 @@ class Application is
 
  该模式为集合和迭代器提供了一些通用接口。 如果你在代码中使用了这些接口， 那么将其他实现了这些接口的集合和迭代器传递给它时， 它仍将可以正常运行。
 
+&nbsp;
+
 ##  实现方式
 
 1. 声明迭代器接口。 该接口必须提供至少一个方法来获取集合中的下个元素。 但为了使用方便， 你还可以添加一些其他方法， 例如获取前一个元素、 记录当前位置和判断迭代是否已结束。
@@ -202,59 +222,60 @@ class Application is
 4. 在你的集合类中实现集合接口。 其主要思想是针对特定集合为客户端代码提供创建迭代器的快捷方式。 集合对象必须将自身传递给迭代器的构造函数来创建两者之间的链接。
 5. 检查客户端代码， 使用迭代器替代所有集合遍历代码。 每当客户端需要遍历集合元素时都会获取一个新的迭代器。
 
+&nbsp;
+
 ##  迭代器模式优缺点
 
--  *单一职责原则*。 通过将体积庞大的遍历算法代码抽取为独立的类， 你可对客户端代码和集合进行整理。
--  *开闭原则*。 你可实现新型的集合和迭代器并将其传递给现有代码， 无需修改现有代码。
--  你可以并行遍历同一集合， 因为每个迭代器对象都包含其自身的遍历状态。
--  相似的， 你可以暂停遍历并在需要时继续。
+-  √ *单一职责原则*。 通过将体积庞大的遍历算法代码抽取为独立的类， 你可对客户端代码和集合进行整理。
+-  √ *开闭原则*。 你可实现新型的集合和迭代器并将其传递给现有代码， 无需修改现有代码。
+-  √ 你可以并行遍历同一集合， 因为每个迭代器对象都包含其自身的遍历状态。
+-  √ 相似的， 你可以暂停遍历并在需要时继续。
+-  × 如果你的程序只与简单的集合进行交互， 应用该模式可能会矫枉过正。
+-  × 对于某些特殊集合， 使用迭代器可能比直接遍历的效率低。
 
--  如果你的程序只与简单的集合进行交互， 应用该模式可能会矫枉过正。
--  对于某些特殊集合， 使用迭代器可能比直接遍历的效率低。
+&nbsp;
 
 ##  与其他模式的关系
 
-- 你可以使用[迭代器模式](https://refactoringguru.cn/design-patterns/iterator)来遍历[组合模式](https://refactoringguru.cn/design-patterns/composite)树。
-- 你可以同时使用[工厂方法模式](https://refactoringguru.cn/design-patterns/factory-method)和[迭代器](https://refactoringguru.cn/design-patterns/iterator)来让子类集合返回不同类型的迭代器， 并使得迭代器与集合相匹配。
-- 你可以同时使用[备忘录模式](https://refactoringguru.cn/design-patterns/memento)和[迭代器](https://refactoringguru.cn/design-patterns/iterator)来获取当前迭代器的状态， 并且在需要的时候进行回滚。
-- 可以同时使用[访问者模式](https://refactoringguru.cn/design-patterns/visitor)和[迭代器](https://refactoringguru.cn/design-patterns/iterator)来遍历复杂数据结构， 并对其中的元素执行所需操作， 即使这些元素所属的类完全不同。
+- 你可以使用 Iterator Pattern 来遍历 Composite Pattern 树。
+- 你可以同时使用 Factory Method Pattern 和 Iterator 来让子类集合返回不同类型的迭代器， 并使得迭代器与集合相匹配。
+- 你可以同时使用 Memento Pattern 和 Iterator Pattern 来获取当前迭代器的状态， 并且在需要的时候进行回滚。
+- 可以同时使用  Visitor Pattern 和 Iterator Pattern 来遍历复杂数据结构， 并对其中的元素执行所需操作， 即使这些元素所属的类完全不同。
 
+&nbsp;
 
+# Java **迭代器**模式讲解和代码示例
 
-# **Iterator** in Java
+**迭代器**是一种行为设计模式， 让你能在不暴露复杂数据结构内部细节的情况下遍历其中所有的元素。
 
-**Iterator** is a behavioral design pattern that allows sequential traversal through a complex data structure without exposing its internal details.
+在迭代器的帮助下， 客户端可以用一个迭代器接口以相似的方式遍历不同集合中的元素。
 
-Thanks to the Iterator, clients can go over elements of different collections in a similar fashion using a single iterator interface.
+&nbsp;
 
-[ Learn more about Iterator ](https://refactoring.guru/design-patterns/iterator)
+## 在 Java 中使用模式 
 
-## Usage of the pattern in Java
+**使用示例：** 该模式在 Java 代码中很常见。 许多框架和程序库都会使用它来提供遍历其集合的标准方式。
 
-**Complexity:** 
+下面是该模式在核心 Java 程序库中的一些示例：
 
-**Popularity:** 
+- [`java.util.Iterator`](http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html)的所有实现 （还有 [`java.util.Scanner`](http://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html)）。
+- [`java.util.Enumeration`](http://docs.oracle.com/javase/8/docs/api/java/util/Enumeration.html)的所有实现
 
-**Usage examples:** The pattern is very common in Java code. Many frameworks and libraries use it to provide a standard way for traversing their collections.
+**识别方法：** 迭代器可以通过导航方法 （例如 `next`和 `previous`等） 来轻松识别。 使用迭代器的客户端代码可能没有其所遍历的集合的直接访问权限。
 
-Here are some examples from core Java libraries:
+&nbsp;
 
-- All implementations of [`java.util.Iterator`](https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html) (also [`java.util.Scanner`](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html)).
-- All implementations of [`java.util.Enumeration`](https://docs.oracle.com/javase/8/docs/api/java/util/Enumeration.html)
+## 迭代访问社交网络档案
 
-**Identification:** Iterator is easy to recognize by the navigation methods (such as `next`, `previous` and others). Client code that uses iterators might not have direct access to the collection being traversed.
+在本例中， 迭代器模式被用于在不向客户端代码暴露通信细节的情况下访问远程社交网络集合中的社交媒体档案。
 
-
-
-## Iterating over social network profiles
-
-In this example, the Iterator pattern is used to go over social profiles of a remote social network collection without exposing any of the communication details to the client code.
+&nbsp;
 
 ##  **iterators**
 
-####  **iterators/ProfileIterator.java:** Defines profile interface
+####  **iterators/ProfileIterator.java:** 定义档案接口
 
-```
+```java
 package refactoring_guru.iterator.example.iterators;
 
 import refactoring_guru.iterator.example.profile.Profile;
@@ -268,9 +289,11 @@ public interface ProfileIterator {
 }
 ```
 
-####  **iterators/FacebookIterator.java:** Implements iteration over Facebook profiles
+&nbsp;
 
-```
+####  **iterators/FacebookIterator.java:** 在 Facebook 档案上实现迭代
+
+```java
 package refactoring_guru.iterator.example.iterators;
 
 import refactoring_guru.iterator.example.profile.Profile;
@@ -332,9 +355,11 @@ public class FacebookIterator implements ProfileIterator {
 }
 ```
 
-####  **iterators/LinkedInIterator.java:** Implements iteration over LinkedIn profiles
+&nbsp;
 
-```
+####  **iterators/LinkedInIterator.java:** 在领英档案上实现迭代
+
+```java
 package refactoring_guru.iterator.example.iterators;
 
 import refactoring_guru.iterator.example.profile.Profile;
@@ -396,11 +421,13 @@ public class LinkedInIterator implements ProfileIterator {
 }
 ```
 
-##  **social_networks**
+&nbsp;
 
-####  **social_networks/SocialNetwork.java:** Defines common social network interface
+## 社交网络
 
-```
+####  **social_networks/SocialNetwork.java:** 定义通用的社交网络接口
+
+```java
 package refactoring_guru.iterator.example.social_networks;
 
 import refactoring_guru.iterator.example.iterators.ProfileIterator;
@@ -412,9 +439,11 @@ public interface SocialNetwork {
 }
 ```
 
+&nbsp;
+
 ####  **social_networks/Facebook.java:** Facebook
 
-```
+```java
 package refactoring_guru.iterator.example.social_networks;
 
 import refactoring_guru.iterator.example.iterators.FacebookIterator;
@@ -491,9 +520,11 @@ public class Facebook implements SocialNetwork {
 }
 ```
 
-####  **social_networks/LinkedIn.java:** LinkedIn
+&nbsp;
 
-```
+####  **social_networks/LinkedIn.java:** 领英
+
+```java
 package refactoring_guru.iterator.example.social_networks;
 
 import refactoring_guru.iterator.example.iterators.LinkedInIterator;
@@ -569,11 +600,13 @@ public class LinkedIn implements SocialNetwork {
 }
 ```
 
+&nbsp;
+
 ##  **profile**
 
-####  **profile/Profile.java:** Social profiles
+####  **profile/Profile.java:** 社交档案
 
-```
+```java
 package refactoring_guru.iterator.example.profile;
 
 import java.util.ArrayList;
@@ -625,11 +658,13 @@ public class Profile {
 }
 ```
 
+&nbsp;
+
 ##  **spammer**
 
-####  **spammer/SocialSpammer.java:** Message sending app
+####  **spammer/SocialSpammer.java:** 消息发送应用
 
-```
+```java
 package refactoring_guru.iterator.example.spammer;
 
 import refactoring_guru.iterator.example.iterators.ProfileIterator;
@@ -668,9 +703,11 @@ public class SocialSpammer {
 }
 ```
 
-####  **Demo.java:** Client code
+&nbsp;
 
-```
+####  **Demo.java:** 客户端代码
+
+```java
 package refactoring_guru.iterator.example;
 
 import refactoring_guru.iterator.example.profile.Profile;
@@ -723,9 +760,11 @@ public class Demo {
 }
 ```
 
-####  **OutputDemo.txt:** Execution result
+&nbsp;
 
-```
+####  **OutputDemo.txt:** 执行结果
+
+```basic
 Please specify social network to target spam tool (default:Facebook):
 1. Facebook
 2. LinkedIn
@@ -745,3 +784,5 @@ Facebook: Loading 'coworkers' list of 'anna.smith@bing.com' over the network...
 Facebook: Loading profile 'sam@amazon.com' over the network...
 Sent message to: 'sam@amazon.com'. Message body: 'Hey! This is Anna's boss Jason. Anna told me you would be interested in [link].'
 ```
+
+&nbsp;
