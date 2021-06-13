@@ -36,6 +36,8 @@
 - [19 - State Pattern](design-patterns-state.md)
   - ![image-20210607174255339](images/state-pattern.png) `State` 让你能在一个对象的内部状态变化时改变其行为， 使其看上去就像改变了自身所属的类一样。
 
+&nbsp;
+
 - [20 - Iterator Pattern](design-patterns-iterator.md)
   - ![迭代器](images/iterator-pattern.png?lastModify=1623066754)Iterator 让你能在不暴露集合底层表现形式 （列表、 栈和树等) 的情况下遍历集合中所有的元素。
 
