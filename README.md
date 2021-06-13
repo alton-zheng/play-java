@@ -199,7 +199,7 @@
 ## 设计模式
 
 - [x] [软件设计模式概述](design-patterns-in-java/design-patterns-overview.md)
-- [ ] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
+- [x] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
 - [ ] [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
 - [ ] [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
 - [ ] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
