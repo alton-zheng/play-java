@@ -263,7 +263,7 @@
   - [x] [19 - State Pattern](design-patterns-in-java/design-patterns-state.md)
   - [x] [20 - Iterator Pattern](design-patterns-in-java/design-patterns-iterator.md)
   - [x] [21 - Strategy Pattern](design-patterns-in-java/design-patterns-strategy.md)
-  - [ ] [22 - Template Method Pattern](design-patterns-in-java/design-patterns-template-method.md)
+  - [x] [22 - Template Method Pattern](design-patterns-in-java/design-patterns-template-method.md)
 
 &nbsp;
 
