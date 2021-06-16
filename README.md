@@ -202,8 +202,8 @@
 - [x] [GoF 的 23 种设计模式的分类和功能](design-patterns-in-java/design-patterns-type-and-function.md)
 - [x] [UML统一建模语言是什么？](design-patterns-in-java/design-patterns-uml.md)
 - [x] [UML类图及类图之间的关系](design-patterns-in-java/design-patterns-uml-relation.md)
-- [ ] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
-- [ ] [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
+- [x] [类关系记忆技巧](design-patterns-in-java/design-patterns-class-relation.md)
+- [x] [UMLet的使用与类图的设计](design-patterns-in-java/design-patterns-umlet-user-and-class-design.md)
 - [ ] [什么才是优秀的软件架构？](design-patterns-in-java/design-patterns-good-software.md)
 - [ ] [如何正确使用设计模式？](design-patterns-in-java/design-patterns-correct-use.md)
 
