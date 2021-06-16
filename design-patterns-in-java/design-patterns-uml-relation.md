@@ -1,12 +1,8 @@
 # UML类图及类图之间的关系
 
-< [UML统一建模语言](http://c.biancheng.net/view/8373.html)[类关系记忆技巧](http://c.biancheng.net/view/8375.html) >
-
-[![img](http://c.biancheng.net/uploads/ads/ad_arc_top_lufei.jpg?v=1.6.53)](https://www.luffycity.com/activity/python-8days-camp?source=c)
-
-[Java一对一答疑，帮助有志青年！使用QQ在线辅导，哪里不懂问哪里，整个过程都是一对一，学习更有针对性。和作者直接交流，不但提升技能，还提升 Level；当你决定加入我们，你已然超越了 90% 的程序员。猛击这里了解详情。](http://c.biancheng.net/view/7552.html)
-
 在 UML 2.0 的 13 种图中，类图（Class Diagrams）是使用频率最高的 UML 图之一。类图描述系统中的类，以及各个类之间的关系的静态视图，能够让我们在正确编写代码之前对系统有一个全面的认识。类图是一种模型类型，确切地说，是一种静态模型类型。类图表示类、接口和它们之间的协作关系，用于系统设计阶段。
+
+&nbsp;
 
 ## 类、接口和类图
 
@@ -38,7 +34,8 @@
 
 
 
-![Student 类](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121K933555.gif)
+![Student 类](images/design-patterns-uml-relation-class.png)
+
 Student 类
 
 > 类图用 3 个矩形拼接表示，最上面的部分标识类的名称，中间的部分标识类的属性，最下面的部分标识类的方法。
@@ -50,6 +47,8 @@ Student 类
 - 字段和方法返回值的数据类型非必需
 - 静态类或静态方法加下划线
 
+&nbsp;
+
 #### 2. 接口
 
 接口（Interface）是一种特殊的类，它具有类的结构但不可被实例化，只可以被子类实现。它包含抽象操作，但不包含属性。它描述了类或组件对外可见的动作。在 UML 中，接口使用一个带有名称的小圆圈来进行表示。
@@ -58,8 +57,10 @@ Student 类
 
 
 
-![img](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121K9493J.gif)
+![img](images/design-patterns-uml-relation-interface.png)
 Graph 接口
+
+&nbsp;
 
 #### 3. 类图
 
@@ -67,14 +68,20 @@ Graph 接口
 
 类图中的类可以通过某种编程语言直接实现。类图在软件系统开发的整个生命周期都是有效的，它是面向对象系统的建模中最常见的图。如下所示是“计算长方形和圆形的周长与面积”的类图，图形接口有计算面积和周长的抽象方法，长方形和圆形实现这两个方法供访问类调用。
 
+&nbsp;
+
+- “计算长方形和圆形的周长与面积”的类图
+
+![“计算长方形和圆形的周长与面积”的类图](images/design-patterns-uml-relation-class-graph.png)
 
 
-![“计算长方形和圆形的周长与面积”的类图](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121P6195T.gif)
-“计算长方形和圆形的周长与面积”的类图
+&nbsp;
 
 ## 类之间的关系
 
 UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。下面根据类与类之间的耦合度从弱到强排列。UML 中的类图有以下几种关系：依赖关系、关联关系、聚合关系、组合关系、泛化关系和实现关系。其中泛化和实现的耦合度相等，它们是最强的。
+
+&nbsp;
 
 #### 1. 依赖关系
 
@@ -84,8 +91,10 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 
 
-![依赖关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121PA2Y5.gif)
+![依赖关系的实例](images/design-patterns-uml-relation-dependency.png)
 依赖关系的实例
+
+&nbsp;
 
 #### 2. 关联关系
 
@@ -97,8 +106,10 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 
 
-![关联关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121Q5115Q.gif)
+![关联关系的实例](images/design-patterns-uml-relation-1.png)
 关联关系的实例
+
+&nbsp;
 
 #### 3. 聚合关系
 
@@ -110,8 +121,10 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 
 
-![聚合关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121Q541410.gif)
+![聚合关系的实例](images/design-patterns-uml-relation-2.png)
 聚合关系的实例
+
+&nbsp;
 
 #### 4.组合关系
 
@@ -123,8 +136,10 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 
 
-![组合关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121QFD27.gif)
+![组合关系的实例](images/design-patterns-uml-relation-3.png)
 组合关系的实例
+
+&nbsp;
 
 #### 5.泛化关系
 
@@ -132,10 +147,12 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下所示。
 
+泛化关系
+
+![泛化关系的实例](images/design-patterns-uml-relation-4.png)
 
 
-![泛化关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121Q62C57.gif)
-泛化关系的实例
+&nbsp;
 
 #### 6.实现关系
 
@@ -143,7 +160,7 @@ UML 将事物之间的联系归纳为 6 种，并用对应的图形类表示。�
 
 在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如下所示。
 
-
-
-![实现关系的实例](http://c.biancheng.net/uploads/allimg/181112/3-1Q1121QI4317.gif)
 实现关系的实例
+
+![实现关系的实例](images/design-patterns-uml-relation-5.png)
+
