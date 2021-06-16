@@ -213,7 +213,7 @@
   - [x] [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
   - [x] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
   - [x] [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
-  - [ ] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
+  - [x] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
   - [ ] [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)
   - [ ] [迪米特法则](design-patterns-in-java/design-patterns-lkp.md)
   - [ ] [合成复用原则](design-patterns-in-java/design-patterns-crp.md)
