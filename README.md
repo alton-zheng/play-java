@@ -211,7 +211,7 @@
 
 - 面向对象设计原则
   - [x] [开闭原则](design-patterns-in-java/design-patterns-ocp.md)
-  - [ ] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
+  - [x] [里氏替换原则](design-patterns-in-java/design-patterns-lsp.md)
   - [ ] [依赖倒置原则](design-patterns-in-java/design-patterns-dip.md)
   - [ ] [单一职责原则](design-patterns-in-java/design-patterns-srp.md)
   - [ ] [接口隔离原则](design-patterns-in-java/design-patterns-isp.md)

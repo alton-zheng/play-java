@@ -1,12 +1,16 @@
 # 里氏替换原则——面向对象设计原则
 
-在上一节[《开闭原则](http://c.biancheng.net/view/1322.html)》中，我们详细介绍了开闭原则，本节我们来介绍里式替换原则。
+在上一节[《开闭原则](design-patterns-ocp.md)》中，我们详细介绍了开闭原则，本节我们来介绍里式替换原则。
+
+&nbsp;
 
 ## 里氏替换原则的定义
 
-里氏替换原则（Liskov Substitution Principle，LSP）由麻省理工学院计算机科学实验室的里斯科夫（Liskov）女士在 1987 年的“面向对象技术的高峰会议”（OOPSLA）上发表的一篇文章《数据抽象和层次》（Data Abstraction and Hierarchy）里提出来的，她提出：继承必须确保超类所拥有的性质在子类中仍然成立（Inheritance should ensure that any property proved about supertype objects also holds for subtype objects）。
+里氏替换原则（Liskov Substitution Principle，LSP）由麻省理工学院计算机科学实验室的里斯科夫（Liskov）女士在 1987 年的“面向对象技术的高峰会议”（OOPSLA）上发表的一篇文章《数据抽象和层次》（`Data Abstraction and Hierarchy`）里提出来的，她提出：继承必须确保超类所拥有的性质在子类中仍然成立（Inheritance should ensure that any property proved about supertype objects also holds for subtype objects）。
 
 里氏替换原则主要阐述了有关继承的一些原则，也就是什么时候应该使用继承，什么时候不应该使用继承，以及其中蕴含的原理。里氏替换原是继承复用的基础，它反映了基类与子类之间的关系，是对开闭原则的补充，是对实现抽象化的具体步骤的规范。
+
+&nbsp;
 
 ## 里氏替换原则的作用
 
@@ -16,6 +20,8 @@
 2. 它克服了继承中重写父类造成的可复用性变差的缺点。
 3. 它是动作正确性的保证。即类的扩展不会给已有的系统引入新的错误，降低了代码出错的可能性。
 4. 加强程序的健壮性，同时变更时可以做到非常好的兼容性，提高程序的维护性、可扩展性，降低需求变更时引入的风险。
+
+&nbsp;
 
 ## 里氏替换原则的实现方法
 
@@ -43,7 +49,10 @@
 
 
 
-![“几维鸟不是鸟”实例的类图](http://c.biancheng.net/uploads/allimg/181113/3-1Q11311094H32.gif)
+![img](images/bird.gif)
+
+
+
 图1 “几维鸟不是鸟”实例的类图
 
 
@@ -103,13 +112,9 @@ class BrownKiwi extends Bird {
 ```
 
 
-程序运行错误的原因是：几维鸟类重写了鸟类的 setSpeed(double speed) 方法，这违背了里氏替换原则。正确的做法是：取消几维鸟原来的继承关系，定义鸟和几维鸟的更一般的父类，如动物类，它们都有奔跑的能力。几维鸟的飞行速度虽然为 0，但奔跑速度不为 0，可以计算出其奔跑 300 千米所要花费的时间。其类图如图 2 所示。
+程序运行错误的原因是：几维鸟类重写了鸟类的 `setSpeed(double speed)`  方法，这违背了里氏替换原则。正确的做法是：取消几维鸟原来的继承关系，定义鸟和几维鸟的更一般的父类，如动物类，它们都有奔跑的能力。几维鸟的飞行速度虽然为 0，但奔跑速度不为 0，可以计算出其奔跑 300 千米所要花费的时间。其类图如图 2 所示。
 
-
-
-![“几维鸟是动物”实例的类图](http://c.biancheng.net/uploads/allimg/181113/3-1Q11311101SN.gif)
+![bird](images/design-patterns-bird-2.gif)
 图2 “几维鸟是动物”实例的类图
 
-## 进阶阅读
-
-如果您想了解里氏替换原则在实际项目中的应用，可以猛击阅读[《使用里氏替换原则解决实际问题》](http://c.biancheng.net/view/vip_8377.html)文章。
+&nbsp;
