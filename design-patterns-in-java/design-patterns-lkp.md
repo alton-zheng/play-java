@@ -1,14 +1,14 @@
-# 迪米特法则——面向对象设计原则
-
-前几节分别详细介绍了面向对象设计原则中的[开闭原则](http://c.biancheng.net/view/1322.html)、[里氏替换原则](http://c.biancheng.net/view/1324.html)、[依赖倒置原则](http://c.biancheng.net/view/1326.html)、[单一职责原则](http://c.biancheng.net/view/1327.html)和[接口隔离原则](http://c.biancheng.net/view/1330.html)，本节将详细介绍迪米特法则。
+# 迪米特法则
 
 ## 迪米特法则的定义
 
-迪米特法则（Law of Demeter，LoD）又叫作最少知识原则（Least Knowledge Principle，LKP)，产生于 1987 年美国东北大学（Northeastern University）的一个名为迪米特（Demeter）的研究项目，由伊恩·荷兰（Ian Holland）提出，被 UML 创始者之一的布奇（Booch）普及，后来又因为在经典著作《程序员修炼之道》（The Pragmatic Programmer）提及而广为人知。
+迪米特法则（`Law of Demeter`，`LoD`）又叫作最少知识原则（`Least Knowledge Principle`，`LKP`)，产生于 1987 年美国东北大学（`Northeastern University`）的一个名为迪米特（`Demeter`）的研究项目，由伊恩·荷兰（Ian Holland）提出，被 UML 创始者之一的布奇（Booch）普及，后来又因为在经典著作《程序员修炼之道》（`The Pragmatic Programmer`）提及而广为人知。
 
 迪米特法则的定义是：只与你的直接朋友交谈，不跟“陌生人”说话（Talk only to your immediate friends and not to strangers）。其含义是：如果两个软件实体无须直接通信，那么就不应当发生直接的相互调用，可以通过第三方转发该调用。其目的是降低类之间的耦合度，提高模块的相对独立性。
 
 迪米特法则中的“朋友”是指：当前对象本身、当前对象的成员对象、当前对象所创建的对象、当前对象的方法参数等，这些对象同当前对象存在关联、聚合或组合关系，可以直接访问这些对象的方法。
+
+&nbsp;
 
 ## 迪米特法则的优点
 
@@ -17,8 +17,9 @@
 1. 降低了类之间的耦合度，提高了模块的相对独立性。
 2. 由于亲合度降低，从而提高了类的可复用率和系统的扩展性。
 
-
 但是，过度使用迪米特法则会使系统产生大量的中介类，从而增加系统的复杂性，使模块之间的通信效率降低。所以，在釆用迪米特法则时需要反复权衡，确保高内聚和低耦合的同时，保证系统的结构清晰。
+
+&nbsp;
 
 ## 迪米特法则的实现方法
 
@@ -44,9 +45,10 @@
 
 
 
-![明星与经纪人的关系图](http://c.biancheng.net/uploads/allimg/181113/3-1Q113152Q5W1.gif)
+![明星与经纪人的关系图](images/design-patterns-lkp.png)
 图1 明星与经纪人的关系图
 
+&nbsp;
 
 程序代码如下：
 
