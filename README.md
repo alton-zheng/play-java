@@ -223,7 +223,7 @@
 
 - Creational Patterns
 
-  - [x] [Crateional Patterns Overview](design-patterns-in-java/design-patterns-create-feature-and-type.md)
+  - [x] [Crateational Patterns Overview](design-patterns-in-java/design-patterns-create-feature-and-type.md)
   - [x] [1 - Singleton Pattern](design-patterns-in-java/design-patterns-singleton.md)
   - [x] [2 - Prototype Pattern](design-patterns-in-java/design-patterns-prototype.md)
   - [x] [3.1 - Static Factory method Pattern](design-patterns-in-java/design-patterns-static-factory-method-pattern.md)
