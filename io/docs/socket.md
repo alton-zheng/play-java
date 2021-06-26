@@ -62,3 +62,27 @@ $ ss -lna
   - 内核态和用户态交互出现问题
 
 &nbsp;
+
+### Linux 模拟 Socket （与 baidu.com 进行连接）
+
+```bash
+$ cd /proc/$$/fd
+/proc/pid/fd
+
+## 新建 fd 8
+$ exec 8<> /dev/tcp/www.baidu.com/80
+
+## 到此为止，linux 与 baidu.com 建立好通道
+
+## 发起 Request
+echo -e `GET / HTTP/1.0 \n` >& 8
+
+## 查看 Response 
+cat 0>& 8
+```
+
+
+
+
+
+&nbsp;
