@@ -21,3 +21,17 @@
 
  
 
+## Linux 网络配置
+
+![iShot2021-06-26 17.54.48](/Users/alton/Desktop/iShot2021-06-26 17.54.48.png)
+
+```bash
+$ cat /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0  #  网卡名
+IPADDR=192.168.150.14  # ip 地址
+NETMASK=255.255.255.0  # 子网掩码
+# ip 地址和子网掩码 & 运算， 得到网络号  192.168.150.0
+```
+
+
+
