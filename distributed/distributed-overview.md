@@ -47,17 +47,41 @@
   - 只看 `ip`， 不看 `url`
 - 不会和 client 握手
 - 后端服务器是镜像级别的，负载均衡器将流量负载到功能一样的后端服务器
-- e.g. lvs
+- e.g.  LVS 
+
+![Four load balancing server](images/Four-tier-load-balancing-server.png)
 
 &nbsp;
 
 #### 7 层负载均衡器
 
 - 高层负载均衡器技术
-
 - 需要和 client 握手
 - 能够支撑的流量比 4 层的少很多
+- e.g. `nginx`, `tomcat`
 
 &nbsp;
 
+#### 公网 ip 和 本地 ip 
+
+![Untitled Diagram](images/local-ip-and-net-ip.png)
+
+- `S-NAT` :  源地址替换协议
+
 &nbsp;
+
+
+
+&nbsp;
+
+一块网卡可以配置多个 ip 地址
+
+&nbsp;
+
+### 虚拟网卡和物理网卡
+
+比如本地服务，自测时： `http://localhost:8080` 或者 `http://127.0.0.1:8080`
+
+这个时候只会走虚拟网卡， 在虚拟网卡找到 localhost, 127.0.0.1 , 直接 Loopback 到 8080 端口.
+
+虚拟网卡对内可见，对外隐藏 （LO，VIP）

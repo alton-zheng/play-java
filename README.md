@@ -60,7 +60,10 @@
 ## 网络到分布式
 
 - [概览](distributed/distributed-overview.md)
-- 
+- [负载均衡模型](distributed/distributed-load-balance-model.md)
+- [LVS - 负载均衡器](distributed/distributed-load-balancing-lvs.md)
+
+&nbsp;
 
 ## 操作系统
 
